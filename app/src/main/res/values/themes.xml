@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/orange</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">#E91E63</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
@@ -15,18 +15,18 @@
     </style>
 
     <style name="ButtonGeneral" parent="Widget.MaterialComponents.Button">
-        <item name="cornerRadius">@dimen/buttonCornerRadius</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_margin">10dp</item>
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+        <item name="android:layout_width">0dp</item>
     </style>
 
-    <style name="ButtonOrange" parent="ButtonGeneral">
-        <item name="android:backgroundTint">@color/orange</item>
+    <style name="ButtonPrimaryColor" parent="ButtonGeneral">
         <item name="android:textColor">@color/white</item>
-        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_height">70dp</item>
+        <item name="android:textSize">@dimen/primary_btn_text_size</item>
+        <item name="android:layout_marginTop">30dp</item>
     </style>
 
-    <style name="ButtonStroke" parent="ButtonGeneral">
+    <style name="ButtonOutlined" parent="ButtonGeneral">
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColor">@color/dark_blue</item>
         <item name="strokeColor">@color/dark_blue</item>
