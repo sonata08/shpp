@@ -8,4 +8,8 @@
     <string name="profile_photo">Profile photo</string>
     <string name="user_name">User name</string>
     <string name="go_to_settings">Go to settings and fill out the profile</string>
+    <string name="get_acquainted">Let\'s get acquainted</string>
+    <string name="fill_out_profile">Fill out the profile and go to the application</string>
+    <string name="email">E-mail</string>
+    <string name="password">Password</string>
 </resources>

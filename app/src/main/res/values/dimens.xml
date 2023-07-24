@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="button_corner_radius">6dp</dimen>
-    <dimen name="text_size_page_title">28sp</dimen>
-    <dimen name="primary_btn_text_size">18sp</dimen>
+    <dimen name="h1">24sp</dimen>
+    <dimen name="h2">18sp</dimen>
+    <dimen name="h3">14sp</dimen>
+    <dimen name="h4">12sp</dimen>
+    <dimen name="text_in_button">16sp</dimen>
     <dimen name="margins_perimeter">16dp</dimen>
-    <dimen name="btn_margin_vert">10dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
 </resources>
