@@ -29,17 +29,17 @@ class SignUpActivity: AppCompatActivity() {
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        autologinIfPrefsSaved()
+        autologinIfCredentialsSaved()
         listenToUserActions()
     }
 
-    private fun autologinIfPrefsSaved() {
+    private fun autologinIfCredentialsSaved() {
         lifecycleScope.launch{
             dataStorePreferences.getCredentialsFlow.collect {
                 email = it.email
                 password = it.password
                 if (email != "" && password != "") {
-                    onRegisterPressed()
+                    goToProfile()
                 }
             }
         }
@@ -86,8 +86,8 @@ class SignUpActivity: AppCompatActivity() {
 
     private fun startActivityOrShowError() {
         if (isValidEmail(email) && isValidPassword(password)) {
-            saveUserCredentials()
-            onRegisterPressed()
+            if (binding.checkboxRememberMe.isChecked) saveUserCredentials()
+            goToProfile()
         } else {
             if (!isValidEmail(email)) binding.emailLayout.error = getString(R.string.error_email)
             if (!isValidPassword(password)) binding.passwordLayout.error = getString(R.string.error_password)
@@ -104,7 +104,7 @@ class SignUpActivity: AppCompatActivity() {
 
     // Sets MainActivity as start of a new task on this history stack, clears existing task
     // and starts MainActivity
-    private fun onRegisterPressed() {
+    private fun goToProfile() {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)

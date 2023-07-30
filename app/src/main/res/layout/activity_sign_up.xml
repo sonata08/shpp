@@ -95,14 +95,6 @@
             android:textSize="@dimen/h3"
             android:text="@string/remember_me"/>
 
-<!--        <androidx.constraintlayout.widget.Guideline-->
-<!--            android:id="@+id/gui"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintBottom_toTopOf="@id/edit_button"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            android:orientation="horizontal"/>-->
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/google_button"
             android:layout_width="0dp"
