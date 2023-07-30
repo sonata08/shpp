@@ -8,5 +8,6 @@
     <dimen name="text_16">16sp</dimen>
     <dimen name="margins_perimeter">16dp</dimen>
     <dimen name="margin_8">8dp</dimen>
-    <dimen name="orange_button_height">55dp</dimen>
+    <dimen name="big_button_height">55dp</dimen>
+    <dimen name="stroke_width">2dp</dimen>
 </resources>

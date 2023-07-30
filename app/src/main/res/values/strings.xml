@@ -12,4 +12,13 @@
     <string name="fill_out_profile">Fill out the profile and go to the application</string>
     <string name="email">E-mail</string>
     <string name="password">Password</string>
+    <string name="remember_me">Remember me</string>
+    <string name="google">google</string>
+    <string name="or">or</string>
+    <string name="register">register</string>
+    <string name="agree_to_terms">By clicking Register you agree to our Terms \n and Conditions</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="sign_in">Sign in</string>
+    <string name="error_email">Incorrect E-Mail address</string>
+    <string name="error_password">Your password must be 8–16 characters</string>
 </resources>
