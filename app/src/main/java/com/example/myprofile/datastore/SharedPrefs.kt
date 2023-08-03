@@ -1,8 +1,11 @@
-package com.example.myprofile
+package com.example.myprofile.datastore
 
 import android.content.Context
 import android.content.SharedPreferences
 
+/*
+    Stores data to SharedPreferences. Not currently in use.
+ */
 class SharedPrefs(context: Context) {
 
     private val preferences: SharedPreferences = context.getSharedPreferences(MY_PREFS, Context.MODE_PRIVATE)

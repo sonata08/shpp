@@ -1,6 +1,5 @@
-package com.example.myprofile
+package com.example.myprofile.datastore
 
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -11,9 +10,16 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
-
+/*
+    The class is responsible for storing user's data
+ */
 class DataStorePreferences(private val dataStore: DataStore<Preferences>) {
 
+    /*
+        Gets data from dataStore or empty string if there is now data.
+        Throws an error is smth goes wrong.
+        Returns an instance of UserCredentials.
+     */
     val getCredentialsFlow: Flow<UserCredentials> = this.dataStore.data
         .catch { exception ->
             if (exception is IOException) {
@@ -32,11 +38,18 @@ class DataStorePreferences(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { preferences ->
             preferences[EMAIL_KEY] = email
             preferences[PASSWORD_KEY] = password
-            preferences[NAME_KEY] = parseEmail(email)
-            Log.d("##DataStore", preferences[NAME_KEY].toString())
         }
     }
 
+    suspend fun saveName(email: String) {
+        dataStore.edit { preferences ->
+            preferences[NAME_KEY] = parseEmail(email)
+        }
+    }
+
+    /*
+        Parses name from email
+     */
     private fun parseEmail(email: String): String {
         val emailName = email.substringBefore("@")
         return if (emailName.contains(".")) {

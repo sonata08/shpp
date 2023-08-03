@@ -1,4 +1,4 @@
-package com.example.myprofile
+package com.example.myprofile.ui
 
 import android.content.Context
 import android.content.Intent
@@ -10,6 +10,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.lifecycleScope
+import com.example.myprofile.datastore.DataStorePreferences
+import com.example.myprofile.R
 import com.example.myprofile.databinding.ActivitySignUpBinding
 import kotlinx.coroutines.launch
 
@@ -33,6 +35,9 @@ class SignUpActivity: AppCompatActivity() {
         listenToUserActions()
     }
 
+    /*
+        Redirects to MyProfile activity if email and password are saved
+     */
     private fun autologinIfCredentialsSaved() {
         lifecycleScope.launch{
             dataStorePreferences.getCredentialsFlow.collect {
@@ -51,6 +56,10 @@ class SignUpActivity: AppCompatActivity() {
         setupPasswordListener()
     }
 
+    /*
+        Listens to user's actions on password field.
+        Shows error only if Register button has already been clicked.
+     */
     private fun setupPasswordListener() {
         binding.passwordEdit.doAfterTextChanged {
             if (ifRegisterButtonClicked) {
@@ -63,6 +72,10 @@ class SignUpActivity: AppCompatActivity() {
         }
     }
 
+    /*
+        Listens to user's actions on email field.
+        Shows error only if Register button has already been clicked.
+     */
     private fun setupEmailListener() {
         binding.emailEdit.doAfterTextChanged {
             if (ifRegisterButtonClicked) {
@@ -75,6 +88,10 @@ class SignUpActivity: AppCompatActivity() {
         }
     }
 
+    /*
+        Gets email and password from user's input then starts MyProfile activity
+        or shows errors.
+     */
     private fun setupRegisterButtonClickListener() {
         binding.registerButton.setOnClickListener {
             email = binding.emailLayout.editText?.text.toString()
@@ -84,9 +101,15 @@ class SignUpActivity: AppCompatActivity() {
         }
     }
 
+    /*
+        Checks if email and password are valid. If so, saves credentials to datastore
+        if checkbox is checked, saves name to datastore and goes to MyProfile activity.
+        Otherwise shows an error.
+     */
     private fun startActivityOrShowError() {
         if (isValidEmail(email) && isValidPassword(password)) {
             if (binding.checkboxRememberMe.isChecked) saveUserCredentials()
+            saveName()
             goToProfile()
         } else {
             if (!isValidEmail(email)) binding.emailLayout.error = getString(R.string.error_email)
@@ -94,16 +117,24 @@ class SignUpActivity: AppCompatActivity() {
         }
     }
 
+    /*
+        Checks email validity
+     */
     private fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
+    /*
+        Checks password validity
+     */
     private fun isValidPassword(password: String): Boolean {
         return password.length in 8..16
     }
 
-    // Sets MainActivity as start of a new task on this history stack, clears existing task
-    // and starts MainActivity
+    /*
+        Sets MainActivity as start of a new task on this history stack, clears existing task
+        and starts MainActivity
+     */
     private fun goToProfile() {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -116,7 +147,11 @@ class SignUpActivity: AppCompatActivity() {
         }
     }
 
-
+    private fun saveName(){
+        lifecycleScope.launch{
+            dataStorePreferences.saveName(email)
+        }
+    }
 
 }
 

@@ -17,7 +17,7 @@
     <string name="google">google</string>
     <string name="or">або</string>
     <string name="register">зареєструватися</string>
-    <string name="agree_to_terms">Натиснувши "Реєстрація", ви приймаєте наші Загальні положення \n та умови</string>
+    <string name="agree_to_terms">Натиснувши "Реєстрація", ви приймаєте наші \n Загальні положення та умови</string>
     <string name="already_have_an_account">Вже маєте обліковий запис?</string>
     <string name="sign_in">Увійти</string>
     <string name="error_email">Неправильна адреса електронної пошти</string>

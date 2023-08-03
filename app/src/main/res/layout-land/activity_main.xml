@@ -11,9 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/blue"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/center_guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/center_guideline" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/settings"
@@ -33,13 +34,12 @@
         app:layout_constraintHeight_percent="0.15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/center_guideline"
-        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintTop_toBottomOf="@id/settings"
+        app:layout_constraintBottom_toTopOf="@id/name"
+        app:layout_constraintVertical_bias="0.2"
         android:contentDescription="@string/profile_photo"
         android:src="@drawable/mockup"
-        app:shapeAppearance="@style/circleImageView"
-         />
+        app:shapeAppearance="@style/circleImageView" />
 
     <TextView
         android:id="@+id/name"
@@ -61,7 +61,7 @@
         android:text="@string/career"
         android:textColor="?attr/colorOnSecondary"
         android:textSize="@dimen/h3"
-        app:layout_constraintBottom_toBottomOf="@id/center_guideline"
+        app:layout_constraintBottom_toTopOf="@id/address"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name"
@@ -74,12 +74,11 @@
         android:text="@string/home_address"
         android:textColor="?attr/colorOnSecondary"
         android:textSize="@dimen/h3"
-        app:layout_constraintBottom_toBottomOf="@id/center_guideline"
+        app:layout_constraintBottom_toTopOf="@id/center_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/career"
-        app:layout_constraintVertical_bias="0.2" />
-
+        android:layout_marginBottom="8dp" />
 
     <TextView
         android:id="@+id/go_to_settings_text"
@@ -127,14 +126,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/margins_perimeter" />
+        app:layout_constraintGuide_begin="@dimen/margin_32" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/right_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/margins_perimeter"/>
+        app:layout_constraintGuide_end="@dimen/margin_32"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/top_guideline"

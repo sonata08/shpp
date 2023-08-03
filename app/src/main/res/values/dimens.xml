@@ -10,4 +10,8 @@
     <dimen name="margin_8">8dp</dimen>
     <dimen name="big_button_height">55dp</dimen>
     <dimen name="stroke_width">2dp</dimen>
+    <dimen name="letter_spacing">0.15</dimen>
+
+<!--    landscape dimens-->
+    <dimen name="margin_32">32dp</dimen>
 </resources>

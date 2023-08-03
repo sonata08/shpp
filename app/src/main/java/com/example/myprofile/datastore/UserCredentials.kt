@@ -1,4 +1,4 @@
-package com.example.myprofile
+package com.example.myprofile.datastore
 
 data class UserCredentials(
     val email: String,
