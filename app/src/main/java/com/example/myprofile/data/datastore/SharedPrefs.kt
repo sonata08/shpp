@@ -1,4 +1,4 @@
-package com.example.myprofile.datastore
+package com.example.myprofile.data.datastore
 
 import android.content.Context
 import android.content.SharedPreferences

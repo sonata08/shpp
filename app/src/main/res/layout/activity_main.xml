@@ -6,13 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-    <FrameLayout
+    <View
         android:id="@+id/upper_part"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/blue"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/center_guideline" />
 
     <TextView
@@ -37,7 +38,6 @@
         app:layout_constraintBottom_toBottomOf="@id/center_guideline"
         app:layout_constraintVertical_bias="0.3"
         android:contentDescription="@string/profile_photo"
-        android:src="@drawable/mockup"
         app:shapeAppearance="@style/circleImageView"
          />
 

@@ -111,7 +111,7 @@
             android:layout_height="wrap_content"
             android:text="@string/google"
             android:textAppearance="@style/ButtonTextCaps"
-            app:icon="@drawable/google"
+            app:icon="@drawable/ic_google"
             app:iconGravity="textStart"
             app:iconTint="@null"
             app:layout_constraintBottom_toTopOf="@id/or_text"

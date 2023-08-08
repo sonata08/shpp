@@ -38,7 +38,7 @@
         app:layout_constraintBottom_toTopOf="@id/name"
         app:layout_constraintVertical_bias="0.2"
         android:contentDescription="@string/profile_photo"
-        android:src="@drawable/mockup"
+        android:src="@drawable/ic_mockup"
         app:shapeAppearance="@style/circleImageView" />
 
     <TextView

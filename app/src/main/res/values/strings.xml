@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">My profile</string>
     <string name="view_my_contacts">View my contacts</string>
     <string name="edit_profile">Edit profile</string>

@@ -1,10 +1,12 @@
-package com.example.myprofile.datastore
+package com.example.myprofile.data.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.myprofile.data.model.UserCredentials
+import com.example.myprofile.utils.Parser
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -14,7 +16,6 @@ import java.io.IOException
     The class is responsible for storing user's data
  */
 class DataStorePreferences(private val dataStore: DataStore<Preferences>) {
-
     /*
         Gets data from dataStore or empty string if there is now data.
         Throws an error is smth goes wrong.
@@ -43,30 +44,13 @@ class DataStorePreferences(private val dataStore: DataStore<Preferences>) {
 
     suspend fun saveName(email: String) {
         dataStore.edit { preferences ->
-            preferences[NAME_KEY] = parseEmail(email)
+            preferences[NAME_KEY] = Parser.parseEmail(email)
         }
     }
-
-    /*
-        Parses name from email
-     */
-    private fun parseEmail(email: String): String {
-        val emailName = email.substringBefore("@")
-        return if (emailName.contains(".")) {
-            val name = emailName
-                .split(".")
-                .joinToString(separator = " ") { it -> it.replaceFirstChar { it.uppercase() } }
-            name
-        } else {
-            emailName
-        }
-    }
-
 
     companion object {
         private val EMAIL_KEY = stringPreferencesKey("user_email")
         private val PASSWORD_KEY = stringPreferencesKey("user_password")
         private val NAME_KEY = stringPreferencesKey("user_name")
     }
-
 }
