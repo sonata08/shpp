@@ -3,7 +3,6 @@ package com.example.myprofile.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Patterns
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.datastore.core.DataStore
@@ -14,25 +13,26 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.lifecycleScope
 import com.example.myprofile.R
 import com.example.myprofile.databinding.ActivitySignUpBinding
+import com.example.myprofile.utils.Validation
 
 const val DATA_STORE_NAME = "settings"
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
 class SignUpActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivitySignUpBinding
-    private lateinit var email: String // TODO: remove from global
-    private lateinit var password: String
-    private var ifRegisterButtonClicked = false // TODO: bad
+    private val binding: ActivitySignUpBinding by lazy {
+        ActivitySignUpBinding.inflate(
+            layoutInflater
+        )
+    }
     private val dataStorePreferences: DataStorePreferences by lazy { DataStorePreferences(dataStore) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         autologinIfCredentialsSaved()
-        listenToUserActions()// TODO: setListeners()
+        setListeners()
     }
 
     /*
@@ -41,16 +41,14 @@ class SignUpActivity : AppCompatActivity() {
     private fun autologinIfCredentialsSaved() {
         lifecycleScope.launch {
             dataStorePreferences.getCredentialsFlow.collect {
-                email = it.email
-                password = it.password
-                if (email.isNotEmpty() && password != "") {
+                if (it.email.isNotEmpty() && it.password != "") {
                     goToProfile()
                 }
             }
         }
     }
 
-    private fun listenToUserActions() {
+    private fun setListeners() {
         setupRegisterButtonClickListener()
         setupEmailListener()
         setupPasswordListener()
@@ -62,12 +60,10 @@ class SignUpActivity : AppCompatActivity() {
      */
     private fun setupPasswordListener() {
         binding.passwordEdit.doAfterTextChanged {
-            if (ifRegisterButtonClicked) {
-                binding.passwordLayout.error = if (!isValidPassword(it.toString())) {
-                    getString(R.string.error_password)
-                } else {
-                    null
-                }
+            binding.passwordLayout.error = if (!Validation.isValidPassword(it.toString())) {
+                getString(R.string.error_password)
+            } else {
+                null
             }
         }
     }
@@ -78,12 +74,10 @@ class SignUpActivity : AppCompatActivity() {
      */
     private fun setupEmailListener() {
         binding.emailEdit.doAfterTextChanged {
-            if (ifRegisterButtonClicked) {
-                if (!isValidEmail(it.toString())) {
-                    binding.emailLayout.error = getString(R.string.error_email)
-                } else {
-                    binding.emailLayout.error = null
-                }
+            if (!Validation.isValidEmail(it.toString())) {
+                binding.emailLayout.error = getString(R.string.error_email)
+            } else {
+                binding.emailLayout.error = null
             }
         }
     }
@@ -94,9 +88,8 @@ class SignUpActivity : AppCompatActivity() {
      */
     private fun setupRegisterButtonClickListener() {
         binding.registerButton.setOnClickListener {
-            email = binding.emailEdit.text.toString() // TODO: not that view
-            password = binding.passwordLayout.editText?.text.toString()
-            ifRegisterButtonClicked = true
+            val email = binding.emailEdit.text.toString()
+            val password = binding.passwordEdit.text.toString()
             startActivityOrShowError(email, password)
         }
     }
@@ -107,28 +100,16 @@ class SignUpActivity : AppCompatActivity() {
         Otherwise shows an error.
      */
     private fun startActivityOrShowError(email: String, password: String) {
-        if (isValidEmail(email) && isValidPassword(password)) {
-            if (binding.checkboxRememberMe.isChecked) saveUserCredentials()
-            saveName()
+        if (Validation.isValidEmail(email) && Validation.isValidPassword(password)) {
+            if (binding.checkboxRememberMe.isChecked) saveUserCredentials(email, password)
+            saveName(email)
             goToProfile()
         } else {
-            if (!isValidEmail(this.email)) binding.emailLayout.error =
+            if (!Validation.isValidEmail(email)) binding.emailLayout.error =
                 getString(R.string.error_email)
-            if (!isValidPassword(this.password)) binding.passwordLayout.error =
+            if (!Validation.isValidPassword(password)) binding.passwordLayout.error =
                 getString(R.string.error_password)
         }
-    }
-
-    /*
-        Checks email validity
-     */
-    private fun isValidEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()
-
-    /*
-        Checks password validity
-     */
-    private fun isValidPassword(password: String): Boolean {
-        return password.length in 8..16 // TODO: to constants
     }
 
     /*
@@ -141,19 +122,16 @@ class SignUpActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun saveUserCredentials() {
+    private fun saveUserCredentials(email: String, password: String) {
         lifecycleScope.launch {
             dataStorePreferences.saveCredentials(email, password)
         }
     }
 
-    private fun saveName() {
+    private fun saveName(email: String) {
         lifecycleScope.launch {
             dataStorePreferences.saveName(email)
         }
-    }
-    companion object {
-
     }
 }
 

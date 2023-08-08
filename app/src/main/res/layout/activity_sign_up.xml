@@ -6,13 +6,8 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:background="@color/blue"
-    android:padding="@dimen/margins_perimeter">
-
-<!--    <FrameLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@color/blue"-->
-<!--        android:padding="@dimen/margins_perimeter">-->
+    android:paddingHorizontal="@dimen/basic_layout_horizontal_margins"
+    android:paddingVertical="@dimen/basic_layout_vertical_margins">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -28,7 +23,6 @@
             app:layout_constraintBottom_toTopOf="@id/fill_profile"
             android:textColor="?attr/colorOnPrimary"
             app:layout_constraintVertical_chainStyle="packed"
-
             android:textSize="@dimen/h1"
             android:text="@string/get_acquainted"/>
 
@@ -97,7 +91,7 @@
             android:buttonTint="@color/white"
             android:checked="true"
             android:text="@string/remember_me"
-            android:textColor="@color/grey_text_2"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="@dimen/h3"
             app:layout_constraintBottom_toTopOf="@+id/google_button"
             app:layout_constraintStart_toStartOf="parent"
@@ -178,14 +172,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:text="@string/sign_in"
             style="@style/TextButton"
-
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-<!--</FrameLayout>-->
 </ScrollView>

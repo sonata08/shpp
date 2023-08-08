@@ -1,0 +1,4 @@
+<resources>
+      <dimen name="basic_layout_vertical_margins">16dp</dimen>
+      <dimen name="basic_layout_horizontal_margins">32dp</dimen>
+</resources>

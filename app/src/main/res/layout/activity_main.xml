@@ -10,7 +10,7 @@
         android:id="@+id/upper_part"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/blue"
+        android:background="?attr/colorSecondary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,6 +38,7 @@
         app:layout_constraintBottom_toBottomOf="@id/center_guideline"
         app:layout_constraintVertical_bias="0.3"
         android:contentDescription="@string/profile_photo"
+        android:src="@drawable/ic_mockup"
         app:shapeAppearance="@style/circleImageView"
          />
 
@@ -127,27 +128,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/margins_perimeter" />
+        app:layout_constraintGuide_begin="@dimen/basic_layout_horizontal_margins" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/right_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/margins_perimeter"/>
+        app:layout_constraintGuide_end="@dimen/basic_layout_horizontal_margins"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/top_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="@dimen/margins_perimeter"/>
+        app:layout_constraintGuide_begin="@dimen/basic_layout_vertical_margins"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/bottom_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="@dimen/margins_perimeter"/>
+        app:layout_constraintGuide_end="@dimen/basic_layout_vertical_margins"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

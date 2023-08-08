@@ -6,12 +6,12 @@
     <dimen name="h3">14sp</dimen>
     <dimen name="h4">12sp</dimen>
     <dimen name="text_16">16sp</dimen>
-    <dimen name="margins_perimeter">16dp</dimen>
+    <dimen name="basic_layout_vertical_margins">16dp</dimen>
+    <dimen name="basic_layout_horizontal_margins">16dp</dimen>
     <dimen name="margin_8">8dp</dimen>
     <dimen name="big_button_height">55dp</dimen>
     <dimen name="stroke_width">2dp</dimen>
     <dimen name="letter_spacing">0.15</dimen>
 
-<!--    landscape dimens-->
-    <dimen name="margin_32">32dp</dimen>
+
 </resources>

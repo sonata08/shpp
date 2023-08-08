@@ -12,10 +12,7 @@ import kotlinx.coroutines.launch
  */
 class MainActivity : AppCompatActivity() {
 
-    val binding: ActivityMainBinding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
-
+    private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val dataStorePreferences: DataStorePreferences by lazy { DataStorePreferences(dataStore) }
 
     override fun onCreate(savedInstanceState: Bundle?) {

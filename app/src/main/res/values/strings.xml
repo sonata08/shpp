@@ -22,4 +22,6 @@
     <string name="sign_in">Sign in</string>
     <string name="error_email">Incorrect E-Mail address</string>
     <string name="error_password">Your password must be 8–16 characters</string>
+    <string name="contacts">Contacts</string>
+
 </resources>

@@ -7,13 +7,11 @@
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/blue</item>
-<!--        <item name="colorSecondaryVariant">@color/grey_82</item> -->
         <item name="colorSecondaryVariant">@color/blue</item>
         <item name="colorOnSecondary">@color/grey_text_2</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorSecondary</item>
         <!-- Customize your theme here. -->
-        <item name="colorOnSurface">@color/grey_text_2</item>
     </style>
 
     <style name="ButtonPrimaryOutlined" parent="Widget.MaterialComponents.Button">
@@ -24,12 +22,17 @@
     </style>
 
     <style name="ButtonTextCaps" >
-        <item name="android:fontFamily">@font/opensans</item>
+        <item name="android:textAppearance">@style/AppTextAppearance</item>
         <item name="android:textSize">@dimen/text_16</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:letterSpacing">@dimen/letter_spacing</item>
     </style>
+
+    <style name="AppTextAppearance">
+        <item name="android:fontFamily">@font/opensans</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 
     <style name="ButtonWhiteOutlined" >
         <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
@@ -51,6 +54,7 @@
 
     <style name="TextInputLayout">
         <item name="colorPrimary">?attr/colorOnSecondary</item>
+        <item name="colorOnSurface">?attr/colorOnSecondary</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="boxBackgroundColor">?attr/colorSecondary</item>
         <item name="errorIconDrawable">@null</item>
