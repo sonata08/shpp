@@ -18,3 +18,4 @@ class ContactsActivity : AppCompatActivity() {
 
     }
 }
+
