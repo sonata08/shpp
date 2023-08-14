@@ -13,7 +13,7 @@ class ContactsAdapter() : ListAdapter<Contact, ContactsAdapter.ContactViewHolder
     class ContactViewHolder(private val binding: ItemContactBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(contact: Contact) {
             binding.apply {
-                profilePic.loadImage(contact.photo)
+                profilePic.loadImage(contact.photo+(0..30).random())
                 tvName.text = contact.name
                 tvCareer.text = contact.career
             }

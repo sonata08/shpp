@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     private fun setName() {
         lifecycleScope.launch {
             dataStorePreferences.getCredentialsFlow.collect{
-                binding.name.text = it.name
+                binding.tvName.text = it.name
             }
         }
     }
