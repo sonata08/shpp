@@ -5,7 +5,7 @@ class ContactsService {
     fun generateContacts(): List<Contact> {
         return mutableListOf(
             Contact("Alice", "Engineer", "https://picsum.photos/200?random="),
-            Contact("Bob", "Designer", "https://picsum.photos/200?random="),
+            Contact("John Smith John Smith John Smith John Smith ", "Designer", "https://picsum.photos/200?random="),
             Contact("Charlie", "Manager", "https://picsum.photos/200?random="),
             Contact("David", "Developer", "https://picsum.photos/200?random="),
             Contact("Emily", "Artist", "https://picsum.photos/200?random="),
