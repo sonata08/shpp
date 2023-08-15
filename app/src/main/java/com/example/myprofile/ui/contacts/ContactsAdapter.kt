@@ -21,7 +21,7 @@ class ContactsAdapter() : ListAdapter<Contact, ContactsAdapter.ContactViewHolder
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
-        return ContactViewHolder(ItemContactBinding.inflate(LayoutInflater.from(parent.context)))
+        return ContactViewHolder(ItemContactBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
