@@ -23,7 +23,12 @@ class ContactsService {
             Contact("Quinn", "Lawyer", "https://picsum.photos/200?random="),
             Contact("Ryan", "Pilot", "https://picsum.photos/200?random="),
             Contact("Sophia", "Dancer", "https://picsum.photos/200?random="),
-            Contact("Thomas", "Engineer", "https://picsum.photos/200?random=")
-        )
+            Contact("Thomas", "Engineer", "https://picsum.photos/200?random="),
+            Contact("Alice", "Engineer", "https://picsum.photos/200?random="),
+            Contact("John Smith John Smith John Smith John Smith ", "Designer", "https://picsum.photos/200?random="),
+            Contact("Charlie", "Manager", "https://picsum.photos/200?random="),
+
+
+            )
     }
 }

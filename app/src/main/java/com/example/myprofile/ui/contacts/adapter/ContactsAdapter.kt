@@ -1,4 +1,4 @@
-package com.example.myprofile.ui.contacts
+package com.example.myprofile.ui.contacts.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,9 @@ import com.example.myprofile.data.model.Contact
 import com.example.myprofile.databinding.ItemContactBinding
 import com.example.myprofile.utils.extentions.loadImage
 
-class ContactsAdapter() : ListAdapter<Contact, ContactsAdapter.ContactViewHolder>(ContactsDiffCallBack()) {
+class ContactsAdapter() : ListAdapter<Contact, ContactsAdapter.ContactViewHolder>(
+    ContactsDiffCallBack()
+) {
     class ContactViewHolder(private val binding: ItemContactBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(contact: Contact) {
             binding.apply {

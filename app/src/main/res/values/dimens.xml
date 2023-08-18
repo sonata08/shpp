@@ -13,5 +13,8 @@
     <dimen name="stroke_width">2dp</dimen>
     <dimen name="letter_spacing">0.15</dimen>
 
+<!--     contacts-->
+    <dimen name="margin_between_items">16dp</dimen>
+    <dimen name="margin_last_item_bottom">50dp</dimen>
 
 </resources>
