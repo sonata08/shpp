@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.example.myprofile.databinding.ActivityMainBinding
 import com.example.myprofile.data.datastore.DataStorePreferences
+import com.example.myprofile.utils.ext.dataStore
 import kotlinx.coroutines.launch
 
 /*

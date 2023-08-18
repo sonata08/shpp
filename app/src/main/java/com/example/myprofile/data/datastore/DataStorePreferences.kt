@@ -26,14 +26,14 @@ class DataStorePreferences(private val dataStore: DataStore<Preferences>) {
             if (exception is IOException) {
                 emit(emptyPreferences())
             } else {
-                throw exception
+                throw exception // shouldn't throw exception as it would crash the app
             }
         }.map { preferences ->
             val email = preferences[EMAIL_KEY] ?: ""
             val password = preferences[PASSWORD_KEY] ?: ""
             val name = preferences[NAME_KEY] ?: ""
             UserCredentials(email, password, name)
-    }
+        }
 
     suspend fun saveCredentials(email: String, password: String) {
         dataStore.edit { preferences ->

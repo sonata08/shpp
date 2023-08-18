@@ -1,22 +1,18 @@
 package com.example.myprofile.ui
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.preferencesDataStore
-import com.example.myprofile.data.datastore.DataStorePreferences
-import kotlinx.coroutines.launch
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.lifecycleScope
 import com.example.myprofile.R
+import com.example.myprofile.data.datastore.DataStorePreferences
 import com.example.myprofile.databinding.ActivitySignUpBinding
 import com.example.myprofile.utils.Validation
+import com.example.myprofile.utils.ext.dataStore
+import kotlinx.coroutines.launch
 
 const val DATA_STORE_NAME = "settings"
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -30,7 +26,6 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
         autologinIfCredentialsSaved()
         setListeners()
     }
@@ -59,11 +54,14 @@ class SignUpActivity : AppCompatActivity() {
         Shows error only if Register button has already been clicked.
      */
     private fun setupPasswordListener() {
-        binding.passwordEdit.doAfterTextChanged {
-            binding.passwordLayout.error = if (!Validation.isValidPassword(it.toString())) {
-                getString(R.string.error_password)
-            } else {
-                null
+        // binding.run
+        binding.run {
+            passwordEdit.doAfterTextChanged {
+                passwordLayout.error = if (!Validation.isValidPassword(it.toString())) {
+                    getString(R.string.error_password)
+                } else {
+                    null
+                }
             }
         }
     }
@@ -73,6 +71,7 @@ class SignUpActivity : AppCompatActivity() {
         Shows error only if Register button has already been clicked.
      */
     private fun setupEmailListener() {
+        // binding.run
         binding.emailEdit.doAfterTextChanged {
             if (!Validation.isValidEmail(it.toString())) {
                 binding.emailLayout.error = getString(R.string.error_email)
@@ -101,7 +100,12 @@ class SignUpActivity : AppCompatActivity() {
      */
     private fun startActivityOrShowError(email: String, password: String) {
         if (Validation.isValidEmail(email) && Validation.isValidPassword(password)) {
-            if (binding.checkboxRememberMe.isChecked) saveUserCredentials(email, password)
+            if (binding.checkboxRememberMe.isChecked) {
+                saveUserCredentials(
+                    email,
+                    password
+                )
+            }
             saveName(email)
             goToProfile()
         } else {
@@ -117,9 +121,10 @@ class SignUpActivity : AppCompatActivity() {
         and starts MainActivity
      */
     private fun goToProfile() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
+        Intent(this, MainActivity::class.java).run {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(this)
+        }
     }
 
     private fun saveUserCredentials(email: String, password: String) {
