@@ -9,21 +9,29 @@ import com.example.myprofile.data.model.Contact
 import com.example.myprofile.databinding.ItemContactBinding
 import com.example.myprofile.utils.extentions.loadImage
 
-class ContactsAdapter() : ListAdapter<Contact, ContactsAdapter.ContactViewHolder>(
-    ContactsDiffCallBack()
-) {
-    class ContactViewHolder(private val binding: ItemContactBinding): RecyclerView.ViewHolder(binding.root) {
+class ContactsAdapter(private val onDeleteClickListener: (contact: Contact) -> Unit) :
+    ListAdapter<Contact, ContactsAdapter.ContactViewHolder>(
+        ContactsDiffCallBack()
+    ) {
+    class ContactViewHolder(
+        private val binding: ItemContactBinding,
+        val onDeleteClickListener: (contact: Contact) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(contact: Contact) {
             binding.apply {
-                profilePic.loadImage(contact.photo+(0..30).random())
+                profilePic.loadImage(contact.photo + (0..30).random())
                 tvName.text = contact.name
                 tvCareer.text = contact.career
+                icDelete.setOnClickListener {
+                    onDeleteClickListener(contact)
+                }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
-        return ContactViewHolder(ItemContactBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        val binding = ItemContactBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ContactViewHolder(binding, onDeleteClickListener)
     }
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
@@ -40,8 +48,4 @@ class ContactsAdapter() : ListAdapter<Contact, ContactsAdapter.ContactViewHolder
             return oldItem == newItem
         }
     }
-
-
-
-
 }
