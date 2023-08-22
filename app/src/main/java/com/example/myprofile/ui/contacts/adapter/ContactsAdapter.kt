@@ -9,7 +9,9 @@ import com.example.myprofile.data.model.Contact
 import com.example.myprofile.databinding.ItemContactBinding
 import com.example.myprofile.utils.extentions.loadImage
 
-class ContactsAdapter(private val onDeleteClickListener: (contact: Contact) -> Unit) :
+class ContactsAdapter(
+    private val onDeleteClickListener: (contact: Contact) -> Unit
+) :
     ListAdapter<Contact, ContactsAdapter.ContactViewHolder>(
         ContactsDiffCallBack()
     ) {
@@ -37,6 +39,10 @@ class ContactsAdapter(private val onDeleteClickListener: (contact: Contact) -> U
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         val current = getItem(position)
         holder.bind(current)
+    }
+
+    fun getContactAtPosition(position: Int): Contact {
+        return getItem(position)
     }
 
     private class ContactsDiffCallBack : DiffUtil.ItemCallback<Contact>() {

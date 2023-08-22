@@ -13,7 +13,7 @@ class ContactsRepository {
         localContactsDataSource.contactsList.remove(contact)
     }
 
-    fun addContact(contact: Contact) {
-        localContactsDataSource.contactsList.add(contact)
+    fun addContact(contact: Contact, index: Int = getContacts().size) {
+        localContactsDataSource.contactsList.add(index, contact)
     }
 }

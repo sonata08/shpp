@@ -16,6 +16,11 @@ class ContactsViewModel(private val contactsRepository: ContactsRepository) : Vi
         contactsRepository.deleteContact(contact)
         _contactsFlow.value = contactsRepository.getContacts().toList()
     }
+
+    fun addContact(contact: Contact, index: Int = _contactsFlow.value.size) {
+        contactsRepository.addContact(contact, index)
+        _contactsFlow.value = contactsRepository.getContacts().toList()
+    }
 }
 
 class ContactsViewModelFactory(private val contactsRepository: ContactsRepository) :

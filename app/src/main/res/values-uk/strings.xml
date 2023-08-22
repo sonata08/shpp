@@ -22,8 +22,12 @@
     <string name="sign_in">Увійти</string>
     <string name="error_email">Неправильна адреса електронної пошти</string>
     <string name="error_password">Ваш пароль має містити 8–16 символів</string>
+
+    // Contacts list
     <string name="contacts">Контакти</string>
     <string name="contact_photo">Фото контакту</string>
     <string name="delete_icon">Видалити</string>
+    <string name="contact_deleted">Контакт видалено</string>
+    <string name="undo">СКАСУВАТИ</string>
 
 </resources>
