@@ -59,12 +59,26 @@
         <item name="boxBackgroundColor">?attr/colorSecondary</item>
         <item name="errorIconDrawable">@null</item>
         <item name="hintTextColor">?attr/colorOnSecondary</item>
-<!--        <item name="android:textColorHint">?attr/colorOnSecondary</item>-->
         <item name="boxStrokeErrorColor">?attr/colorOnPrimary</item>
 <!--        cursor color-->
         <item name="colorControlActivated">?attr/colorOnPrimary</item>
     </style>
 
+    <style name="TextInputOnWhiteBackground">
+        <item name="android:textColor">@color/grey_text</item>
+        <item name="boxBackgroundColor">?attr/colorPrimaryVariant</item>
+        <item name="errorIconDrawable">@null</item>
+        <item name="hintTextColor">?attr/colorOnSecondary</item>
+        <item name="boxStrokeErrorColor">?attr/colorOnPrimary</item>
+        <!--        cursor color-->
+        <item name="colorControlActivated">@color/grey_text</item>
+    </style>
+
+    <style name="TextInputGray" >
+        <item name="android:textAppearance">@style/AppTextAppearance</item>
+        <item name="android:textSize">@dimen/h2</item>
+        <item name="android:textColor">@color/grey_text</item>
+    </style>
 
 </resources>
 

@@ -7,7 +7,7 @@
     <string name="home_address">Home address</string>
     <string name="settings">Settings</string>
     <string name="profile_photo">Profile photo</string>
-    <string name="user_name">User name</string>
+    <string name="user_name">Username</string>
     <string name="go_to_settings">Go to settings and fill out the profile</string>
     <string name="get_acquainted">Let\'s get acquainted</string>
     <string name="fill_out_profile">Fill out the profile and go to the application</string>
@@ -29,5 +29,11 @@
     <string name="delete_icon">Delete icon</string>
     <string name="contact_deleted">The contact has been deleted.</string>
     <string name="undo">UNDO</string>
+    <string name="add_contacts">Add contacts</string>
+    <string name="add_contact">Add contact</string>
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="save">Save</string>
 
 </resources>

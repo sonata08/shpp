@@ -21,7 +21,7 @@ class ContactsAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(contact: Contact) {
             binding.apply {
-                profilePic.loadImage(contact.photo + (0..30).random())
+                profilePic.loadImage(contact.photo)
                 tvName.text = contact.name
                 tvCareer.text = contact.career
                 icDelete.setOnClickListener {

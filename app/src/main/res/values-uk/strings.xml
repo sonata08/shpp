@@ -29,5 +29,11 @@
     <string name="delete_icon">Видалити</string>
     <string name="contact_deleted">Контакт видалено</string>
     <string name="undo">СКАСУВАТИ</string>
+    <string name="add_contacts">Додати контакти</string>
+    <string name="add_contact">Додати контакт</string>
+    <string name="phone">Телефон</string>
+    <string name="address">Адреса</string>
+    <string name="date_of_birth">Дата народження</string>
+    <string name="save">Зберегти</string>
 
 </resources>

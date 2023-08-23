@@ -20,6 +20,7 @@
         android:id="@+id/tv_contacts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/basic_layout_vertical_margins"
         android:text="@string/contacts"
         android:textAppearance="@style/AppTextAppearance"
         android:textColor="?attr/colorOnPrimary"
@@ -28,6 +29,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_add_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/basic_layout_horizontal_margins"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_contacts"
+        app:layout_constraintBottom_toBottomOf="@id/header_background"
+        android:text="@string/add_contacts"
+        android:textAppearance="@style/AppTextAppearance"
+        android:textColor="?attr/colorOnPrimary"
+        android:textSize="@dimen/h3"
+        app:layout_constraintVertical_bias="0.8"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
