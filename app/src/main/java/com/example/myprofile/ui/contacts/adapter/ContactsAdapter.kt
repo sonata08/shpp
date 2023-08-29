@@ -22,7 +22,7 @@ class ContactsAdapter(
         fun bind(contact: Contact) {
             binding.apply {
                 profilePic.loadImage(contact.photo)
-                tvName.text = contact.name
+                tvName.text = contact.username
                 tvCareer.text = contact.career
                 icDelete.setOnClickListener {
                     onDeleteClickListener(contact)

@@ -87,13 +87,13 @@
         android:text="@string/go_to_settings"
         android:textSize="@dimen/h3"
         android:textColor="?attr/colorSecondaryVariant"
-        app:layout_constraintBottom_toTopOf="@id/google_button"
+        app:layout_constraintBottom_toTopOf="@id/btn_google"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
         app:layout_constraintEnd_toEndOf="@id/right_guideline"
         android:layout_marginBottom="@dimen/margin_8"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/google_button"
+        android:id="@+id/btn_google"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         style="@style/ButtonWhiteOutlined"

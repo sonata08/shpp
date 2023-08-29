@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomAnimatedButton">
+        <attr name="isAnimated" format="boolean"/>
+        <attr name="buttonText" format="string"/>
+        <attr name="buttonIcon" format="reference"/>
+        <attr name="buttonBackgroundColor" format="color"/>
+
+    </declare-styleable>
+</resources>

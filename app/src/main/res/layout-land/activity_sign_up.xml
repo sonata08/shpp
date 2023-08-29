@@ -86,25 +86,23 @@
             android:text="@string/remember_me"
             android:textColor="@color/grey_text_2"
             android:textSize="@dimen/h3"
-            app:layout_constraintBottom_toTopOf="@+id/google_button"
+            app:layout_constraintBottom_toTopOf="@+id/btn_google"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/password_layout"
             app:useMaterialThemeColors="false" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/google_button"
-            style="@style/ButtonWhiteOutlined"
+        <com.example.myprofile.utils.CustomAnimatedButton
+            android:id="@+id/btn_google"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/google"
+            android:layout_height="@dimen/big_button_height"
             android:textAppearance="@style/ButtonTextCaps"
-            app:icon="@drawable/ic_google"
-            app:iconGravity="textStart"
-            app:iconTint="@null"
+            app:buttonBackgroundColor="?attr/colorOnPrimary"
+            app:buttonIcon="@drawable/ic_google"
+            app:buttonText="@string/google"
+            app:isAnimated="true"
             app:layout_constraintBottom_toTopOf="@id/or_text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:strokeWidth="@null" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/or_text"
@@ -112,13 +110,13 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/register_button"
+            app:layout_constraintBottom_toTopOf="@id/btn_register"
             android:text="@string/or"
             android:textSize="@dimen/h2"
             android:textColor="?attr/colorOnPrimary" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/register_button"
+            android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="@dimen/big_button_height"
             app:layout_constraintStart_toStartOf="parent"

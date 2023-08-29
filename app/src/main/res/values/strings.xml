@@ -23,17 +23,22 @@
     <string name="error_email">Incorrect E-Mail address</string>
     <string name="error_password">Your password must be 8–16 characters</string>
 
-    // Contacts list
+    <!--    Contacts list-->
     <string name="contacts">Contacts</string>
     <string name="contact_photo">Contact\'s photo</string>
     <string name="delete_icon">Delete icon</string>
     <string name="contact_deleted">The contact has been deleted.</string>
     <string name="undo">UNDO</string>
     <string name="add_contacts">Add contacts</string>
+
+    <!--    Add contact-->
     <string name="add_contact">Add contact</string>
     <string name="phone">Phone</string>
     <string name="address">Address</string>
     <string name="date_of_birth">Date of birth</string>
     <string name="save">Save</string>
+    <string name="error_username">Your username must be at least 3 characters long</string>
+    <string name="back">Back</string>
+    <string name="add_photo">Add photo</string>
 
 </resources>

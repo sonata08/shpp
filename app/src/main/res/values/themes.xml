@@ -37,8 +37,8 @@
     <style name="ButtonWhiteOutlined" >
         <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
         <item name="android:textColor">@color/grey_text</item>
-        <item name="strokeColor">?attr/colorSecondary</item>
-        <item name="strokeWidth">@dimen/stroke_width</item>
+<!--        <item name="strokeColor">?attr/colorSecondary</item>-->
+<!--        <item name="strokeWidth">@dimen/stroke_width</item>-->
     </style>
 
     <style name="circleImageView" parent="">
@@ -69,7 +69,7 @@
         <item name="boxBackgroundColor">?attr/colorPrimaryVariant</item>
         <item name="errorIconDrawable">@null</item>
         <item name="hintTextColor">?attr/colorOnSecondary</item>
-        <item name="boxStrokeErrorColor">?attr/colorOnPrimary</item>
+        <item name="boxStrokeErrorColor">?attr/colorError</item>
         <!--        cursor color-->
         <item name="colorControlActivated">@color/grey_text</item>
     </style>
@@ -79,6 +79,13 @@
         <item name="android:textSize">@dimen/h2</item>
         <item name="android:textColor">@color/grey_text</item>
     </style>
+
+    <style name="MyDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowMinWidthMajor">70%</item>
+        <item name="android:windowMinWidthMinor">70%</item>
+    </style>
+
 
 </resources>
 

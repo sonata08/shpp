@@ -87,7 +87,7 @@ class SignUpActivity : AppCompatActivity() {
         or shows errors.
      */
     private fun setupRegisterButtonClickListener() {
-        binding.registerButton.setOnClickListener {
+        binding.btnRegister.setOnClickListener {
             val email = binding.emailEdit.text.toString()
             val password = binding.passwordEdit.text.toString()
             startActivityOrShowError(email, password)

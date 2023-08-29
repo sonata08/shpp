@@ -1,10 +1,10 @@
 package com.example.myprofile.ui.contacts
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,6 +24,7 @@ import com.example.myprofile.ui.contacts.dialog.AddContactDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
+
 class ContactsActivity : AppCompatActivity(), AddContactCallback {
 
     private val binding: ActivityContactsBinding by lazy {
@@ -42,20 +43,14 @@ class ContactsActivity : AppCompatActivity(), AddContactCallback {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        adapter = ContactsAdapter {contact ->
+        adapter = ContactsAdapter { contact ->
             val position = adapter.currentList.indexOf(contact)
             deleteContactWithSnackbar(contact, position, binding.recyclerView)
         }
         setupRecyclerView()
 
-            val isLargeLayout = resources.getBoolean(R.bool.large_layout)
+        val isLargeLayout = resources.getBoolean(R.bool.large_layout)
         binding.tvAddContact.setOnClickListener {
-
-            Toast.makeText(this, "DIALOG", Toast.LENGTH_SHORT).show()
-//            val dialogFragment = AddContactDialogFragment {
-//                viewModel.addContact(it)
-//            }
-//            dialogFragment.show(supportFragmentManager, "AddContactDialog")
             showDialog(isLargeLayout)
         }
 
@@ -99,16 +94,14 @@ class ContactsActivity : AppCompatActivity(), AddContactCallback {
         }
     }
 
-//    override fun onContactAdded(contact: Contact) {
-//        viewModel.addContact(contact)
-//    }
-
+    // shows fullscreen dialog if small layout and not fullscreen otherwise
     private fun showDialog(isLargeLayout: Boolean) {
         val fragmentManager = supportFragmentManager
         val newFragment = AddContactDialogFragment()
         if (isLargeLayout) {
             // The device is using a large layout, so show the fragment as a dialog
-            newFragment.show(fragmentManager, "dialog")
+            newFragment.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.MyDialogTheme)
+            newFragment.show(fragmentManager, ADD_CONTACT_DIALOG)
         } else {
             // The device is smaller, so show the fragment fullscreen
             val transaction = fragmentManager.beginTransaction()
@@ -127,6 +120,9 @@ class ContactsActivity : AppCompatActivity(), AddContactCallback {
         viewModel.addContact(contact)
     }
 
+    companion object {
+        const val ADD_CONTACT_DIALOG = "AddContactDialogFragment"
+    }
 
 }
 
