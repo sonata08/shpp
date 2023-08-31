@@ -1,22 +1,18 @@
 package com.example.myprofile.ui
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.preferencesDataStore
 import com.example.myprofile.data.datastore.DataStorePreferences
 import kotlinx.coroutines.launch
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.lifecycleScope
 import com.example.myprofile.R
 import com.example.myprofile.databinding.ActivitySignUpBinding
 import com.example.myprofile.utils.Validation
+import com.example.myprofile.utils.extentions.dataStore
 
 const val DATA_STORE_NAME = "settings"
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_NAME)
 
 class SignUpActivity : AppCompatActivity() {
 
