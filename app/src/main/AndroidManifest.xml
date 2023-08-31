@@ -16,11 +16,6 @@
             android:name=".ui.contacts.ContactsActivity"
             android:label="@string/contacts"
             android:exported="true">
-
-        </activity>
-        <activity
-            android:name=".ui.SignUpActivity"
-            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,9 +23,27 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.SignUpActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
             android:name=".ui.MainActivity"
             android:label="My Profile"
             android:parentActivityName=".ui.SignUpActivity" />
+
+        <!-- Trigger Google Play services to install the backported photo picker module. -->
+        <!--suppress AndroidDomInspection -->
+        <service android:name="com.google.android.gms.metadata.ModuleDependencies"
+            android:enabled="false"
+            android:exported="false"
+            tools:ignore="MissingClass">
+            <intent-filter>
+                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+            </intent-filter>
+            <meta-data android:name="photopicker_activity:0:required" android:value="" />
+        </service>
+
     </application>
 
 </manifest>

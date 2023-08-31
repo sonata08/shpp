@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
@@ -42,10 +44,27 @@ class AddContactDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        var photoUri = ""
+        // Registers a photo picker activity launcher in single-select mode.
+        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // Callback is invoked after the user selects a media item or closes the
+            // photo picker.
+            if (uri != null) {
+                photoUri = uri.toString()
+                binding.photo.loadImage(photoUri)
+            }
+        }
+
         binding.photo.loadImage(null)
-        binding.saveButton.setOnClickListener {
+        binding.btnAddPhoto.setOnClickListener {
+            // Launch the photo picker and let the user choose image
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+
+        }
+
+        binding.btnSave.setOnClickListener {
             if (isValidUsername()) {
-                val contact = getContact()
+                val contact = getContact(photoUri)
                 addContactCallback.onContactAdded(contact)
                 dismiss()
             }
@@ -56,7 +75,7 @@ class AddContactDialogFragment : DialogFragment() {
         return binding.root
     }
 
-    private fun getContact(): Contact {
+    private fun getContact(uri: String): Contact {
         with(binding) {
             val username = usernameEdit.text.toString()
             val career = careerEdit.text.toString()
@@ -64,7 +83,7 @@ class AddContactDialogFragment : DialogFragment() {
             val phone = phoneEdit.text.toString()
             val address = addressEdit.text.toString()
             val birthDate = birthdateEdit.text.toString()
-            return Contact(username, career, email, phone, address, birthDate)
+            return Contact(username, career, uri, email, phone, address, birthDate)
         }
     }
 

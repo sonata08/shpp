@@ -21,7 +21,7 @@
         <item name="strokeWidth">2dp</item>
     </style>
 
-    <style name="ButtonTextCaps" >
+    <style name="ButtonTextCaps">
         <item name="android:textAppearance">@style/AppTextAppearance</item>
         <item name="android:textSize">@dimen/text_16</item>
         <item name="android:textAllCaps">true</item>
@@ -33,12 +33,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-
-    <style name="ButtonWhiteOutlined" >
+    <style name="ButtonWhiteOutlined">
         <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
         <item name="android:textColor">@color/grey_text</item>
-<!--        <item name="strokeColor">?attr/colorSecondary</item>-->
-<!--        <item name="strokeWidth">@dimen/stroke_width</item>-->
+        <!--        <item name="strokeColor">?attr/colorSecondary</item>-->
+        <!--        <item name="strokeWidth">@dimen/stroke_width</item>-->
     </style>
 
     <style name="circleImageView" parent="">
@@ -60,7 +59,7 @@
         <item name="errorIconDrawable">@null</item>
         <item name="hintTextColor">?attr/colorOnSecondary</item>
         <item name="boxStrokeErrorColor">?attr/colorOnPrimary</item>
-<!--        cursor color-->
+        <!--        cursor color-->
         <item name="colorControlActivated">?attr/colorOnPrimary</item>
     </style>
 
@@ -74,7 +73,7 @@
         <item name="colorControlActivated">@color/grey_text</item>
     </style>
 
-    <style name="TextInputGray" >
+    <style name="TextInputGray">
         <item name="android:textAppearance">@style/AppTextAppearance</item>
         <item name="android:textSize">@dimen/h2</item>
         <item name="android:textColor">@color/grey_text</item>
