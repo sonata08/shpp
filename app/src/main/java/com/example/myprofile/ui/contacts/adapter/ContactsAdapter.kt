@@ -1,5 +1,6 @@
 package com.example.myprofile.ui.contacts.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,29 +11,34 @@ import com.example.myprofile.databinding.ItemContactBinding
 import com.example.myprofile.utils.extentions.loadImage
 
 class ContactsAdapter(
-    private val onDeleteClickListener: (contact: Contact) -> Unit
+    private val listener: OnContactClickListener
 ) :
     ListAdapter<Contact, ContactsAdapter.ContactViewHolder>(
         ContactsDiffCallBack()
     ) {
     class ContactViewHolder(
         private val binding: ItemContactBinding,
-        val onDeleteClickListener: (contact: Contact) -> Unit
+        private val listener: OnContactClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
+        private var currentContact: Contact? = null
 
         init {
             binding.root.setOnClickListener {
-
+                currentContact?.let {
+                    Log.d("M_", currentContact?.username.toString())
+                    listener.onContactClick(it)
+                }
             }
         }
 
         fun bind(contact: Contact) {
+            currentContact = contact
             binding.apply {
                 profilePic.loadImage(contact.photo)
                 tvName.text = contact.username
                 tvCareer.text = contact.career
                 icDelete.setOnClickListener {
-                    onDeleteClickListener(contact)
+                    listener.onContactDelete(contact)
                 }
             }
         }
@@ -40,7 +46,7 @@ class ContactsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val binding = ItemContactBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ContactViewHolder(binding, onDeleteClickListener)
+        return ContactViewHolder(binding, listener)
     }
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {

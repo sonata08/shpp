@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
+// Draws dividers between items and background frame
 class ContactsItemDecoration(
     private val sideMargin: Int,
     private val marginBetween: Int,

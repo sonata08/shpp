@@ -18,16 +18,18 @@ import com.example.myprofile.data.model.Contact
 import com.example.myprofile.data.repository.ContactsRepository
 import com.example.myprofile.databinding.ActivityContactsBinding
 import com.example.myprofile.ui.SignUpActivity
+import com.example.myprofile.ui.contacts.adapter.OnContactClickListener
 import com.example.myprofile.ui.contacts.adapter.ContactsAdapter
 import com.example.myprofile.ui.contacts.adapter.ContactsItemDecoration
 import com.example.myprofile.ui.contacts.adapter.SwipeToDeleteCallback
 import com.example.myprofile.ui.contacts.dialog.AddContactCallback
 import com.example.myprofile.ui.contacts.dialog.AddContactDialogFragment
+import com.example.myprofile.utils.extentions.showShortToast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 
-class ContactsActivity : AppCompatActivity(), AddContactCallback {
+class ContactsActivity : AppCompatActivity(), AddContactCallback, OnContactClickListener {
 
     private val binding: ActivityContactsBinding by lazy {
         ActivityContactsBinding.inflate(
@@ -45,10 +47,7 @@ class ContactsActivity : AppCompatActivity(), AddContactCallback {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        adapter = ContactsAdapter { contact ->
-            val position = adapter.currentList.indexOf(contact)
-            deleteContactWithSnackbar(contact, position, binding.recyclerView)
-        }
+        adapter = ContactsAdapter(this)
         setupRecyclerView()
 
         val isLargeLayout = resources.getBoolean(R.bool.large_layout)
@@ -56,6 +55,7 @@ class ContactsActivity : AppCompatActivity(), AddContactCallback {
             showDialog(isLargeLayout)
         }
 
+        // opens SingUpActivity just for convenience to check CustomView
         binding.btnBack.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
@@ -127,9 +127,17 @@ class ContactsActivity : AppCompatActivity(), AddContactCallback {
         viewModel.addContact(contact)
     }
 
+    override fun onContactDelete(contact: Contact) {
+        val position = adapter.currentList.indexOf(contact)
+        deleteContactWithSnackbar(contact, position, binding.recyclerView)
+    }
+
+    override fun onContactClick(contact: Contact) {
+        showShortToast("Open ${contact.username}'s details")
+    }
+
     companion object {
         const val ADD_CONTACT_DIALOG = "AddContactDialogFragment"
     }
-
 }
 
