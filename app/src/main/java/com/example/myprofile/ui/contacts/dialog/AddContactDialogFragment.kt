@@ -47,8 +47,7 @@ class AddContactDialogFragment : DialogFragment() {
         var photoUri = ""
         // Registers a photo picker activity launcher in single-select mode.
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // Callback is invoked after the user selects a media item or closes the
-            // photo picker.
+            // Callback is invoked after the user selects a media item or closes the photo picker.
             if (uri != null) {
                 photoUri = uri.toString()
                 binding.photo.loadImage(photoUri)
@@ -59,7 +58,6 @@ class AddContactDialogFragment : DialogFragment() {
         binding.btnAddPhoto.setOnClickListener {
             // Launch the photo picker and let the user choose image
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-
         }
 
         binding.btnSave.setOnClickListener {

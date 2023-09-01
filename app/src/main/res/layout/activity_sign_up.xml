@@ -102,7 +102,7 @@
             app:buttonBackgroundColor="?attr/colorOnPrimary"
             app:buttonIcon="@drawable/ic_google"
             app:buttonText="@string/google"
-            app:isAnimated="true"
+            app:isAnimated="false"
             app:layout_constraintBottom_toTopOf="@id/or_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

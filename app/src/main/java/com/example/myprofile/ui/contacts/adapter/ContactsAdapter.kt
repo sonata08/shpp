@@ -19,6 +19,13 @@ class ContactsAdapter(
         private val binding: ItemContactBinding,
         val onDeleteClickListener: (contact: Contact) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+
+            }
+        }
+
         fun bind(contact: Contact) {
             binding.apply {
                 profilePic.loadImage(contact.photo)
@@ -39,6 +46,8 @@ class ContactsAdapter(
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         val current = getItem(position)
         holder.bind(current)
+
+
     }
 
     fun getContactAtPosition(position: Int): Contact {

@@ -1,5 +1,6 @@
 package com.example.myprofile.ui.contacts
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -16,6 +17,7 @@ import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.data.repository.ContactsRepository
 import com.example.myprofile.databinding.ActivityContactsBinding
+import com.example.myprofile.ui.SignUpActivity
 import com.example.myprofile.ui.contacts.adapter.ContactsAdapter
 import com.example.myprofile.ui.contacts.adapter.ContactsItemDecoration
 import com.example.myprofile.ui.contacts.adapter.SwipeToDeleteCallback
@@ -52,6 +54,11 @@ class ContactsActivity : AppCompatActivity(), AddContactCallback {
         val isLargeLayout = resources.getBoolean(R.bool.large_layout)
         binding.tvAddContact.setOnClickListener {
             showDialog(isLargeLayout)
+        }
+
+        binding.btnBack.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
         }
 
         lifecycleScope.launch {
