@@ -16,11 +16,7 @@
             android:name=".ui.contacts.ContactsActivity"
             android:label="@string/contacts"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.SignUpActivity"
@@ -30,7 +26,15 @@
         <activity
             android:name=".ui.MainActivity"
             android:label="My Profile"
-            android:parentActivityName=".ui.SignUpActivity" />
+            android:exported="true"
+
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <!-- Trigger Google Play services to install the backported photo picker module. -->
         <!--suppress AndroidDomInspection -->
