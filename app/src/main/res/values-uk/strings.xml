@@ -41,4 +41,7 @@
     <string name="back">Назад</string>
     <string name="add_photo">Додати фото</string>
 
+    <!--    Detail view-->
+    <string name="message">Повідомлення</string>
+
 </resources>

@@ -75,13 +75,15 @@ class AddContactDialogFragment : DialogFragment() {
 
     private fun getContact(uri: String): Contact {
         with(binding) {
+            // TODO: setup id properly
+            val id = 33L
             val username = usernameEdit.text.toString()
             val career = careerEdit.text.toString()
             val email = emailEdit.text.toString()
             val phone = phoneEdit.text.toString()
             val address = addressEdit.text.toString()
             val birthDate = birthdateEdit.text.toString()
-            return Contact(username, career, uri, email, phone, address, birthDate)
+            return Contact(id, username, career, uri, email, phone, address, birthDate)
         }
     }
 

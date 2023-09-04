@@ -41,4 +41,7 @@
     <string name="back">Back</string>
     <string name="add_photo">Add photo</string>
 
+<!--    Detail view-->
+    <string name="message">message</string>
+
 </resources>

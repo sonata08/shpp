@@ -18,5 +18,9 @@
         android:id="@+id/detailViewFragment"
         android:name="com.example.myprofile.ui.contacts.DetailViewFragment"
         android:label="DetailViewFragment"
-        tools:layout="@layout/fragment_detail_view"/>
+        tools:layout="@layout/fragment_detail_view">
+        <argument
+            android:name="contact_id"
+            app:argType="long" />
+    </fragment>
 </navigation>

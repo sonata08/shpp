@@ -1,6 +1,5 @@
 package com.example.myprofile.ui.contacts.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -25,7 +24,6 @@ class ContactsAdapter(
         init {
             binding.root.setOnClickListener {
                 currentContact?.let {
-                    Log.d("M_", currentContact?.username.toString())
                     listener.onContactClick(it)
                 }
             }
@@ -35,7 +33,7 @@ class ContactsAdapter(
             currentContact = contact
             binding.apply {
                 profilePic.loadImage(contact.photo)
-                tvName.text = contact.username
+                tvUsername.text = contact.username
                 tvCareer.text = contact.career
                 icDelete.setOnClickListener {
                     listener.onContactDelete(contact)

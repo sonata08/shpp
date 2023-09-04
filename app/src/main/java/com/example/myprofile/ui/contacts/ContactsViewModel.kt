@@ -21,6 +21,10 @@ class ContactsViewModel(private val contactsRepository: ContactsRepository) : Vi
         contactsRepository.addContact(contact, index)
         _contactsFlow.value = contactsRepository.getContacts().toList()
     }
+
+    fun getContact(id: Long): Contact? {
+        return _contactsFlow.value.find { it.id == id }
+    }
 }
 
 class ContactsViewModelFactory(private val contactsRepository: ContactsRepository) :
