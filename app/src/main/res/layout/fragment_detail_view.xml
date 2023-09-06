@@ -30,6 +30,7 @@
         android:id="@+id/photo"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:transitionName="detail_photo"
         android:contentDescription="@string/profile_photo"
         android:src="@drawable/ic_mockup"
         app:layout_constraintBottom_toBottomOf="@id/center_guideline"

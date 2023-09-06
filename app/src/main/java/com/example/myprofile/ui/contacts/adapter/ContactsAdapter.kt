@@ -2,9 +2,12 @@ package com.example.myprofile.ui.contacts.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.databinding.ItemContactBinding
 import com.example.myprofile.utils.extentions.loadImage
@@ -20,11 +23,13 @@ class ContactsAdapter(
         private val listener: OnContactClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
         private var currentContact: Contact? = null
+        private val profilePicImageView: ImageView = binding.root.findViewById(R.id.profile_pic)
 
         init {
             binding.root.setOnClickListener {
+                val extras = FragmentNavigatorExtras(profilePicImageView to "detail_photo")
                 currentContact?.let {
-                    listener.onContactClick(it)
+                    listener.onContactClick(it, extras)
                 }
             }
         }

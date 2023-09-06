@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +27,6 @@ import com.example.myprofile.ui.contacts.adapter.OnContactClickListener
 import com.example.myprofile.ui.contacts.adapter.SwipeToDeleteCallback
 import com.example.myprofile.ui.contacts.dialog.AddContactCallback
 import com.example.myprofile.ui.contacts.dialog.AddContactDialogFragment
-import com.example.myprofile.utils.extentions.showShortToast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
@@ -142,10 +142,10 @@ class ContactsFragment : Fragment(), AddContactCallback, OnContactClickListener 
         deleteContactWithSnackbar(contact, position, binding.recyclerView)
     }
 
-    override fun onContactClick(contact: Contact) {
-        requireContext().showShortToast("Open ${contact.username}'s details")
+    override fun onContactClick(contact: Contact, extras: FragmentNavigator.Extras) {
         val action = ContactsFragmentDirections.actionContactsFragmentToDetailViewFragment(contact.id)
-        findNavController().navigate(action)
+        findNavController().navigate(action, extras)
+
     }
 
     companion object {

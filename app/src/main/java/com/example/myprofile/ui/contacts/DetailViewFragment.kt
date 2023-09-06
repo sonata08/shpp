@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
 import com.example.myprofile.data.repository.ContactsRepository
 import com.example.myprofile.databinding.FragmentDetailViewBinding
 import com.example.myprofile.utils.extentions.loadImage
@@ -28,6 +29,8 @@ class DetailViewFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailViewBinding.inflate(inflater, container, false)
+        // adds photo animation
+        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.slide_left)
         return binding.root
     }
 

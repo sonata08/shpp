@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -132,7 +133,7 @@ class ContactsActivity : AppCompatActivity(), AddContactCallback, OnContactClick
         deleteContactWithSnackbar(contact, position, binding.recyclerView)
     }
 
-    override fun onContactClick(contact: Contact) {
+    override fun onContactClick(contact: Contact, extras: FragmentNavigator.Extras) {
         showShortToast("Open ${contact.username}'s details")
     }
 
