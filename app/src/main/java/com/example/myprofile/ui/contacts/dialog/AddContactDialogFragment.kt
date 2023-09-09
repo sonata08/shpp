@@ -1,18 +1,21 @@
 package com.example.myprofile.ui.contacts.dialog
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
+import androidx.navigation.navGraphViewModels
 import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
+import com.example.myprofile.data.repository.ContactsRepository
 import com.example.myprofile.databinding.DialogAddContactBinding
+import com.example.myprofile.ui.contacts.ContactsViewModel
+import com.example.myprofile.ui.contacts.ContactsViewModelFactory
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.utils.extentions.loadImage
 
@@ -24,63 +27,80 @@ class AddContactDialogFragment : DialogFragment() {
         )
     }
 
-    private lateinit var addContactCallback: AddContactCallback
-
-    // Instantiating the AddContactCallback to survive during screen rotations
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        // Verify that the host activity implements the callback interface
-        try {
-            addContactCallback = context as AddContactCallback
-        } catch (e: ClassCastException) {
-            // The activity doesn't implement the interface, throw exception
-            throw ClassCastException(
-                (context.toString() +
-                        " must implement AddContactCallback")
+    private val viewModel: ContactsViewModel by navGraphViewModels(
+        R.id.contactsFragment,
+        factoryProducer = {
+            ContactsViewModelFactory(
+                ContactsRepository()
             )
         }
-    }
-
-
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        var photoUri = ""
-        // Registers a photo picker activity launcher in single-select mode.
-        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // Callback is invoked after the user selects a media item or closes the photo picker.
-            if (uri != null) {
-                photoUri = uri.toString()
-                binding.photo.loadImage(photoUri)
-            }
-        }
-
-        binding.photo.loadImage(null)
-        binding.btnAddPhoto.setOnClickListener {
-            // Launch the photo picker and let the user choose image
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-
-        binding.btnSave.setOnClickListener {
-            if (isValidUsername()) {
-                val contact = getContact(photoUri)
-                addContactCallback.onContactAdded(contact)
-                dismiss()
-            }
-        }
-        binding.backButton.setOnClickListener {
-            dismiss()
-        }
         return binding.root
     }
 
-    private fun getContact(uri: String): Contact {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupToolbar()
+        binding.photo.loadImage(viewModel.photoUri)
+        val pickMedia = registerPhotoPicker()
+        setupAddPhotoListener(pickMedia)
+        setupSaveListener()
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.setNavigationOnClickListener {
+            viewModel.resetPhotoUri()
+            dismiss()
+        }
+    }
+
+    // makes dialog fullscreen if small layout and not fullscreen otherwise
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val isLargeLayout = resources.getBoolean(R.bool.large_layout)
+        return if (isLargeLayout) {
+            Dialog(requireContext(), R.style.SmallScreenDialogStyle)
+        } else {
+            Dialog(requireContext(), R.style.FullScreenDialogStyle)
+        }
+    }
+
+    // Registers a photo picker activity launcher in single-select mode.
+    private fun registerPhotoPicker(): ActivityResultLauncher<PickVisualMediaRequest> {
+        return registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // Callback is invoked after the user selects a media item or closes the photo picker.
+            if (uri != null) {
+                viewModel.setPhotoUri(uri.toString())
+                binding.photo.loadImage(viewModel.photoUri)
+            }
+        }
+    }
+
+    private fun setupAddPhotoListener(pickMedia: ActivityResultLauncher<PickVisualMediaRequest>) {
+        binding.btnAddPhoto.setOnClickListener {
+            // Launches the photo picker and let the user choose image
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+    }
+
+    private fun setupSaveListener() {
+        binding.btnSave.setOnClickListener {
+            if (isValidUsername()) {
+                val contact = createContact(viewModel.photoUri)
+                viewModel.addContact(contact)
+                viewModel.resetPhotoUri()
+                dismiss()
+            }
+        }
+    }
+
+    private fun createContact(uri: String): Contact {
         with(binding) {
-            // TODO: setup id properly
-            val id = 33L
+            val id = viewModel.getNextId()
             val username = usernameEdit.text.toString()
             val career = careerEdit.text.toString()
             val email = emailEdit.text.toString()
@@ -103,6 +123,4 @@ class AddContactDialogFragment : DialogFragment() {
             }
         }
     }
-
-
 }

@@ -12,6 +12,11 @@ class ContactsViewModel(private val contactsRepository: ContactsRepository) : Vi
     private val _contactsFlow = MutableStateFlow(contactsRepository.getContacts().toList())
     val contactsFlow = _contactsFlow.asStateFlow()
 
+    private var _photoUri = ""
+    val photoUri: String
+        get() = _photoUri
+
+
     fun deleteContact(contact: Contact) {
         contactsRepository.deleteContact(contact)
         _contactsFlow.value = contactsRepository.getContacts().toList()
@@ -25,6 +30,21 @@ class ContactsViewModel(private val contactsRepository: ContactsRepository) : Vi
     fun getContact(id: Long): Contact? {
         return _contactsFlow.value.find { it.id == id }
     }
+
+    fun getNextId(): Long {
+        return _contactsFlow.value.size.toLong() + 1
+    }
+
+
+    fun setPhotoUri(uri: String) {
+        _photoUri = uri
+    }
+
+    fun resetPhotoUri() {
+        _photoUri = ""
+    }
+
+
 }
 
 class ContactsViewModelFactory(private val contactsRepository: ContactsRepository) :

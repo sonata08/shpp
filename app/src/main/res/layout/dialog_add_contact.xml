@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    tools:context=".ui.contacts.ContactsFragment"
+    tools:context=".ui.contacts.dialog.AddContactDialogFragment"
     tools:ignore="RtlSymmetry">
 
 
@@ -13,41 +13,53 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/add_contact"
+            app:titleCentered="true" />
+
         <View
             android:id="@+id/header_background"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="?attr/colorSecondary"
+            android:background="?attr/colorPrimary"
             app:layout_constraintBottom_toTopOf="@id/username_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.25"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/basic_layout_vertical_margins"
-            app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_back_button"
-            android:background="@null"
-            android:contentDescription="@string/back"
-            />
+<!--        <ImageButton-->
+<!--            android:id="@+id/back_button"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/basic_layout_vertical_margins"-->
+<!--            app:layout_constraintStart_toStartOf="@id/left_guideline"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:src="@drawable/ic_back"-->
+<!--            android:background="@null"-->
+<!--            android:contentDescription="@string/back"-->
+<!--            />-->
 
-        <TextView
-            android:id="@+id/tv_contacts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/basic_layout_vertical_margins"
-            android:text="@string/add_contact"
-            android:textAppearance="@style/AppTextAppearance"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="@dimen/h2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <TextView-->
+<!--            android:id="@+id/tv_contacts"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/basic_layout_vertical_margins"-->
+<!--            android:text="@string/add_contact"-->
+<!--            android:textAppearance="@style/AppTextAppearance"-->
+<!--            android:textColor="?attr/colorOnPrimary"-->
+<!--            android:textSize="@dimen/h2"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <ImageView
             android:id="@+id/photo"
@@ -59,16 +71,17 @@
             app:layout_constraintDimensionRatio="W,1"
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintStart_toStartOf="@id/left_guideline"
-            app:layout_constraintTop_toBottomOf="@id/tv_contacts" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
         <ImageView
             android:id="@+id/btn_add_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_8"
             app:layout_constraintStart_toEndOf="@id/photo"
             app:layout_constraintEnd_toEndOf="@id/right_guideline"
             app:layout_constraintBottom_toBottomOf="@id/header_background"
-            app:layout_constraintTop_toBottomOf="@id/tv_contacts"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
             android:src="@drawable/ic_add_contact_btn"
             android:contentDescription="@string/add_photo"
             />

@@ -8,11 +8,14 @@
     <fragment
         android:id="@+id/contactsFragment"
         android:name="com.example.myprofile.ui.contacts.ContactsFragment"
-        android:label="ContactsFragment"
+        android:label="@string/contacts"
         tools:layout="@layout/fragment_contacts">
         <action
             android:id="@+id/action_contactsFragment_to_detailViewFragment"
             app:destination="@id/detailViewFragment" />
+        <action
+            android:id="@+id/action_contactsFragment_to_addContactDialogFragment"
+            app:destination="@id/addContactDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailViewFragment"
@@ -23,4 +26,10 @@
             android:name="contact_id"
             app:argType="long" />
     </fragment>
+    <dialog
+        android:id="@+id/addContactDialogFragment"
+        android:name="com.example.myprofile.ui.contacts.dialog.AddContactDialogFragment"
+        android:label="AddContactDialogFragment"
+        tools:layout="@layout/dialog_add_contact">
+    </dialog>
 </navigation>

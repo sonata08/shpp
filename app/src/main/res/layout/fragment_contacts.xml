@@ -2,60 +2,47 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.contacts.ContactsFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.MaterialComponents.Toolbar.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/contacts"
+        app:titleCentered="true"
+        tools:showIn="@layout/fragment_contacts" />
 
     <View
         android:id="@+id/header_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?attr/colorSecondary"
+        android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintHeight_percent="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/btn_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/basic_layout_vertical_margins"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_contacts"
-        app:layout_constraintBottom_toBottomOf="@id/tv_contacts"
-        android:src="@drawable/ic_back_button"
-        android:background="@null"
-        android:contentDescription="@string/back"
-        />
-
-    <TextView
-        android:id="@+id/tv_contacts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/basic_layout_vertical_margins"
-        android:text="@string/contacts"
-        android:textAppearance="@style/AppTextAppearance"
-        android:textColor="?attr/colorOnPrimary"
-        android:textSize="@dimen/h1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <TextView
         android:id="@+id/tv_add_contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/basic_layout_horizontal_margins"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_contacts"
-        app:layout_constraintBottom_toBottomOf="@id/header_background"
         android:text="@string/add_contacts"
         android:textAppearance="@style/AppTextAppearance"
         android:textColor="?attr/colorOnPrimary"
         android:textSize="@dimen/h3"
-        app:layout_constraintVertical_bias="0.8"
-        />
+        app:layout_constraintBottom_toBottomOf="@id/header_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintVertical_bias="0.8" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

@@ -30,6 +30,7 @@
     <string name="contact_deleted">The contact has been deleted.</string>
     <string name="undo">UNDO</string>
     <string name="add_contacts">Add contacts</string>
+    <string name="search">Search</string>
 
     <!--    Add contact-->
     <string name="add_contact">Add contact</string>
@@ -43,5 +44,9 @@
 
 <!--    Detail view-->
     <string name="message">message</string>
+    <string name="profile">Profile</string>
+    <string name="facebook" translatable="false">Facebook</string>
+    <string name="linkedin" translatable="false">LinkedIn</string>
+    <string name="instagram" translatable="false">Instagram</string>
 
 </resources>

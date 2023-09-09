@@ -30,6 +30,7 @@
     <string name="contact_deleted">Контакт видалено</string>
     <string name="undo">СКАСУВАТИ</string>
     <string name="add_contacts">Додати контакти</string>
+    <string name="search">Пошук</string>
 
     <!--    Add contact-->
     <string name="add_contact">Додати контакт</string>
@@ -43,5 +44,6 @@
 
     <!--    Detail view-->
     <string name="message">Повідомлення</string>
+    <string name="profile">Профайл</string>
 
 </resources>
