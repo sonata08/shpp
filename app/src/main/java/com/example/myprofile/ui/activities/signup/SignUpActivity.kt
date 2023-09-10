@@ -1,18 +1,19 @@
-package com.example.myprofile.ui
+package com.example.myprofile.ui.activities.signup
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.Lifecycle
 import com.example.myprofile.data.datastore.DataStorePreferences
 import kotlinx.coroutines.launch
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.myprofile.R
 import com.example.myprofile.databinding.ActivitySignUpBinding
+import com.example.myprofile.ui.activities.main.MainActivity
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.utils.extentions.dataStore
-
-const val DATA_STORE_NAME = "settings"
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -36,9 +37,11 @@ class SignUpActivity : AppCompatActivity() {
      */
     private fun autologinIfCredentialsSaved() {
         lifecycleScope.launch {
-            dataStorePreferences.getCredentialsFlow.collect {
-                if (it.email.isNotEmpty() && it.password != "") {
-                    goToProfile()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                dataStorePreferences.getCredentialsFlow.collect {
+                    if (it.email.isNotEmpty() && it.password != "") {
+                        goToProfile()
+                    }
                 }
             }
         }
@@ -64,18 +67,21 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    /*
+    /**
         Listens to user's actions on email field.
         Shows error only if Register button has already been clicked.
      */
     private fun setupEmailListener() {
-        binding.emailEdit.doAfterTextChanged {
-            if (!Validation.isValidEmail(it.toString())) {
-                binding.emailLayout.error = getString(R.string.error_email)
-            } else {
-                binding.emailLayout.error = null
+        with(binding) {
+            emailEdit.doAfterTextChanged {
+                if (!Validation.isValidEmail(it.toString())) {
+                    emailLayout.error = getString(R.string.error_email)
+                } else {
+                    emailLayout.error = null
+                }
             }
         }
+
     }
 
     /*
@@ -90,10 +96,10 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    /*
-        Checks if email and password are valid. If so, saves credentials to datastore
-        if checkbox is checked, saves name to datastore and goes to MyProfile activity.
-        Otherwise shows an error.
+    /**
+     * Checks if email and password are valid. If so, saves credentials to datastore
+     * if checkbox is checked, saves name to datastore and goes to MyProfile activity.
+     * Otherwise shows an error.
      */
     private fun startActivityOrShowError(email: String, password: String) {
         if (Validation.isValidEmail(email) && Validation.isValidPassword(password)) {

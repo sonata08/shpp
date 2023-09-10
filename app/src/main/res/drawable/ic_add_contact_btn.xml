@@ -21,4 +21,6 @@
       android:fillColor="#00000000"
       android:strokeColor="#FAFAFA"
       android:strokeLineCap="round"/>
+
+  <!-- TODO: colors -> move it to values.colors-->
 </vector>

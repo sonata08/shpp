@@ -94,7 +94,7 @@
             app:layout_constraintTop_toBottomOf="@id/password_layout"
             app:useMaterialThemeColors="false" />
 
-        <com.example.myprofile.utils.CustomAnimatedButton
+        <com.example.myprofile.ui.utils.custom_views.CustomAnimatedButton
             android:id="@+id/btn_google"
             android:layout_width="0dp"
             android:layout_height="@dimen/big_button_height"
@@ -102,10 +102,13 @@
             app:buttonBackgroundColor="?attr/colorOnPrimary"
             app:buttonIcon="@drawable/ic_google"
             app:buttonText="@string/google"
-            app:isAnimated="false"
+            app:isAnimated="true"
             app:layout_constraintBottom_toTopOf="@id/or_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- TODO: no scaled text when layout_width = 50dp -->
+        <!-- TODO: add standard values to arrts (what happens when delete "app:buttonText="@string/google" ?) -->
 
         <TextView
             android:id="@+id/or_text"

@@ -15,7 +15,9 @@ import java.io.IOException
 /*
     The class is responsible for storing user's data
  */
-class DataStorePreferences(private val dataStore: DataStore<Preferences>) {
+class DataStorePreferences(
+    private val dataStore: DataStore<Preferences>
+) {
     /*
         Gets data from dataStore or empty string if there is now data.
         Throws an error is smth goes wrong.

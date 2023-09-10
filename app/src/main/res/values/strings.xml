@@ -21,7 +21,7 @@
     <string name="already_have_an_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
     <string name="error_email">Incorrect E-Mail address</string>
-    <string name="error_password">Your password must be 8–16 characters</string>
+    <string name="error_password">Your password must be 8–16 characters</string>    <!-- Variable --> <!-- TODO: 8-16 -> use arguments instead -->
 
     <!--    Contacts list-->
     <string name="contacts">Contacts</string>

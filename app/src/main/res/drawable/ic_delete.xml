@@ -10,6 +10,7 @@
       android:fillColor="#00000000"
       android:strokeColor="#fb5e06"
       android:strokeLineCap="round"/>
+  <!-- TODO: colors -> primary-->
   <path
       android:pathData="M1,4.538L20.462,4.538"
       android:strokeWidth="2"

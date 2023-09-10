@@ -1,4 +1,4 @@
-package com.example.myprofile.utils
+package com.example.myprofile.ui.utils.custom_views
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -15,19 +15,20 @@ import com.google.android.material.button.MaterialButton
 // Icon can be animated when touched
 class CustomAnimatedButton @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null,
+    attributeSet: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : MaterialButton(context, attrs, defStyleAttr) {
+) : MaterialButton(context, attributeSet, defStyleAttr) {  //todo if have time - do on View
 
     private var isAnimated = false
 
     init {
         context.theme.obtainStyledAttributes(
-            attrs,
+            attributeSet,
             R.styleable.CustomAnimatedButton,
-            0, 0
+            defStyleAttr,
+            0
         ).apply {
-            try {
+            try {       //todo remove try
                 isAnimated = getBoolean(R.styleable.CustomAnimatedButton_isAnimated, false)
                 setupIcon(this)
                 setupText(this)
@@ -44,7 +45,7 @@ class CustomAnimatedButton @JvmOverloads constructor(
 
     fun setText(customText: String) {
         text = customText
-        invalidate()
+        invalidate()        //todo DRY (do not repeat yourself), just decompose
         requestLayout()
     }
 
@@ -78,6 +79,7 @@ class CustomAnimatedButton @JvmOverloads constructor(
             ta.getColor(R.styleable.CustomAnimatedButton_buttonBackgroundColor, 0)
         setBackgroundColor(customBackground)
     }
+
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -123,7 +125,7 @@ class CustomAnimatedButton @JvmOverloads constructor(
 
         animator.apply {
             duration = ANIM_DURATION
-            repeatCount = 1
+            repeatCount = 1 //todo const
             addUpdateListener { animation ->
                 val animatedValue = animation.animatedValue as Float
                 scaleDrawable(animatedValue)
@@ -135,15 +137,16 @@ class CustomAnimatedButton @JvmOverloads constructor(
 
     // enlarges the icon scale times
     private fun scaleDrawable(scale: Float) {
-        val width = (icon?.intrinsicWidth?.times(scale))?.toInt()
-        val height = (icon?.intrinsicHeight?.times(scale))?.toInt()
+        icon?.let {
+            val width = (it.intrinsicWidth.times(scale)).toInt()
+            val height = (it.intrinsicHeight.times(scale)).toInt()
 
-        if (width != null && height != null) {
-            val scaledDrawable = icon?.mutate()?.apply {
+            val scaledDrawable = it.mutate().apply {
                 setBounds(0, 0, width, height)
             }
             icon = scaledDrawable
         }
+
     }
 
     companion object {
