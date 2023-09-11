@@ -1,29 +1,30 @@
-package com.example.myprofile.ui.contacts
+package com.example.myprofile.ui.activities.contacts
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.data.repository.ContactsRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.myprofile.data.repository.ContactsRepositoryImpl
 
 class ContactsViewModel(private val contactsRepository: ContactsRepository) : ViewModel() {
 
-    private val _contactsFlow = MutableStateFlow(contactsRepository.getContacts().toList())
-    val contactsFlow = _contactsFlow.asStateFlow()
+    val contactsFlow = contactsRepository.getContacts()
 
-    fun deleteContact(contact: Contact) {
-        contactsRepository.deleteContact(contact)
-        _contactsFlow.value = contactsRepository.getContacts().toList()
+    fun deleteContact(contactPosition: Int) {
+        contactsRepository.deleteContact(contactPosition)
     }
 
-    fun addContact(contact: Contact, index: Int = _contactsFlow.value.size) {
+    fun addContact(contact: Contact,index: Int = contactsFlow.value.size) {
         contactsRepository.addContact(contact, index)
-        _contactsFlow.value = contactsRepository.getContacts().toList()
     }
+
+    fun restoreLastDeletedContact() {
+        contactsRepository.restoreLastDeletedContact()
+    }
+
 }
 
-class ContactsViewModelFactory(private val contactsRepository: ContactsRepository) :
+class ContactsViewModelFactory(private val contactsRepository: ContactsRepositoryImpl) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ContactsViewModel::class.java)) {

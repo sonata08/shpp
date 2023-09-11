@@ -91,7 +91,7 @@
             app:layout_constraintTop_toBottomOf="@id/password_layout"
             app:useMaterialThemeColors="false" />
 
-        <com.example.myprofile.utils.CustomAnimatedButton
+        <com.example.myprofile.ui.utils.custom_views.CustomAnimatedButton
             android:id="@+id/btn_google"
             android:layout_width="0dp"
             android:layout_height="@dimen/big_button_height"

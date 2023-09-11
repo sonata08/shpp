@@ -1,4 +1,4 @@
-package com.example.myprofile.ui
+package com.example.myprofile.ui.activities.signup
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import androidx.lifecycle.lifecycleScope
 import com.example.myprofile.R
 import com.example.myprofile.databinding.ActivitySignUpBinding
+import com.example.myprofile.ui.activities.main.MainActivity
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.utils.extentions.dataStore
 

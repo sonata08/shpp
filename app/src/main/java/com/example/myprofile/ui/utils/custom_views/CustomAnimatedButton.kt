@@ -1,4 +1,4 @@
-package com.example.myprofile.utils
+package com.example.myprofile.ui.utils.custom_views
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint

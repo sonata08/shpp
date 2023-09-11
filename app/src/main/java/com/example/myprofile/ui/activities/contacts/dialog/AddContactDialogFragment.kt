@@ -1,4 +1,4 @@
-package com.example.myprofile.ui.contacts.dialog
+package com.example.myprofile.ui.activities.contacts.dialog
 
 import android.content.Context
 import android.os.Bundle
@@ -12,7 +12,7 @@ import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.databinding.DialogAddContactBinding
 import com.example.myprofile.utils.Validation
-import com.example.myprofile.utils.extentions.loadImage
+import com.example.myprofile.ui.utils.extensions.loadImage
 
 class AddContactDialogFragment : DialogFragment() {
 

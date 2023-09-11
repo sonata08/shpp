@@ -1,4 +1,4 @@
-package com.example.myprofile.ui.contacts.adapter
+package com.example.myprofile.ui.activities.contacts.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.databinding.ItemContactBinding
-import com.example.myprofile.utils.extentions.loadImage
+import com.example.myprofile.ui.utils.extensions.loadImage
 
 class ContactsAdapter(
     private val listener: OnContactClickListener
@@ -29,14 +29,14 @@ class ContactsAdapter(
             }
         }
 
-        fun bind(contact: Contact) {
+        fun bind(contact: Contact, position: Int) {
             currentContact = contact
             binding.apply {
                 profilePic.loadImage(contact.photo)
                 tvName.text = contact.username
                 tvCareer.text = contact.career
                 icDelete.setOnClickListener {
-                    listener.onContactDelete(contact)
+                    listener.onContactDelete(position)
                 }
             }
         }
@@ -49,11 +49,7 @@ class ContactsAdapter(
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current)
-    }
-
-    fun getContactAtPosition(position: Int): Contact {
-        return getItem(position)
+        holder.bind(current, position)
     }
 
     private class ContactsDiffCallBack : DiffUtil.ItemCallback<Contact>() {
