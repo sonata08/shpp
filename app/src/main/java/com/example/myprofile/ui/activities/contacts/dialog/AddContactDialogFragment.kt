@@ -1,6 +1,5 @@
 package com.example.myprofile.ui.activities.contacts.dialog
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,32 +20,12 @@ class AddContactDialogFragment : DialogFragment() {
             layoutInflater
         )
     }
-
+    private var photoUri = ""
     private lateinit var addContactCallback: AddContactCallback
 
-    // Instantiating the AddContactCallback to survive during screen rotations
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        // Verify that the host activity implements the callback interface
-        try {
-            addContactCallback = context as AddContactCallback
-        } catch (e: ClassCastException) {
-            // The activity doesn't implement the interface, throw exception
-            throw ClassCastException(
-                (context.toString() +
-                        " must implement AddContactCallback")
-            )
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        var photoUri = ""
-        // Registers a photo picker activity launcher in single-select mode.
-        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+    // Registers a photo picker activity launcher in single-select mode.
+    private val pickMedia =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             // Callback is invoked after the user selects a media item or closes the photo picker.
             if (uri != null) {
                 photoUri = uri.toString()
@@ -54,7 +33,14 @@ class AddContactDialogFragment : DialogFragment() {
             }
         }
 
-        binding.photo.loadImage("")
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        addContactCallback = requireActivity() as AddContactCallback
+
+        binding.photo.loadImage(photoUri)
         binding.btnAddPhoto.setOnClickListener {
             // Launch the photo picker and let the user choose image
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -73,16 +59,17 @@ class AddContactDialogFragment : DialogFragment() {
         return binding.root
     }
 
-    private fun getContact(uri: String): Contact {
-        with(binding) {
-            val username = usernameEdit.text.toString()
-            val career = careerEdit.text.toString()
-            val email = emailEdit.text.toString()
-            val phone = phoneEdit.text.toString()
-            val address = addressEdit.text.toString()
-            val birthDate = birthdateEdit.text.toString()
-            return Contact(username, career, uri, email, phone, address, birthDate)
-        }
+    private fun getContact(photoUri: String): Contact = with(binding) {
+        Contact(
+            username = usernameEdit.text.toString(),
+            career = careerEdit.text.toString(),
+            photo = photoUri,
+            email = emailEdit.text.toString(),
+            phone = phoneEdit.text.toString(),
+            address = addressEdit.text.toString(),
+            birthDate = birthdateEdit.text.toString()
+
+        )
     }
 
     private fun isValidUsername(): Boolean {

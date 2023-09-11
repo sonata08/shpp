@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.data.repository.ContactsRepository
-import com.example.myprofile.data.repository.ContactsRepositoryImpl
 
 class ContactsViewModel(private val contactsRepository: ContactsRepository) : ViewModel() {
 
@@ -24,7 +23,7 @@ class ContactsViewModel(private val contactsRepository: ContactsRepository) : Vi
 
 }
 
-class ContactsViewModelFactory(private val contactsRepository: ContactsRepositoryImpl) :
+class ContactsViewModelFactory(private val contactsRepository: ContactsRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ContactsViewModel::class.java)) {
