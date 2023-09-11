@@ -20,6 +20,7 @@ abstract class SwipeToDeleteCallback :
         return false
     }
 
+    // draws background and deleteIcon when an item is swiped
     override fun onChildDraw(
         c: Canvas,
         recyclerView: RecyclerView,

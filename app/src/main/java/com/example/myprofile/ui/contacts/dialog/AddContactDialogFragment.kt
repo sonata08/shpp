@@ -54,7 +54,7 @@ class AddContactDialogFragment : DialogFragment() {
             }
         }
 
-        binding.photo.loadImage(null)
+        binding.photo.loadImage("")
         binding.btnAddPhoto.setOnClickListener {
             // Launch the photo picker and let the user choose image
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))

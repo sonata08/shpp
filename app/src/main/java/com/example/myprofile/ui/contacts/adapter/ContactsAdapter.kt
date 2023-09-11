@@ -1,6 +1,5 @@
 package com.example.myprofile.ui.contacts.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -25,7 +24,6 @@ class ContactsAdapter(
         init {
             binding.root.setOnClickListener {
                 currentContact?.let {
-                    Log.d("M_", currentContact?.username.toString())
                     listener.onContactClick(it)
                 }
             }
@@ -52,8 +50,6 @@ class ContactsAdapter(
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         val current = getItem(position)
         holder.bind(current)
-
-
     }
 
     fun getContactAtPosition(position: Int): Contact {
