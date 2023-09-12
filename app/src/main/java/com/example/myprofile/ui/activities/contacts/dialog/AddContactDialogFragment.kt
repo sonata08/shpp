@@ -76,7 +76,7 @@ class AddContactDialogFragment : DialogFragment() {
         with(binding) {
             val username = usernameEdit.text.toString()
             if (!Validation.isValidUsername(username)) {
-                usernameEdit.error = getString(R.string.error_username)
+                usernameEdit.error = getString(R.string.error_username, Validation.MIN_USERNAME_LENGTH)
                 return false
             } else {
                 usernameEdit.error = null

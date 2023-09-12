@@ -2,7 +2,6 @@ package com.example.myprofile.ui.activities.contacts.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.data.model.Contact
@@ -13,7 +12,7 @@ class ContactsAdapter(
     private val listener: OnContactClickListener
 ) :
     ListAdapter<Contact, ContactsAdapter.ContactViewHolder>(
-        ContactsDiffCallBack()
+        ContactsDiffUtilCallBack()
     ) {
     class ContactViewHolder(
         private val binding: ItemContactBinding,
@@ -52,13 +51,5 @@ class ContactsAdapter(
         holder.bind(current, position)
     }
 
-    private class ContactsDiffCallBack : DiffUtil.ItemCallback<Contact>() {
-        override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
-            return oldItem == newItem
-        }
 
-        override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean {
-            return oldItem == newItem
-        }
-    }
 }

@@ -4,9 +4,9 @@ import android.util.Patterns
 
 object Validation {
 
-    private const val MIN_PASSWORD_LENGTH = 8
-    private const val MAX_PASSWORD_LENGTH = 16
-    private const val MIX_USERNAME_LENGTH = 3
+    const val MIN_PASSWORD_LENGTH = 8
+    const val MAX_PASSWORD_LENGTH = 16
+    const val MIN_USERNAME_LENGTH = 3
 
     fun isValidEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
@@ -15,6 +15,6 @@ object Validation {
     }
 
     fun isValidUsername(username: String): Boolean {
-        return  username.length >= MIX_USERNAME_LENGTH
+        return  username.length >= MIN_USERNAME_LENGTH
     }
 }

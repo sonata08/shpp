@@ -58,7 +58,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun setupPasswordListener() {
         binding.passwordEdit.doAfterTextChanged {
             binding.passwordLayout.error = if (!Validation.isValidPassword(it.toString())) {
-                getString(R.string.error_password)
+                getString(R.string.error_password, Validation.MIN_PASSWORD_LENGTH, Validation.MAX_PASSWORD_LENGTH)
             } else {
                 null
             }

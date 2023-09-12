@@ -21,7 +21,7 @@
     <string name="already_have_an_account">Вже маєте обліковий запис?</string>
     <string name="sign_in">Увійти</string>
     <string name="error_email">Неправильна адреса електронної пошти</string>
-    <string name="error_password">Ваш пароль має містити 8–16 символів</string>
+    <string name="error_password">Ваш пароль має містити %1$d–%2$d символів</string>
 
     <!--    Contacts list-->
     <string name="contacts">Контакти</string>
@@ -37,7 +37,7 @@
     <string name="address">Адреса</string>
     <string name="date_of_birth">Дата народження</string>
     <string name="save">Зберегти</string>
-    <string name="error_username">Імʼя користувача повинно містити як мінімум 3 символи</string>
+    <string name="error_username">Імʼя користувача повинно містити як мінімум %1$d символи</string>
     <string name="back">Назад</string>
     <string name="add_photo">Додати фото</string>
 
