@@ -1,4 +1,4 @@
-package com.example.myprofile.utils.extentions
+package com.example.myprofile.ui.utils.extentions
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide

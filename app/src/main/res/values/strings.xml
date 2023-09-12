@@ -21,7 +21,7 @@
     <string name="already_have_an_account">Already have an account?</string>
     <string name="sign_in">Sign in</string>
     <string name="error_email">Incorrect E-Mail address</string>
-    <string name="error_password">Your password must be 8–16 characters</string>
+    <string name="error_password">Your password must be %1$d–%2$d characters</string>
 
     <!--    Contacts list-->
     <string name="contacts">Contacts</string>
@@ -38,7 +38,7 @@
     <string name="address">Address</string>
     <string name="date_of_birth">Date of birth</string>
     <string name="save">Save</string>
-    <string name="error_username">Your username must be at least 3 characters long</string>
+    <string name="error_username">Your username must be at least %1$d characters long</string>
     <string name="back">Back</string>
     <string name="add_photo">Add photo</string>
 

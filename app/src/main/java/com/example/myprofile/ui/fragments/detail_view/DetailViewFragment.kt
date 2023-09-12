@@ -1,4 +1,4 @@
-package com.example.myprofile.ui.contacts
+package com.example.myprofile.ui.fragments.detail_view
 
 import android.os.Bundle
 import android.util.Log
@@ -11,9 +11,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import androidx.transition.TransitionInflater
 import com.example.myprofile.R
-import com.example.myprofile.data.repository.ContactsRepository
+import com.example.myprofile.data.repository.impl.ContactsRepositoryImpl
 import com.example.myprofile.databinding.FragmentDetailViewBinding
-import com.example.myprofile.utils.extentions.loadImage
+import com.example.myprofile.ui.fragments.contacts.ContactsViewModel
+import com.example.myprofile.ui.fragments.contacts.ContactsViewModelFactory
+import com.example.myprofile.ui.utils.extentions.loadImage
 
 class DetailViewFragment : Fragment() {
 
@@ -24,7 +26,7 @@ class DetailViewFragment : Fragment() {
         R.id.contactsFragment,
         factoryProducer = {
             ContactsViewModelFactory(
-                ContactsRepository()
+                ContactsRepositoryImpl()
             )
         }
     )

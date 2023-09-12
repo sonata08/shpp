@@ -1,4 +1,4 @@
-package com.example.myprofile.ui.contacts
+package com.example.myprofile.ui.fragments.contacts
 
 
 import android.os.Bundle
@@ -17,12 +17,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
-import com.example.myprofile.data.repository.ContactsRepository
+import com.example.myprofile.data.repository.impl.ContactsRepositoryImpl
 import com.example.myprofile.databinding.FragmentContactsBinding
-import com.example.myprofile.ui.contacts.adapter.ContactsAdapter
-import com.example.myprofile.ui.contacts.adapter.ContactsItemDecoration
-import com.example.myprofile.ui.contacts.adapter.OnContactClickListener
-import com.example.myprofile.ui.contacts.adapter.SwipeToDeleteCallback
+import com.example.myprofile.ui.fragments.contacts.adapter.ContactsAdapter
+import com.example.myprofile.ui.fragments.contacts.adapter.ContactsItemDecoration
+import com.example.myprofile.ui.fragments.contacts.adapter.OnContactClickListener
+import com.example.myprofile.ui.fragments.contacts.adapter.SwipeToDeleteCallback
 import com.example.myprofile.utils.extentions.showShortToast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -36,7 +36,7 @@ class ContactsFragment : Fragment(), OnContactClickListener {
         R.id.contactsFragment,
         factoryProducer = {
             ContactsViewModelFactory(
-                ContactsRepository()
+                ContactsRepositoryImpl()
             )
         }
     )
@@ -108,24 +108,26 @@ class ContactsFragment : Fragment(), OnContactClickListener {
         }
     }
 
-    private fun deleteContactWithSnackbar(contact: Contact, position: Int, view: View) {
-        viewModel.deleteContact(contact)
-        Snackbar.make(view, R.string.contact_deleted, Snackbar.LENGTH_SHORT)
-            .setAction(R.string.undo) { viewModel.addContact(contact, position) }
+    private fun deleteContactWithSnackbar(position: Int) {
+        viewModel.deleteContact(position)
+        showUndoSnackbar()
+    }
+
+    private fun showUndoSnackbar() {
+        Snackbar.make(binding.root, R.string.contact_deleted, Snackbar.LENGTH_SHORT)
+            .setAction(R.string.undo) { viewModel.restoreLastDeletedContact() }
             .show()
     }
 
     private val swipeHandler = object : SwipeToDeleteCallback() {
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.bindingAdapterPosition
-            val contact = adapter.getContactAtPosition(position)
-            deleteContactWithSnackbar(contact, position, viewHolder.itemView)
+            deleteContactWithSnackbar(position)
         }
     }
 
-    override fun onContactDelete(contact: Contact) {
-        val position = adapter.currentList.indexOf(contact)
-        deleteContactWithSnackbar(contact, position, binding.recyclerView)
+    override fun onContactDelete(contactPosition: Int) {
+        deleteContactWithSnackbar(contactPosition)
     }
 
     override fun onContactClick(contact: Contact, extras: FragmentNavigator.Extras) {

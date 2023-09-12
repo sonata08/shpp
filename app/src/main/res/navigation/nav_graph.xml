@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/contactsFragment"
-        android:name="com.example.myprofile.ui.contacts.ContactsFragment"
+        android:name="com.example.myprofile.ui.fragments.contacts.ContactsFragment"
         android:label="@string/contacts"
         tools:layout="@layout/fragment_contacts">
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailViewFragment"
-        android:name="com.example.myprofile.ui.contacts.DetailViewFragment"
+        android:name="com.example.myprofile.ui.fragments.detail_view.DetailViewFragment"
         android:label="DetailViewFragment"
         tools:layout="@layout/fragment_detail_view">
         <argument
@@ -28,7 +28,7 @@
     </fragment>
     <dialog
         android:id="@+id/addContactDialogFragment"
-        android:name="com.example.myprofile.ui.contacts.dialog.AddContactDialogFragment"
+        android:name="com.example.myprofile.ui.fragments.contacts.dialog.AddContactDialogFragment"
         android:label="AddContactDialogFragment"
         tools:layout="@layout/dialog_add_contact">
     </dialog>

@@ -1,22 +1,21 @@
-package com.example.myprofile.ui.contacts.adapter
+package com.example.myprofile.ui.fragments.contacts.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.databinding.ItemContactBinding
-import com.example.myprofile.utils.extentions.loadImage
+import com.example.myprofile.ui.utils.extentions.loadImage
 
 class ContactsAdapter(
     private val listener: OnContactClickListener
 ) :
     ListAdapter<Contact, ContactsAdapter.ContactViewHolder>(
-        ContactsDiffCallBack()
+        ContactsDiffUtilCallBack()
     ) {
     class ContactViewHolder(
         private val binding: ItemContactBinding,
@@ -34,14 +33,14 @@ class ContactsAdapter(
             }
         }
 
-        fun bind(contact: Contact) {
+        fun bind(contact: Contact, position: Int) {
             currentContact = contact
             binding.apply {
                 profilePic.loadImage(contact.photo)
                 tvUsername.text = contact.username
                 tvCareer.text = contact.career
                 icDelete.setOnClickListener {
-                    listener.onContactDelete(contact)
+                    listener.onContactDelete(position)
                 }
             }
         }
@@ -54,22 +53,6 @@ class ContactsAdapter(
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current)
-
-
-    }
-
-    fun getContactAtPosition(position: Int): Contact {
-        return getItem(position)
-    }
-
-    private class ContactsDiffCallBack : DiffUtil.ItemCallback<Contact>() {
-        override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean {
-            return oldItem == newItem
-        }
+        holder.bind(current, position)
     }
 }

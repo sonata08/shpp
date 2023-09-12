@@ -1,4 +1,4 @@
-package com.example.myprofile.utils
+package com.example.myprofile.ui.utils.custom_views
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -27,14 +27,11 @@ class CustomAnimatedButton @JvmOverloads constructor(
             R.styleable.CustomAnimatedButton,
             0, 0
         ).apply {
-            try {
-                isAnimated = getBoolean(R.styleable.CustomAnimatedButton_isAnimated, false)
-                setupIcon(this)
-                setupText(this)
-                setupBackground(this)
-            } finally {
-                recycle()
-            }
+            isAnimated = getBoolean(R.styleable.CustomAnimatedButton_isAnimated, false)
+            setupIcon(this)
+            setupText(this)
+            setupBackground(this)
+            recycle()
         }
     }
 
@@ -44,18 +41,20 @@ class CustomAnimatedButton @JvmOverloads constructor(
 
     fun setText(customText: String) {
         text = customText
-        invalidate()
-        requestLayout()
+        redrawView()
     }
 
     fun setButtonBackgroundColor(customBackground: Int) {
         setBackgroundColor(customBackground)
-        invalidate()
-        requestLayout()
+        redrawView()
     }
 
     fun setButtonIcon(customIcon: Drawable) {
         icon = customIcon
+        redrawView()
+    }
+
+    private fun redrawView() {
         invalidate()
         requestLayout()
     }
@@ -123,7 +122,7 @@ class CustomAnimatedButton @JvmOverloads constructor(
 
         animator.apply {
             duration = ANIM_DURATION
-            repeatCount = 1
+            repeatCount = NUM_REPEAT
             addUpdateListener { animation ->
                 val animatedValue = animation.animatedValue as Float
                 scaleDrawable(animatedValue)
@@ -151,7 +150,7 @@ class CustomAnimatedButton @JvmOverloads constructor(
         private const val ANIM_SCALE_COEF = 1.2f
         private const val SCALE_FACTOR = 1.5f
         private const val ANIM_DURATION = 1000L
+        private const val NUM_REPEAT = 1
     }
 
 }
-

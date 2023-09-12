@@ -1,4 +1,4 @@
-package com.example.myprofile.ui.contacts.adapter
+package com.example.myprofile.ui.fragments.contacts.adapter
 
 import android.graphics.Rect
 import android.view.View
