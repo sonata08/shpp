@@ -1,7 +1,6 @@
 package com.example.myprofile.ui.fragments.detail_view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,15 +56,13 @@ class DetailViewFragment : Fragment() {
     }
 
     private fun bindContact() {
-        Log.d("M_DetailFrag", args.contactId.toString())
         val contact = viewModel.getContact(args.contactId)
-        if (contact != null) {
-            with(binding)
-            {
-                photo.loadImage(contact.photo)
-                tvUsername.text = contact.username
-                tvCareer.text = contact.career
-                tvAddress.text = contact.address
+        contact?.let {
+            with(binding) {
+                photo.loadImage(it.photo)
+                tvUsername.text = it.username
+                tvCareer.text = it.career
+                tvAddress.text = it.address
             }
         }
     }

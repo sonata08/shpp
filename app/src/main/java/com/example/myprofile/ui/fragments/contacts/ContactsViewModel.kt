@@ -44,8 +44,6 @@ class ContactsViewModel(private val contactsRepository: ContactsRepository) : Vi
     fun resetPhotoUri() {
         _photoUri = ""
     }
-
-
 }
 
 class ContactsViewModelFactory(private val contactsRepository: ContactsRepository) :

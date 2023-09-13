@@ -33,14 +33,14 @@ class ContactsAdapter(
             }
         }
 
-        fun bind(contact: Contact, position: Int) {
+        fun bind(contact: Contact) {
             currentContact = contact
             binding.apply {
                 profilePic.loadImage(contact.photo)
                 tvUsername.text = contact.username
                 tvCareer.text = contact.career
                 icDelete.setOnClickListener {
-                    listener.onContactDelete(position)
+                    listener.onContactDelete(bindingAdapterPosition)
                 }
             }
         }
@@ -53,6 +53,8 @@ class ContactsAdapter(
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current, position)
+        holder.bind(current)
     }
+
+
 }
