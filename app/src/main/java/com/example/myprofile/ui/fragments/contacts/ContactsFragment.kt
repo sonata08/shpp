@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -25,8 +26,11 @@ import com.example.myprofile.ui.fragments.contacts.adapter.OnContactClickListene
 import com.example.myprofile.ui.fragments.contacts.adapter.SwipeToDeleteCallback
 import com.example.myprofile.utils.extentions.showShortToast
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+
+//@AndroidEntryPoint
 class ContactsFragment : Fragment(), OnContactClickListener {
 
     private var _binding: FragmentContactsBinding? = null
@@ -69,9 +73,12 @@ class ContactsFragment : Fragment(), OnContactClickListener {
     }
 
     private fun setupToolbar() {
-        with(binding) {
-            toolbar.inflateMenu(R.menu.contacts_menu)
-            toolbar.setOnMenuItemClickListener {
+        with(binding.toolbar) {
+            setNavigationOnClickListener {
+                findNavController().popBackStack()
+            }
+            inflateMenu(R.menu.contacts_menu)
+            setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.search -> {
                         requireContext().showShortToast("SEARCH")

@@ -42,11 +42,12 @@
     <string name="back">Back</string>
     <string name="add_photo">Add photo</string>
 
-<!--    Detail view-->
+    <!--    Detail view-->
     <string name="message">message</string>
     <string name="profile">Profile</string>
     <string name="facebook" translatable="false">Facebook</string>
     <string name="linkedin" translatable="false">LinkedIn</string>
     <string name="instagram" translatable="false">Instagram</string>
+
 
 </resources>

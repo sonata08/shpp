@@ -4,9 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.data.repository.ContactsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-
-class ContactsViewModel(private val contactsRepository: ContactsRepository) : ViewModel() {
+//@HiltViewModel
+//class ContactsViewModel @Inject constructor(
+class ContactsViewModel (
+    private val contactsRepository: ContactsRepository
+) : ViewModel() {
 
     val contactsFlow = contactsRepository.getContacts()
 

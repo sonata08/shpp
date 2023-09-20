@@ -14,7 +14,7 @@ import com.example.myprofile.utils.extentions.dataStore
 
 
 
-class SignUpActivity : AppCompatActivity() {
+class AuthActivity : AppCompatActivity() {
 
     private val binding: ActivitySignUpBinding by lazy {
         ActivitySignUpBinding.inflate(

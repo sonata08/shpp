@@ -39,10 +39,10 @@
     </style>
 
     <style name="ButtonWhiteOutlined">
-        <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
+        <item name="android:backgroundTint">?attr/colorOnPrimary</item>
         <item name="android:textColor">@color/grey_text</item>
-        <!--        <item name="strokeColor">?attr/colorSecondary</item>-->
-        <!--        <item name="strokeWidth">@dimen/stroke_width</item>-->
+        <item name="strokeColor">?attr/colorPrimary</item>
+        <item name="strokeWidth">@dimen/stroke_width</item>
     </style>
 
     <style name="circleImageView" parent="">
