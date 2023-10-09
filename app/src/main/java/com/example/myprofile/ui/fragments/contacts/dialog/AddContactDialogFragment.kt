@@ -1,5 +1,6 @@
 package com.example.myprofile.ui.fragments.contacts.dialog
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,11 +22,7 @@ import com.example.myprofile.ui.utils.extentions.loadImage
 
 class AddContactDialogFragment : DialogFragment() {
 
-    private val binding: DialogAddContactBinding by lazy {
-        DialogAddContactBinding.inflate(
-            layoutInflater
-        )
-    }
+    private lateinit var binding: DialogAddContactBinding
 
     private val viewModel: ContactsViewModel by navGraphViewModels(
         R.id.contactsFragment,
@@ -45,21 +42,6 @@ class AddContactDialogFragment : DialogFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupToolbar()
-        binding.photo.loadImage(viewModel.photoUri)
-        setupAddPhotoListener()
-        setupSaveListener()
-    }
-
     private fun setupToolbar() {
         binding.toolbar.setNavigationOnClickListener {
             viewModel.resetPhotoUri()
@@ -70,11 +52,21 @@ class AddContactDialogFragment : DialogFragment() {
     // makes dialog fullscreen if small layout and not fullscreen otherwise
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val isLargeLayout = resources.getBoolean(R.bool.large_layout)
-        return if (isLargeLayout) {
-            Dialog(requireContext(), R.style.SmallScreenDialogStyle)
-        } else {
-            Dialog(requireContext(), R.style.FullScreenDialogStyle)
-        }
+        val builder = androidx.appcompat.app.AlertDialog.Builder(requireActivity())
+        val inflater = requireActivity().layoutInflater
+        val dialogView = inflater.inflate(R.layout.dialog_add_contact, null)
+        builder.setView(dialogView)
+        binding = DialogAddContactBinding.bind(dialogView)
+        setupToolbar()
+        binding.photo.loadImage(viewModel.photoUri)
+        setupAddPhotoListener()
+        setupSaveListener()
+        return builder.create()
+//        return if (isLargeLayout) {
+//            Dialog(requireContext(), R.style.SmallScreenDialogStyle)
+//        } else {
+//            Dialog(requireContext(), R.style.FullScreenDialogStyle)
+//        }
     }
 
     // Registers a photo picker activity launcher in single-select mode.
@@ -123,13 +115,13 @@ class AddContactDialogFragment : DialogFragment() {
     private fun isValidUsername(): Boolean {
         with(binding) {
             val username = usernameEdit.text.toString()
-            if (!Validation.isValidUsername(username)) {
+            return if (!Validation.isValidUsername(username)) {
                 usernameEdit.error =
                     getString(R.string.error_username, Validation.MIN_USERNAME_LENGTH)
-                return false
+                 false
             } else {
                 usernameEdit.error = null
-                return true
+                true
             }
         }
     }

@@ -13,7 +13,7 @@ class ContactsRepositoryImpl : ContactsRepository {
     private var lastDeletedContact: Pair<Int, Contact>? = null
     override fun getContacts() = contactsFlow
 
-    override fun deleteContact(contactPosition: Int) {
+    override fun deleteContact(contactPosition: Int) { // TODO: check if is deleted
         _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
             lastDeletedContact = contactPosition to get(contactPosition)
             remove(lastDeletedContact?.second)

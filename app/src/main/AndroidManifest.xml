@@ -26,7 +26,7 @@
         </activity>
         <activity
             android:name=".ui.activities.SignUpActivity"
-            android:exported="true">
+            android:exported="false">
         </activity>
 
         <!-- Trigger Google Play services to install the backported photo picker module. -->

@@ -17,30 +17,35 @@ class ContactsAdapter(
     ListAdapter<Contact, ContactsAdapter.ContactViewHolder>(
         ContactsDiffUtilCallBack()
     ) {
-    class ContactViewHolder(
-        private val binding: ItemContactBinding,
-        private val listener: OnContactClickListener
+    inner class ContactViewHolder(
+        private val binding: ItemContactBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         private var currentContact: Contact? = null
         private val profilePicImageView: ImageView = binding.root.findViewById(R.id.profile_pic)
 
-        init {
-            binding.root.setOnClickListener {
-                val extras = FragmentNavigatorExtras(profilePicImageView to "detail_photo")
-                currentContact?.let {
-                    listener.onContactClick(it, extras)
-                }
-            }
+        init { // TODO: why?
+
         }
 
         fun bind(contact: Contact) {
             currentContact = contact
+            setListeners(contact)
             binding.apply {
                 profilePic.loadImage(contact.photo)
                 tvUsername.text = contact.username
                 tvCareer.text = contact.career
+            }
+        }
+
+        private fun setListeners(contact: Contact) {
+            with(binding) {
                 icDelete.setOnClickListener {
                     listener.onContactDelete(bindingAdapterPosition)
+
+                }
+                root.setOnClickListener {
+                    val extras = FragmentNavigatorExtras(profilePicImageView to "detail_photo")
+                    listener.onContactClick(contact, extras)
                 }
             }
         }
@@ -48,13 +53,11 @@ class ContactsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val binding = ItemContactBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ContactViewHolder(binding, listener)
+        return ContactViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
         val current = getItem(position)
         holder.bind(current)
     }
-
-
 }

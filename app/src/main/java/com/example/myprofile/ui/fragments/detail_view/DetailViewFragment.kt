@@ -1,6 +1,7 @@
 package com.example.myprofile.ui.fragments.detail_view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,10 +38,14 @@ class DetailViewFragment : Fragment() {
     ): View {
         _binding = FragmentDetailViewBinding.inflate(inflater, container, false)
         // adds photo animation
-        sharedElementEnterTransition = TransitionInflater.from(requireContext())
-            .inflateTransition(android.R.transition.slide_left)
+        setSharedElement()
 
         return binding.root
+    }
+
+    private fun setSharedElement() {
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(android.R.transition.slide_left)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,13 +55,14 @@ class DetailViewFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+        binding.toolbar.setNavigationOnClickListener { // TODO: read about
+            findNavController().navigateUp()
         }
     }
 
     private fun bindContact() {
         val contact = viewModel.getContact(args.contactId)
+
         contact?.let {
             with(binding) {
                 photo.loadImage(it.photo)

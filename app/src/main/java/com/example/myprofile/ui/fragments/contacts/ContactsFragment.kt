@@ -2,6 +2,7 @@ package com.example.myprofile.ui.fragments.contacts
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,7 @@ import com.example.myprofile.utils.extentions.showShortToast
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
-class ContactsFragment : Fragment(), OnContactClickListener {
+class ContactsFragment : Fragment() {
 
     private var _binding: FragmentContactsBinding? = null
     private val binding get() = _binding!!
@@ -40,7 +41,20 @@ class ContactsFragment : Fragment(), OnContactClickListener {
             )
         }
     )
-    private lateinit var adapter: ContactsAdapter
+    private val adapter: ContactsAdapter by lazy {
+        ContactsAdapter(listener = object : OnContactClickListener {
+            override fun onContactDelete(contactPosition: Int) {
+                deleteContactWithSnackbar(contactPosition)
+            }
+
+            override fun onContactClick(contact: Contact, extras: FragmentNavigator.Extras) {
+                Log.d("LOG_TAG", "Click: $contact")
+                val action =
+                    ContactsFragmentDirections.actionContactsFragmentToDetailViewFragment(contact.id)
+                findNavController().navigate(action, extras)
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,10 +69,13 @@ class ContactsFragment : Fragment(), OnContactClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar()
-        adapter = ContactsAdapter(this)
+        // adapter = ContactsAdapter(this)
         setupRecyclerView()
         setupAddContactListener()
+        setObservers()
+    }
 
+    private fun setObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contactsFlow.collect {
@@ -74,7 +91,7 @@ class ContactsFragment : Fragment(), OnContactClickListener {
             toolbar.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.search -> {
-                        requireContext().showShortToast("SEARCH")
+                        requireContext().showShortToast("SEARCH") // TODO: to string
                         true
                     }
 
@@ -85,11 +102,13 @@ class ContactsFragment : Fragment(), OnContactClickListener {
     }
 
     private fun setupAddContactListener() {
-        binding.tvAddContact.setOnClickListener {
-            val action =
-                ContactsFragmentDirections.actionContactsFragmentToAddContactDialogFragment()
-            findNavController().navigate(action)
-        }
+        binding.tvAddContact.setOnClickListener { openDialogFragment() }
+    }
+
+    private fun openDialogFragment() {
+        val action =
+            ContactsFragmentDirections.actionContactsFragmentToAddContactDialogFragment()
+        findNavController().navigate(action)
     }
 
     private fun setupRecyclerView() {
@@ -126,16 +145,14 @@ class ContactsFragment : Fragment(), OnContactClickListener {
         }
     }
 
-    override fun onContactDelete(contactPosition: Int) {
-        deleteContactWithSnackbar(contactPosition)
-    }
-
-    override fun onContactClick(contact: Contact, extras: FragmentNavigator.Extras) {
-        val action =
-            ContactsFragmentDirections.actionContactsFragmentToDetailViewFragment(contact.id)
-        findNavController().navigate(action, extras)
-
-    }
+//    override fun onContactDelete(contactPosition: Int) {
+//        deleteContactWithSnackbar(contactPosition)
+//    }
+//
+//    override fun onContactClick(contact: Contact, extras: FragmentNavigator.Extras) {
+//
+//
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -14,7 +14,7 @@ object Validation {
         return password.length in MIN_PASSWORD_LENGTH..MAX_PASSWORD_LENGTH
     }
 
-    fun isValidUsername(username: String): Boolean {
-        return  username.length >= MIN_USERNAME_LENGTH
-    }
+    fun isValidUsername(username: String): Boolean =
+        username.length >= MIN_USERNAME_LENGTH
+
 }
