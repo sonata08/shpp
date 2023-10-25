@@ -38,7 +38,12 @@ class ContactsRepositoryImpl : ContactsRepository {
     companion object {
         val contactsList = listOf(
             Contact(1, "Alice", "Engineer", "https://picsum.photos/200?random=1"),
-            Contact(2, "John VeryLongNameThatDoesDotFitInTheView", "Designer", "https://picsum.photos/200?random=2"),
+            Contact(
+                2,
+                "John VeryLongNameThatDoesDotFitInTheView",
+                "Designer",
+                "https://picsum.photos/200?random=2"
+            ),
             Contact(3, "Charlie", "Manager", "https://picsum.photos/200?random=3"),
             Contact(4, "David", "Developer", "https://picsum.photos/200?random=4"),
             Contact(5, "Emily", "Artist", "https://picsum.photos/200?random=5"),
@@ -58,7 +63,12 @@ class ContactsRepositoryImpl : ContactsRepository {
             Contact(19, "Sophia", "Dancer", "https://picsum.photos/200?random=19"),
             Contact(20, "Thomas", "Engineer", "https://picsum.photos/200?random=20"),
             Contact(21, "Alice", "Engineer", "https://picsum.photos/200?random=21"),
-            Contact(22, "John VeryLongNameThatDoesDotFitInTheView", "Designer", "https://picsum.photos/200?random=22"),
+            Contact(
+                22,
+                "John VeryLongNameThatDoesDotFitInTheView",
+                "Designer",
+                "https://picsum.photos/200?random=22"
+            ),
             Contact(23, "Charlie", "Manager", "https://picsum.photos/200?random=23")
         )
     }

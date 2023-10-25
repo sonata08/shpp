@@ -1,15 +1,18 @@
 package com.example.myprofile.ui.fragments.contacts.adapter
 
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.databinding.ItemContactBinding
 import com.example.myprofile.ui.utils.extentions.loadImage
+
 
 class ContactsAdapter(
     private val listener: OnContactClickListener
@@ -40,7 +43,10 @@ class ContactsAdapter(
                 tvUsername.text = contact.username
                 tvCareer.text = contact.career
                 icDelete.setOnClickListener {
-                    listener.onContactDelete(bindingAdapterPosition)
+                    // checks if item has not been removed from the adapter
+                    if (bindingAdapterPosition != NO_POSITION) {
+                        listener.onContactDelete(bindingAdapterPosition)
+                    }
                 }
             }
         }

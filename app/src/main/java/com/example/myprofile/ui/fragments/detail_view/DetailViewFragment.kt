@@ -51,7 +51,7 @@ class DetailViewFragment : Fragment() {
 
     private fun setupToolbar() {
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigateUp()
         }
     }
 
