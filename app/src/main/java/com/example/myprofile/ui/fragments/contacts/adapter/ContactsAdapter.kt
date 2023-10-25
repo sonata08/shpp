@@ -17,9 +17,8 @@ class ContactsAdapter(
     ListAdapter<Contact, ContactsAdapter.ContactViewHolder>(
         ContactsDiffUtilCallBack()
     ) {
-    class ContactViewHolder(
+    inner class ContactViewHolder(
         private val binding: ItemContactBinding,
-        private val listener: OnContactClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
         private var currentContact: Contact? = null
         private val profilePicImageView: ImageView = binding.root.findViewById(R.id.profile_pic)
@@ -30,6 +29,12 @@ class ContactsAdapter(
                 currentContact?.let {
                     listener.onContactClick(it, extras)
                 }
+            }
+            binding.root.setOnLongClickListener {
+                currentContact?.let {
+                    listener.onContactLongClick(it)
+                }
+                true
             }
         }
 
@@ -48,7 +53,7 @@ class ContactsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
         val binding = ItemContactBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ContactViewHolder(binding, listener)
+        return ContactViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {

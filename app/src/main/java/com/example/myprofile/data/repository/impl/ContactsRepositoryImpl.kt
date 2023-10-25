@@ -5,7 +5,8 @@ import com.example.myprofile.data.repository.ContactsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ContactsRepositoryImpl : ContactsRepository {
+class
+ ContactsRepositoryImpl : ContactsRepository {
 
     private val _contactsFlow = MutableStateFlow(contactsList)
     private val contactsFlow = _contactsFlow.asStateFlow()

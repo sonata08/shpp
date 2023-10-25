@@ -12,9 +12,7 @@ import com.example.myprofile.databinding.FragmentSettingsBinding
 import com.example.myprofile.utils.extentions.dataStore
 import kotlinx.coroutines.launch
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
@@ -34,10 +32,10 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setName()
-        binding.btnContacts.setOnClickListener {
-            val action = SettingsFragmentDirections.actionSettingsFragmentToContactsFragment()
-            findNavController().navigate(action)
-        }
+//        binding.btnContacts.setOnClickListener {
+//            val action = SettingsFragmentDirections.actionSettingsFragmentToContactsFragment()
+//            findNavController().navigate(action)
+//        }
     }
 
     /**

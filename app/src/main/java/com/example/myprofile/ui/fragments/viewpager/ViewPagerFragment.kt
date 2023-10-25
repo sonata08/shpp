@@ -1,16 +1,14 @@
-package com.example.myprofile.ui.fragments
+package com.example.myprofile.ui.fragments.viewpager
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.myprofile.R
 import com.example.myprofile.databinding.FragmentViewPagerBinding
+import com.google.android.material.tabs.TabLayoutMediator
 
-
-/**
- * A simple [Fragment] subclass.
- */
 class ViewPagerFragment : Fragment() {
 
     private var _binding: FragmentViewPagerBinding? = null
@@ -26,6 +24,15 @@ class ViewPagerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val viewPager = binding.viewPager
+//        val tabLayout = binding.tabLayout
+        viewPager.adapter = ViewPagerAdapter(this)
+//        TabLayoutMediator(tabLayout, viewPager) {tab, position ->
+//            when(position) {
+//                0 -> tab.text = resources.getString(R.string.settings)
+//                1 -> tab.text = resources.getString(R.string.contacts)
+//            }
+//        }.attach()
     }
 
 }

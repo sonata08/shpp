@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.data.repository.ContactsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 //@HiltViewModel
@@ -13,13 +14,19 @@ class ContactsViewModel (
     private val contactsRepository: ContactsRepository
 ) : ViewModel() {
 
-    val contactsFlow = contactsRepository.getContacts()
+    //TODO: save sate isMultiSelectMode
+    val isMultiSelectMode = MutableStateFlow(false)
 
+
+    fun toMultiSelectMode() = isMultiSelectMode.value == true
+
+    //TODO: save list of selected items
+
+    val contactsFlow = contactsRepository.getContacts()
 
     private var _photoUri = ""
     val photoUri: String
         get() = _photoUri
-
 
     fun deleteContact(contactPosition: Int) {
         contactsRepository.deleteContact(contactPosition)

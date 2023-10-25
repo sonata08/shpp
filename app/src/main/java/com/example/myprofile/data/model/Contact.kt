@@ -8,5 +8,6 @@ data class Contact(
     val email: String = "",
     val phone: String = "",
     val address: String = "",
-    val birthDate: String = ""
+    val birthDate: String = "",
+    val isChecked: Boolean = false
 )

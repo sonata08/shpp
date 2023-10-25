@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.navGraphViewModels
 import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
@@ -27,14 +28,20 @@ class AddContactDialogFragment : DialogFragment() {
         )
     }
 
-    private val viewModel: ContactsViewModel by navGraphViewModels(
-        R.id.contactsFragment,
-        factoryProducer = {
-            ContactsViewModelFactory(
-                ContactsRepositoryImpl()
-            )
-        }
-    )
+//    private val viewModel: ContactsViewModel by navGraphViewModels(
+//        R.id.contactsFragment,
+//        factoryProducer = {
+//            ContactsViewModelFactory(
+//                ContactsRepositoryImpl()
+//            )
+//        }
+//    )
+
+    private val viewModel: ContactsViewModel by activityViewModels {
+        ContactsViewModelFactory(
+            ContactsRepositoryImpl()
+        )
+    }
 
     // Registers a photo picker activity launcher in single-select mode.
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->

@@ -6,4 +6,6 @@ import com.example.myprofile.data.model.Contact
 interface OnContactClickListener {
      fun onContactDelete(contactPosition: Int)
      fun onContactClick(contact: Contact, extras: FragmentNavigator.Extras)
+
+     fun onContactLongClick(contact: Contact)
 }
