@@ -17,4 +17,6 @@ class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
         }
         return ContactsFragment()
     }
+
+
 }

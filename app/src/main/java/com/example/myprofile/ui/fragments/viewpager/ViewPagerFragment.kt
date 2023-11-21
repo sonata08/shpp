@@ -5,14 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.myprofile.R
+import androidx.viewpager2.widget.ViewPager2
 import com.example.myprofile.databinding.FragmentViewPagerBinding
-import com.google.android.material.tabs.TabLayoutMediator
 
+const val SETTINGS_FRAGMENT = 0
+const val CONTACTS_FRAGMENT = 1
 class ViewPagerFragment : Fragment() {
 
     private var _binding: FragmentViewPagerBinding? = null
     private val binding get() = _binding!!
+
+    lateinit var viewPager: ViewPager2
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,15 +28,21 @@ class ViewPagerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewPager = binding.viewPager
-//        val tabLayout = binding.tabLayout
+        viewPager = binding.viewPager
         viewPager.adapter = ViewPagerAdapter(this)
+//        val tabLayout = binding.tabLayout
 //        TabLayoutMediator(tabLayout, viewPager) {tab, position ->
 //            when(position) {
-//                0 -> tab.text = resources.getString(R.string.settings)
-//                1 -> tab.text = resources.getString(R.string.contacts)
+//                SETTINGS_FRAGMENT -> tab.text = resources.getString(R.string.settings)
+//                CONTACTS_FRAGMENT -> tab.text = resources.getString(R.string.contacts)
 //            }
 //        }.attach()
     }
+
+    fun openContactsFragment() {
+        viewPager.currentItem = 1
+    }
+
+
 
 }

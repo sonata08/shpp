@@ -31,6 +31,7 @@
     <string name="undo">СКАСУВАТИ</string>
     <string name="add_contacts">Додати контакти</string>
     <string name="search">Пошук</string>
+    <string name="fab_delete">Видалити контакти</string>
 
     <!--    Add contact-->
     <string name="add_contact">Додати контакт</string>

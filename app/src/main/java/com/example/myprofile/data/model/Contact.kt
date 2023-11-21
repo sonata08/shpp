@@ -9,5 +9,5 @@ data class Contact(
     val phone: String = "",
     val address: String = "",
     val birthDate: String = "",
-    val isChecked: Boolean = false
+//    var isSelected: Boolean = false
 )

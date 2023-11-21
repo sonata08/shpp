@@ -33,7 +33,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/profile_photo"
-        android:transitionName="detail_photo"
+        android:transitionName="@string/transition_name"
         app:layout_constraintBottom_toBottomOf="@id/center_guideline"
         app:layout_constraintDimensionRatio="W,1"
         app:layout_constraintEnd_toEndOf="parent"

@@ -31,6 +31,7 @@
     <string name="undo">UNDO</string>
     <string name="add_contacts">Add contacts</string>
     <string name="search">Search</string>
+    <string name="fab_delete">Delete contacts</string>
 
     <!--    Add contact-->
     <string name="add_contact">Add contact</string>
@@ -48,6 +49,6 @@
     <string name="facebook" translatable="false">Facebook</string>
     <string name="linkedin" translatable="false">LinkedIn</string>
     <string name="instagram" translatable="false">Instagram</string>
-
+    <string name="transition_name" translatable="false">detail_photo</string>
 
 </resources>
