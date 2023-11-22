@@ -25,7 +25,6 @@ import com.example.myprofile.ui.fragments.contacts.adapter.ContactsAdapter
 import com.example.myprofile.ui.fragments.contacts.adapter.ContactsItemDecoration
 import com.example.myprofile.ui.fragments.contacts.adapter.OnContactClickListener
 import com.example.myprofile.ui.fragments.contacts.adapter.SwipeToDeleteCallback
-import com.example.myprofile.ui.fragments.viewpager.CONTACTS_FRAGMENT
 import com.example.myprofile.ui.fragments.viewpager.SETTINGS_FRAGMENT
 import com.example.myprofile.ui.fragments.viewpager.ViewPagerFragment
 import com.example.myprofile.ui.fragments.viewpager.ViewPagerFragmentDirections
@@ -72,7 +71,6 @@ class ContactsFragment : Fragment() {
                 viewModel.activateMultiselectMode(contactPosition)
                 binding.fab.show()
                 setFabOnclickListener()
-
             }
             override fun onItemSelect(contactPosition: Int, isChecked: Boolean) {
                 viewModel.makeSelected(contactPosition, isChecked)
@@ -119,7 +117,7 @@ class ContactsFragment : Fragment() {
             // when back button is pressed
             setNavigationOnClickListener {
                 val viewPagerFragment = requireParentFragment() as ViewPagerFragment
-                viewPagerFragment.viewPager.currentItem = SETTINGS_FRAGMENT
+                viewPagerFragment.goToFragment(SETTINGS_FRAGMENT)
             }
             inflateMenu(R.menu.contacts_menu)
             setOnMenuItemClickListener {
@@ -155,8 +153,7 @@ class ContactsFragment : Fragment() {
         val itemDecoration = ContactsItemDecoration(
             R.dimen.basic_layout_horizontal_margins,
             R.dimen.margin_between_items,
-            R.dimen.margin_last_item_bottom,
-            R.drawable.recyclerview_item_shape
+            R.dimen.margin_last_item_bottom
         )
         with(binding) {
             recyclerView.layoutManager = LinearLayoutManager(root.context)

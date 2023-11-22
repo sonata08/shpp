@@ -39,8 +39,8 @@ class ViewPagerFragment : Fragment() {
 //        }.attach()
     }
 
-    fun openContactsFragment() {
-        viewPager.currentItem = 1
+    fun goToFragment(name: Int) {
+        viewPager.currentItem = name
     }
 
 

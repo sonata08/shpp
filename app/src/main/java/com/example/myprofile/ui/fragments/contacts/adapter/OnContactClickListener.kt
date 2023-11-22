@@ -1,5 +1,6 @@
 package com.example.myprofile.ui.fragments.contacts.adapter
 
+import android.view.View
 import androidx.navigation.fragment.FragmentNavigator
 import com.example.myprofile.data.model.ContactMultiselect
 

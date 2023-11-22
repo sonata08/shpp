@@ -39,7 +39,7 @@ class SettingsFragment : Fragment() {
         Log.d(TAG, "onViewCreated")
         binding.btnContacts.setOnClickListener {
             val viewPagerFragment = requireParentFragment() as ViewPagerFragment
-            viewPagerFragment.viewPager.currentItem = CONTACTS_FRAGMENT
+            viewPagerFragment.goToFragment(CONTACTS_FRAGMENT)
         }
     }
 

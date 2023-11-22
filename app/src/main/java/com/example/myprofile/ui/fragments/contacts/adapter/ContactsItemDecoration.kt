@@ -9,7 +9,6 @@ class ContactsItemDecoration(
     private val sideMargin: Int,
     private val marginBetween: Int,
     private val marginBottom: Int,
-    private val backgroundShape: Int
 ) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
@@ -22,7 +21,7 @@ class ContactsItemDecoration(
         val sideSpacing = view.resources.getDimensionPixelSize(sideMargin)
         val spacing = view.resources.getDimensionPixelSize(marginBetween)
         val spacingBottom = view.resources.getDimensionPixelSize(marginBottom)
-        view.setBackgroundResource(backgroundShape)
+
         outRect.top = spacing
         outRect.left = sideSpacing
         outRect.right = sideSpacing
