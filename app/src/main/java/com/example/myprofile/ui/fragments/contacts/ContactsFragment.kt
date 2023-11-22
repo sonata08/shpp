@@ -84,6 +84,7 @@ class ContactsFragment : Fragment() {
 
     // TODO: disable transaction to detail view while in multiselect mode
     // TODO: disable swipe delete
+    // TODO: save recyclerview position after long click
 
     override fun onCreateView(
         inflater: LayoutInflater,

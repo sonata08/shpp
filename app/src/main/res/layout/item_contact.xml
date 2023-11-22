@@ -11,11 +11,13 @@
     android:padding="@dimen/margin_8"
     android:weightSum="6">
 
-    <com.google.android.material.checkbox.MaterialCheckBox
+    <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/is_selected_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        android:button="@drawable/checkbox_selector"
+        android:visibility="gone"
+        />
 
     <ImageView
         android:id="@+id/profile_pic"
