@@ -24,7 +24,17 @@
         android:textColor="?attr/colorOnPrimary"
         android:textSize="@dimen/h1"
         app:layout_constraintStart_toStartOf="@id/left_guideline"
-        app:layout_constraintTop_toTopOf="@id/top_guideline" />
+        app:layout_constraintTop_toTopOf="@id/btn_logout"
+        app:layout_constraintBottom_toBottomOf="@id/btn_logout"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_logout"
+        android:layout_width="@dimen/btn_log_out_width"
+        android:layout_height="wrap_content"
+        android:text="@string/log_out"
+        style="@style/logOut"
+        app:layout_constraintEnd_toEndOf="@id/right_guideline"
+        app:layout_constraintTop_toTopOf="@id/top_guideline"/>
 
     <ImageView
         android:id="@+id/photo"

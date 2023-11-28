@@ -17,8 +17,8 @@ import java.io.IOException
  */
 class DataStorePreferences(private val dataStore: DataStore<Preferences>) {
     /*
-        Gets data from dataStore or empty string if there is now data.
-        Throws an error is smth goes wrong.
+        Gets data from dataStore or an empty string if there is now data.
+        Throws an error if smth goes wrong.
         Returns an instance of UserCredentials.
      */
     val getCredentialsFlow: Flow<UserCredentials> = this.dataStore.data
@@ -45,6 +45,12 @@ class DataStorePreferences(private val dataStore: DataStore<Preferences>) {
     suspend fun saveName(email: String) {
         dataStore.edit { preferences ->
             preferences[NAME_KEY] = Parser.parseEmail(email)
+        }
+    }
+
+    suspend fun clear() {
+        dataStore.edit {
+            it.clear()
         }
     }
 

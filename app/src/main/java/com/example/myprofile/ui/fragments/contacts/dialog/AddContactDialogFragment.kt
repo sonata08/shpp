@@ -9,17 +9,15 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.navGraphViewModels
 import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
-import com.example.myprofile.data.repository.impl.ContactsRepositoryImpl
 import com.example.myprofile.databinding.DialogAddContactBinding
 import com.example.myprofile.ui.fragments.contacts.ContactsViewModel
-import com.example.myprofile.ui.fragments.contacts.ContactsViewModelFactory
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.ui.utils.extentions.loadImage
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class AddContactDialogFragment : DialogFragment() {
 
     private val binding: DialogAddContactBinding by lazy {
@@ -37,11 +35,7 @@ class AddContactDialogFragment : DialogFragment() {
 //        }
 //    )
 
-    private val viewModel: ContactsViewModel by activityViewModels {
-        ContactsViewModelFactory(
-            ContactsRepositoryImpl()
-        )
-    }
+    private val viewModel: ContactsViewModel by activityViewModels()
 
     // Registers a photo picker activity launcher in single-select mode.
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->

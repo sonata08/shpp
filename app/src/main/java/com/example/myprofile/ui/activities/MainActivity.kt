@@ -6,9 +6,9 @@ import android.util.Log
 import com.example.myprofile.R
 import dagger.hilt.android.AndroidEntryPoint
 
-const val TAG = "FAT_MainActivity"
+private const val TAG = "FAT_MainActivity"
 
-//@AndroidEntryPoint
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

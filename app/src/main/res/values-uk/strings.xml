@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">My profile</string>
-    <string name="view_my_contacts">Подивитись контакти</string>
-    <string name="edit_profile">Редагувати профіль</string>
+
+    <string name="user_name">Ім\'я користувача</string>
     <string name="career">Кар\'єра</string>
     <string name="home_address">Домашня адреса</string>
-    <string name="settings">Налаштування</string>
     <string name="profile_photo">Фото профілю</string>
-    <string name="user_name">Ім\'я користувача</string>
-    <string name="go_to_settings">Перейдіть до налаштувань і заповніть профіль</string>
+
+    <!--    Auth -->
     <string name="get_acquainted">Давайте знайомитись</string>
     <string name="fill_out_profile">Заповніть профіль і перейдіть до додатку</string>
     <string name="email">E-mail</string>
     <string name="password">Пароль</string>
     <string name="remember_me">Запам\'ятати мене</string>
+    <string name="error_email">Неправильна адреса електронної пошти</string>
+    <string name="error_password">Ваш пароль має містити %1$d – %2$d символів</string>
     <string name="google">google</string>
     <string name="or">або</string>
     <string name="register">зареєструватися</string>
     <string name="agree_to_terms">Натиснувши "Реєстрація", ви приймаєте наші \n Загальні положення та умови</string>
     <string name="already_have_an_account">Вже маєте обліковий запис?</string>
     <string name="sign_in">Увійти</string>
-    <string name="error_email">Неправильна адреса електронної пошти</string>
-    <string name="error_password">Ваш пароль має містити %1$d–%2$d символів</string>
+
+
+    <!--    Settings-->
+    <string name="settings">Налаштування</string>
+    <string name="log_out">Log out</string>
+    <string name="go_to_settings">Перейдіть до налаштувань і заповніть профіль</string>
+    <string name="view_my_contacts">Подивитись контакти</string>
+    <string name="edit_profile">Редагувати профіль</string>
 
     <!--    Contacts list-->
     <string name="contacts">Контакти</string>

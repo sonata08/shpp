@@ -54,7 +54,7 @@
         app:layout_constraintBottom_toBottomOf="@id/recycler_view"
         android:layout_marginEnd="@dimen/margin_16"
         android:layout_marginBottom="@dimen/margin_16"
-
+        android:visibility="gone"
         />
 
     <androidx.recyclerview.widget.RecyclerView

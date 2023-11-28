@@ -1,35 +1,23 @@
 package com.example.myprofile.ui.fragments.contacts
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.data.repository.ContactsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-//@HiltViewModel
-//class ContactsViewModel @Inject constructor(
-class ContactsViewModel (
+@HiltViewModel
+class ContactsViewModel @Inject constructor(
     private val contactsRepository: ContactsRepository
 ) : ViewModel() {
 
-    //TODO: save sate isMultiSelectMode
-//    private var isMultiSelectMode = false
-//    fun toMultiSelectMode() {
-//        isMultiSelectMode = !isMultiSelectMode
-//    }
-
-    //TODO: save list of selected items
-
-
-
     val contactsFlow = contactsRepository.getContacts()
-
-
 
     private var _photoUri = ""
     val photoUri: String
         get() = _photoUri
 
-
+    var scrollPosition = 0
 
 
     fun deleteContacts() {
@@ -52,10 +40,12 @@ class ContactsViewModel (
     fun activateMultiselectMode(contactPosition: Int) {
         contactsRepository.activateMultiselectMode()
         makeSelected(contactPosition, true)
+        scrollPosition = contactPosition
     }
 
     fun deactivateMultiselectMode() {
         contactsRepository.deactivateMultiselectMode()
+        scrollPosition = 0
     }
 
     fun deleteContact(contactPosition: Int) {
@@ -87,13 +77,13 @@ class ContactsViewModel (
     }
 }
 
-class ContactsViewModelFactory(private val contactsRepository: ContactsRepository) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ContactsViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return ContactsViewModel(contactsRepository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
+//class ContactsViewModelFactory(private val contactsRepository: ContactsRepository) :
+//    ViewModelProvider.Factory {
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//        if (modelClass.isAssignableFrom(ContactsViewModel::class.java)) {
+//            @Suppress("UNCHECKED_CAST")
+//            return ContactsViewModel(contactsRepository) as T
+//        }
+//        throw IllegalArgumentException("Unknown ViewModel class")
+//    }
+//}

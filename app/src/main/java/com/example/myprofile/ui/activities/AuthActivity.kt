@@ -2,22 +2,25 @@ package com.example.myprofile.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import com.example.myprofile.data.datastore.DataStorePreferences
 import kotlinx.coroutines.launch
 import androidx.lifecycle.lifecycleScope
 import com.example.myprofile.R
-import com.example.myprofile.databinding.ActivitySignUpBinding
+import com.example.myprofile.databinding.ActivityAuthBinding
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.utils.extentions.dataStore
+import dagger.hilt.android.AndroidEntryPoint
 
+const val TAG_AUTH = "FAT_AuthActivity"
 
-
+@AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
 
-    private val binding: ActivitySignUpBinding by lazy {
-        ActivitySignUpBinding.inflate(
+    private val binding: ActivityAuthBinding by lazy {
+        ActivityAuthBinding.inflate(
             layoutInflater
         )
     }
@@ -26,12 +29,12 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
+        Log.d(TAG_AUTH, "datastorPref = $dataStorePreferences")
         autologinIfCredentialsSaved()
         setListeners()
     }
 
-    /*
+    /**
         Redirects to MyProfile activity if email and password are saved
      */
     private fun autologinIfCredentialsSaved() {
@@ -50,7 +53,7 @@ class AuthActivity : AppCompatActivity() {
         setupPasswordListener()
     }
 
-    /*
+    /**
         Listens to user's actions on password field.
         Shows error only if Register button has already been clicked.
      */
@@ -64,7 +67,7 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    /*
+    /**
         Listens to user's actions on email field.
         Shows error only if Register button has already been clicked.
      */
@@ -78,7 +81,7 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    /*
+    /**
         Gets email and password from user's input then starts MyProfile activity
         or shows errors.
      */
@@ -90,7 +93,7 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    /*
+    /**
         Checks if email and password are valid. If so, saves credentials to datastore
         if checkbox is checked, saves name to datastore and goes to MyProfile activity.
         Otherwise shows an error.
@@ -106,11 +109,11 @@ class AuthActivity : AppCompatActivity() {
             if (!Validation.isValidEmail(email)) binding.emailLayout.error =
                 getString(R.string.error_email)
             if (!Validation.isValidPassword(password)) binding.passwordLayout.error =
-                getString(R.string.error_password)
+                getString(R.string.error_password, Validation.MIN_PASSWORD_LENGTH, Validation.MAX_PASSWORD_LENGTH)
         }
     }
 
-    /*
+    /**
         Sets MainActivity as start of a new task on this history stack, clears existing task
         and starts MainActivity
      */
@@ -130,6 +133,38 @@ class AuthActivity : AppCompatActivity() {
         lifecycleScope.launch {
             dataStorePreferences.saveName(email)
         }
+    }
+
+
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.d(TAG_AUTH, "onRestart")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG_AUTH, "onDestroy")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG_AUTH, "onPause")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG_AUTH, "onStart")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG_AUTH, "onStop")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG_AUTH, "onResume")
     }
 }
 

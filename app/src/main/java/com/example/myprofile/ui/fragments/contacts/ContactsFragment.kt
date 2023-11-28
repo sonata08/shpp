@@ -4,10 +4,7 @@ package com.example.myprofile.ui.fragments.contacts
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -19,41 +16,32 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
 import com.example.myprofile.data.model.ContactMultiselect
-import com.example.myprofile.data.repository.impl.ContactsRepositoryImpl
+import com.example.myprofile.data.repository.ContactsRepository
 import com.example.myprofile.databinding.FragmentContactsBinding
+import com.example.myprofile.ui.fragments.BaseFragment
 import com.example.myprofile.ui.fragments.contacts.adapter.ContactsAdapter
 import com.example.myprofile.ui.fragments.contacts.adapter.ContactsItemDecoration
 import com.example.myprofile.ui.fragments.contacts.adapter.OnContactClickListener
 import com.example.myprofile.ui.fragments.contacts.adapter.SwipeToDeleteCallback
-import com.example.myprofile.ui.fragments.viewpager.SETTINGS_FRAGMENT
 import com.example.myprofile.ui.fragments.viewpager.ViewPagerFragment
+import com.example.myprofile.ui.fragments.viewpager.ViewPagerFragment.Companion.SETTINGS_FRAGMENT
 import com.example.myprofile.ui.fragments.viewpager.ViewPagerFragmentDirections
 import com.example.myprofile.utils.extentions.showShortToast
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-const val TAG = "FAT_ContactsFrag"
+private const val TAG = "FAT_ContactsFrag"
 
-//@AndroidEntryPoint
-class ContactsFragment : Fragment() {
+@AndroidEntryPoint
+class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate) {
 
-    private var _binding: FragmentContactsBinding? = null
-    private val binding get() = _binding!!
 
-//    private val viewModel: ContactsViewModel by navGraphViewModels(
-//        R.id.contactsFragment,
-//        factoryProducer = {
-//            ContactsViewModelFactory(
-//                ContactsRepositoryImpl()
-//            )
-//        }
-//    )
+    @Inject lateinit var repositoryImpl: ContactsRepository
+    @Inject lateinit var repositoryImpl2: ContactsRepository
 
-    private val viewModel: ContactsViewModel by activityViewModels {
-        ContactsViewModelFactory(
-                ContactsRepositoryImpl()
-            )
-    }
+    private val viewModel: ContactsViewModel by activityViewModels()
 
     private val adapter: ContactsAdapter by lazy {
         ContactsAdapter(object : OnContactClickListener {
@@ -61,7 +49,10 @@ class ContactsFragment : Fragment() {
                 deleteContactWithSnackbar(contactPosition)
             }
 
-            override fun onContactClick(contact: ContactMultiselect, extras: FragmentNavigator.Extras) {
+            override fun onContactClick(
+                contact: ContactMultiselect,
+                extras: FragmentNavigator.Extras
+            ) {
                 val action =
                     ViewPagerFragmentDirections.actionViewPagerFragmentToDetailViewFragment(contact.contact.id)
                 findNavController().navigate(action, extras)
@@ -72,42 +63,38 @@ class ContactsFragment : Fragment() {
                 binding.fab.show()
                 setFabOnclickListener()
             }
+
             override fun onItemSelect(contactPosition: Int, isChecked: Boolean) {
                 viewModel.makeSelected(contactPosition, isChecked)
                 // If no contacts are selected -> deactivate MultiselectMode and hide FAB
-                if(viewModel.isNothingSelected()) {
+                if (viewModel.isNothingSelected()) {
                     binding.fab.hide()
                 }
             }
         })
     }
 
-    // TODO: disable transaction to detail view while in multiselect mode
-    // TODO: disable swipe delete
-    // TODO: save recyclerview position after long click
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        Log.d(TAG, "onCreateView")
-        _binding = FragmentContactsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "onViewCreated")
+        Log.d(TAG, "inject = $repositoryImpl")
+        Log.d(TAG, "inject 2 = $repositoryImpl2")
         setupToolbar()
         setupRecyclerView()
         setupAddContactListener()
-        binding.fab.hide()
+        showContacts()
+    }
+
+    private fun showContacts() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contactsFlow.collect {
                     Log.d(TAG, "adapter.submitList")
-                    adapter.submitList(it)
+                    adapter.submitList(it){
+                        // scrolls to the selected contact in multiselect mode
+                        binding.recyclerView.scrollToPosition(viewModel.scrollPosition)
+                    }
                 }
             }
         }
@@ -160,7 +147,8 @@ class ContactsFragment : Fragment() {
             recyclerView.layoutManager = LinearLayoutManager(root.context)
             recyclerView.addItemDecoration(itemDecoration)
             recyclerView.adapter = adapter
-            itemTouchHelper.attachToRecyclerView(recyclerView)
+            // uncomment to activate swipe-to-delete behavior
+//            itemTouchHelper.attachToRecyclerView(recyclerView)
         }
     }
 
@@ -188,7 +176,6 @@ class ContactsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
         Log.d(TAG, "onDestroyView")
     }
 

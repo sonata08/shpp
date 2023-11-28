@@ -6,8 +6,11 @@ import com.example.myprofile.data.model.ContactMultiselect
 import com.example.myprofile.data.repository.ContactsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ContactsRepositoryImpl : ContactsRepository {
+@Singleton
+class ContactsRepositoryImpl @Inject constructor() : ContactsRepository {
 
     private val _contactsFlow = MutableStateFlow(contactsList.map { ContactMultiselect(it) })
     private val contactsFlow = _contactsFlow.asStateFlow()
