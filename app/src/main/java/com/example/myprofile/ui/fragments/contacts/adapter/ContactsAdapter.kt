@@ -14,8 +14,7 @@ import com.example.myprofile.data.model.ContactMultiselect
 import com.example.myprofile.databinding.ItemContactBinding
 import com.example.myprofile.ui.utils.extentions.loadImage
 
-const val TRANSITION_NAME = "detail_photo"
-const val TAG = "FAT_ADAPTER"
+private const val TRANSITION_NAME = "detail_photo"
 
 class ContactsAdapter(
     private val listener: OnContactClickListener
@@ -46,7 +45,6 @@ class ContactsAdapter(
                     isSelectedCheckbox.visibility = View.VISIBLE
                     icDelete.visibility = View.GONE
                     setItemBackground(R.drawable.recyclerview_item_shape_multiselect)
-                    binding.root.setOnClickListener{null}
                 } else {
                     isSelectedCheckbox.visibility = View.GONE
                     icDelete.visibility = View.VISIBLE
@@ -100,6 +98,4 @@ class ContactsAdapter(
         val current = getItem(position)
         holder.bind(current)
     }
-
-
 }

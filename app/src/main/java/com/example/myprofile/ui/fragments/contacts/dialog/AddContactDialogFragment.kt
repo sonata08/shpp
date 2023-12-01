@@ -26,15 +26,6 @@ class AddContactDialogFragment : DialogFragment() {
         )
     }
 
-//    private val viewModel: ContactsViewModel by navGraphViewModels(
-//        R.id.contactsFragment,
-//        factoryProducer = {
-//            ContactsViewModelFactory(
-//                ContactsRepositoryImpl()
-//            )
-//        }
-//    )
-
     private val viewModel: ContactsViewModel by activityViewModels()
 
     // Registers a photo picker activity launcher in single-select mode.
@@ -77,18 +68,6 @@ class AddContactDialogFragment : DialogFragment() {
             Dialog(requireContext(), R.style.FullScreenDialogStyle)
         }
     }
-
-    // Registers a photo picker activity launcher in single-select mode.
-//    private fun registerPhotoPicker() {
-//        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-//            // Callback is invoked after the user selects a media item or closes the photo picker.
-//            if (uri != null) {
-//                viewModel.setPhotoUri(uri.toString())
-//            }
-//        }
-//    }
-
-
 
     private fun setupAddPhotoListener() {
         binding.btnAddPhoto.setOnClickListener {

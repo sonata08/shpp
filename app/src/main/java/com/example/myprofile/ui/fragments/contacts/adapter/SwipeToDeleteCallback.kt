@@ -68,5 +68,4 @@ abstract class SwipeToDeleteCallback :
         coloredIcon.draw(c)
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
-
 }

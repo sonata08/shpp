@@ -17,8 +17,9 @@ class ContactsViewModel @Inject constructor(
     val photoUri: String
         get() = _photoUri
 
+    // position of the first selected item in multiselect mode
+    // or 0 if not in multiselect mode
     var scrollPosition = 0
-
 
     fun deleteContacts() {
         contactsRepository.deleteContacts()
@@ -27,7 +28,6 @@ class ContactsViewModel @Inject constructor(
     fun makeSelected(contactPosition: Int, isChecked: Boolean) {
         contactsRepository.makeSelected(contactPosition, isChecked)
     }
-
 
     fun isNothingSelected(): Boolean {
         if (contactsRepository.countSelected() == 0) {
@@ -76,14 +76,3 @@ class ContactsViewModel @Inject constructor(
         _photoUri = ""
     }
 }
-
-//class ContactsViewModelFactory(private val contactsRepository: ContactsRepository) :
-//    ViewModelProvider.Factory {
-//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//        if (modelClass.isAssignableFrom(ContactsViewModel::class.java)) {
-//            @Suppress("UNCHECKED_CAST")
-//            return ContactsViewModel(contactsRepository) as T
-//        }
-//        throw IllegalArgumentException("Unknown ViewModel class")
-//    }
-//}

@@ -1,9 +1,7 @@
 package com.example.myprofile.ui.fragments.contacts
 
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -16,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
 import com.example.myprofile.data.model.ContactMultiselect
-import com.example.myprofile.data.repository.ContactsRepository
 import com.example.myprofile.databinding.FragmentContactsBinding
 import com.example.myprofile.ui.fragments.BaseFragment
 import com.example.myprofile.ui.fragments.contacts.adapter.ContactsAdapter
@@ -30,16 +27,10 @@ import com.example.myprofile.utils.extentions.showShortToast
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-private const val TAG = "FAT_ContactsFrag"
 
 @AndroidEntryPoint
 class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate) {
-
-
-    @Inject lateinit var repositoryImpl: ContactsRepository
-    @Inject lateinit var repositoryImpl2: ContactsRepository
 
     private val viewModel: ContactsViewModel by activityViewModels()
 
@@ -74,12 +65,8 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         })
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated")
-        Log.d(TAG, "inject = $repositoryImpl")
-        Log.d(TAG, "inject 2 = $repositoryImpl2")
         setupToolbar()
         setupRecyclerView()
         setupAddContactListener()
@@ -90,7 +77,6 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contactsFlow.collect {
-                    Log.d(TAG, "adapter.submitList")
                     adapter.submitList(it){
                         // scrolls to the selected contact in multiselect mode
                         binding.recyclerView.scrollToPosition(viewModel.scrollPosition)
@@ -170,53 +156,8 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         }
     }
 
-
-
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.d(TAG, "onDestroyView")
-    }
-
     override fun onPause() {
         super.onPause()
-        Log.d(TAG, "onPause")
         viewModel.deactivateMultiselectMode()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "onDestroy")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "onStart")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d(TAG, "onStop")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d(TAG, "onResume")
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.d(TAG, "onAttach")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.d(TAG, "onDetach")
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate")
     }
 }

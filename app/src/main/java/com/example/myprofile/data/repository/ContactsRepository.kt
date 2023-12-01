@@ -10,11 +10,8 @@ interface ContactsRepository {
     fun deleteContacts()
     fun restoreLastDeletedContact()
     fun addContact(contact: Contact, index: Int)
-
     fun makeSelected(contactPosition: Int, isChecked: Boolean)
-
     fun countSelected(): Int
-
     fun deactivateMultiselectMode()
     fun activateMultiselectMode()
 }

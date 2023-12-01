@@ -1,6 +1,5 @@
 package com.example.myprofile.data.repository.impl
 
-import android.util.Log
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.data.model.ContactMultiselect
 import com.example.myprofile.data.repository.ContactsRepository
@@ -19,7 +18,6 @@ class ContactsRepositoryImpl @Inject constructor() : ContactsRepository {
     private var lastDeletedContact: Pair<Int, ContactMultiselect>? = null
     override fun getContacts() = contactsFlow
 
-
     override fun deleteContact(contactPosition: Int) {
         _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
             lastDeletedContact = contactPosition to get(contactPosition)
@@ -30,7 +28,6 @@ class ContactsRepositoryImpl @Inject constructor() : ContactsRepository {
     override fun deleteContacts() {
         _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
             removeAll { it.isSelected }
-            Log.d("FAT_Repository", "after delete contacts ")
         }
     }
 

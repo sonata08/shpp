@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myprofile.databinding.FragmentViewPagerBinding
 
-//const val SETTINGS_FRAGMENT = 0
-//const val CONTACTS_FRAGMENT = 1
 class ViewPagerFragment : Fragment() {
 
     private var _binding: FragmentViewPagerBinding? = null
@@ -47,6 +45,4 @@ class ViewPagerFragment : Fragment() {
         const val SETTINGS_FRAGMENT = 0
         const val CONTACTS_FRAGMENT = 1
     }
-
-
 }

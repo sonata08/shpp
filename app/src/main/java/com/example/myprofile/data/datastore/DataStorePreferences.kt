@@ -11,15 +11,18 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-/*
-    The class is responsible for storing user's data
+/**
+The class is responsible for storing user's data
  */
-class DataStorePreferences(private val dataStore: DataStore<Preferences>) {
-    /*
-        Gets data from dataStore or an empty string if there is now data.
-        Throws an error if smth goes wrong.
-        Returns an instance of UserCredentials.
+@Singleton
+class DataStorePreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
+    /**
+    Gets data from dataStore or an empty string if there is now data.
+    Throws an error if smth goes wrong.
+    Returns an instance of UserCredentials.
      */
     val getCredentialsFlow: Flow<UserCredentials> = this.dataStore.data
         .catch { exception ->
@@ -33,7 +36,7 @@ class DataStorePreferences(private val dataStore: DataStore<Preferences>) {
             val password = preferences[PASSWORD_KEY] ?: ""
             val name = preferences[NAME_KEY] ?: ""
             UserCredentials(email, password, name)
-    }
+        }
 
     suspend fun saveCredentials(email: String, password: String) {
         dataStore.edit { preferences ->

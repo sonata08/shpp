@@ -16,9 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class DetailViewFragment :
     BaseFragment<FragmentDetailViewBinding>(FragmentDetailViewBinding::inflate) {
 
-
     private val args: DetailViewFragmentArgs by navArgs()
-
     private val viewModel: ContactsViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +24,6 @@ class DetailViewFragment :
         sharedElementEnterTransition = TransitionInflater.from(requireContext())
             .inflateTransition(android.R.transition.slide_left)
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,6 +48,4 @@ class DetailViewFragment :
             }
         }
     }
-
-
 }
