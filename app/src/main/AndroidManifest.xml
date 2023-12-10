@@ -19,15 +19,16 @@
             android:name=".ui.activities.MainActivity"
             android:exported="true"
             android:label="My Profile">
+
+        </activity>
+        <activity
+            android:name=".ui.activities.AuthActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.activities.AuthActivity"
-            android:exported="true">
         </activity>
 
         <!-- Trigger Google Play services to install the backported photo picker module. -->

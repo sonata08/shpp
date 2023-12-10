@@ -4,7 +4,9 @@ package com.example.myprofile.ui.fragments.contacts
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigator
@@ -71,6 +73,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         setupRecyclerView()
         setupAddContactListener()
         showContacts()
+        deactivateMultiselectMode()
     }
 
     private fun showContacts() {
@@ -156,8 +159,16 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        viewModel.deactivateMultiselectMode()
+    private fun deactivateMultiselectMode() {
+        viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onPause(owner: LifecycleOwner) {
+                viewModel.deactivateMultiselectMode()            }
+        })
+
     }
+
+//    override fun onPause() {
+//        super.onPause()
+//        viewModel.deactivateMultiselectMode()
+//    }
 }

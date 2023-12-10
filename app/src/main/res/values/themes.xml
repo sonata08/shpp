@@ -45,6 +45,13 @@
         <item name="strokeWidth">@dimen/stroke_width</item>
     </style>
 
+    <style name="ButtonPrimaryColorOutlined">
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="strokeColor">?attr/colorOnPrimary</item>
+        <item name="strokeWidth">@dimen/stroke_width</item>
+    </style>
+
     <style name="logOut">
         <item name="android:textAppearance">@style/AppTextAppearance</item>
         <item name="android:textSize">@dimen/h3</item>
