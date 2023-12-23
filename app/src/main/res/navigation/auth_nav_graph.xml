@@ -7,24 +7,52 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.myprofile.ui.fragments.auth.login.LoginFragment"
+        android:name="com.example.myprofile.ui.auth.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.myprofile.ui.fragments.auth.singup.SignUpFragment"
-        android:label="SignUpFragment" >
+        android:name="com.example.myprofile.ui.auth.singup.SignUpFragment"
+        android:label="fragment_sing_up"
+        tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_signUpFragment_to_singUpExtendedFragment"
             app:destination="@id/singUpExtendedFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/singUpExtendedFragment"
-        android:name="com.example.myprofile.ui.fragments.auth.signup_extended.SingUpExtendedFragment"
+        android:name="com.example.myprofile.ui.auth.signup_extended.SingUpExtendedFragment"
         android:label="fragment_sign_up_extended"
-        tools:layout="@layout/fragment_sign_up_extended" />
+        tools:layout="@layout/fragment_sign_up_extended" >
+        <argument
+            android:name="userId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <argument
+            android:name="accessToken"
+            app:argType="string" />
+        <argument
+            android:name="refreshToken"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_singUpExtendedFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.myprofile.ui.main.MainActivity"
+        tools:layout="@layout/fragment_settings" />
+    <include app:graph="@navigation/nav_graph" />
+
+
 </navigation>

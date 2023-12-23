@@ -66,5 +66,11 @@
     <string name="mobile_phone">Мобільний телефон</string>
     <string name="your_profile_data">Дані вашого профілю</string>
 
+    <!-- SignUp Fragment   -->
+    <string name="user_exists">Такий користувач вже зареєстрований</string>
+    <string name="unauthorized">Не має доступу</string>
+    <string name="access_denied">Доступ заборонений</string>
+    <string name="invalid_request">Invalid request</string>
+    <string name="default_error">Сталася помилка</string>
 
 </resources>
