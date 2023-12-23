@@ -1,6 +1,5 @@
 package com.example.myprofile.utils
 
-import android.util.Log
 import com.example.myprofile.data.network.dto.ErrorResponse
 import com.google.gson.Gson
 import java.lang.Exception

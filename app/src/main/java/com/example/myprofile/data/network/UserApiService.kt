@@ -1,10 +1,8 @@
 package com.example.myprofile.data.network
 
-import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserCredentialsAuth
 import com.example.myprofile.data.network.dto.EditUser
 import com.example.myprofile.data.network.dto.LoginResponse
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header

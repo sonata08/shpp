@@ -1,6 +1,6 @@
 package com.example.myprofile.data.network.dto
 
-import kotlinx.serialization.Serializable
+
 
 data class Tokens(
     val accessToken: String,

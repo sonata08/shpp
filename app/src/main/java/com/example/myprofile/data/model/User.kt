@@ -1,6 +1,6 @@
 package com.example.myprofile.data.model
 
-import kotlinx.serialization.Serializable
+
 
 data class User(
     val id: Long,
