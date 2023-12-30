@@ -1,5 +1,6 @@
 package com.example.myprofile.ui.auth.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -15,6 +16,7 @@ import com.example.myprofile.data.network.dto.AuthUiState
 import com.example.myprofile.data.network.dto.LoginResponseData
 import com.example.myprofile.databinding.FragmentLoginBinding
 import com.example.myprofile.ui.base.BaseFragment
+import com.example.myprofile.ui.main.MainActivity
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.utils.extentions.showShortToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,12 +29,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        autoLoginUser()
+//        autoLoginUser()
         setListeners()
         setAuthStateObserver()
-        viewModel.autoLoginUser()
+
         with(binding) {
-            emailEdit.setText("t@t.t")
+            emailEdit.setText("t@mail.com")
             passwordEdit.setText("123")
         }
     }
@@ -43,20 +45,16 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             findNavController().navigate(action)
         }
 
-
-
         binding.btnLogin.setOnClickListener {
             val email = binding.emailEdit.text.toString()
             val password = binding.passwordEdit.text.toString()
             val userCredentials = UserCredentialsAuth(email, password)
             viewModel.loginUser(userCredentials)
-
         }
     }
 
     private fun autoLoginUser() {
-        // TODO: GET /users/:userId
-
+        viewModel.autoLoginUser()
     }
 
 
@@ -64,13 +62,20 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.authStateFlow.collect {
-                    Log.d("FAT_LoginFragment", "uiState = $it")
+//                    Log.d("FAT_LoginFragment", "uiState = $it")
                     when (it) {
-                        is AuthUiState.Success -> singInUser(it.data.data)
+                        is AuthUiState.Success -> {
+                            Log.d("FAT_LoginFragment", "UiState = Success")
+                            singInUser(it.data.data)
+                        }
                         is AuthUiState.Loading -> {
-
-                        } //TODO
-                        is AuthUiState.Error -> showAuthError(it.message)
+                            Log.d("FAT_LoginFragment", "UiState = Loading")
+                            //TODO
+                        }
+                        is AuthUiState.Error -> {
+                            Log.d("FAT_LoginFragment", "UiState.Error = ${it.message}")
+                            showAuthError(it.message)
+                        }
                     }
 
 
@@ -83,11 +88,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         viewModel.rememberUser(binding.checkboxRememberMe.isChecked)
         viewModel.saveUserIdTokens(data)
         gotoProfile()
+        Log.d("FAT_LoginFragment", "user id = ${data.user.id}")
 
     }
 
     private fun showAuthError(message: String) {
-        Log.d("FAT_LoginFragment", "message = $message")
+        Log.d("FAT_LoginFragment", "showAuthError = $message")
         requireContext().showShortToast(message)
     }
 
@@ -116,11 +122,11 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     }
 
     private fun gotoProfile() {
-//        val intent = Intent(requireContext(), MainActivity::class.java)
-//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//        startActivity(intent)
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
 
-        val action = LoginFragmentDirections.actionLoginFragmentToMainActivity()
-        findNavController().navigate((action))
+//        val action = LoginFragmentDirections.actionLoginFragmentToMainActivity()
+//        findNavController().navigate((action))
     }
 }

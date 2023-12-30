@@ -1,10 +1,10 @@
 package com.example.myprofile.data.repository.impl
 
 import android.util.Log
+import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserCredentialsAuth
 import com.example.myprofile.data.network.UserApiService
 import com.example.myprofile.data.network.dto.AuthUiState
-import com.example.myprofile.data.network.dto.EditUser
 import com.example.myprofile.data.repository.AuthRepository
 import com.example.myprofile.utils.getMessageFromHttpException
 import retrofit2.HttpException
@@ -58,16 +58,19 @@ class AuthRepositoryImpl @Inject constructor(
             AuthUiState.Success(response)
         } catch (e: Exception) {
             Log.d("FAT_AuthRep_get_catch", "getUser_error = $e")
-            AuthUiState.Error(e.message ?: "")
+            AuthUiState.Error(e.message ?: "unknown ERROR")
         }
     }
 
-    override suspend fun editUser(token: String, userId: Long, user: EditUser): AuthUiState {
+    override suspend fun editUser(token: String, userId: Long, user: User): AuthUiState {
         return try {
+            val token2 = "Bearer $token"
             val response = userApiService.editUser(token = token, userId = userId, user = user)
+            Log.d("FAT_AuthRep_edit", response.toString())
             AuthUiState.Success(response)
         } catch (e: HttpException) {
             val error = e.response()?.errorBody()?.string()
+            Log.d("FAT_AuthRep_edit_catch", "editUser_error = $error")
             AuthUiState.Error(getMessageFromHttpException(error))
         }
     }

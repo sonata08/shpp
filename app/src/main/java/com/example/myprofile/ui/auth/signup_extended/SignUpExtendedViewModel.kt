@@ -2,6 +2,7 @@ package com.example.myprofile.ui.auth.signup_extended
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myprofile.data.model.User
 import com.example.myprofile.data.network.dto.AuthUiState
 import com.example.myprofile.data.network.dto.EditUser
 import com.example.myprofile.data.repository.AuthRepository
@@ -19,7 +20,7 @@ class SignUpExtendedViewModel @Inject constructor(
     private val _authStateFlow = MutableStateFlow<AuthUiState>(AuthUiState.Loading)
     val authStateFlow = _authStateFlow.asStateFlow()
 
-    fun editUser(token: String, userId: Long, user: EditUser) {
+    fun editUser(token: String, userId: Long, user: User) {
         viewModelScope.launch {
             _authStateFlow.value = authRepository.editUser(token, userId, user)
         }

@@ -35,11 +35,15 @@ class DataStorePreferences @Inject constructor(private val dataStore: DataStore<
     }
 
     suspend fun getUserIdTokens(): UserIdTokens {
+        return try {
             val preferences = this.dataStore.data.first()
             val accessToken = preferences[ACCESS_TOKEN] ?: ""
             val refreshToken = preferences[REFRESH_TOKEN] ?: ""
             val userId = preferences[USER_ID] ?: -1
-            return UserIdTokens(userId = userId, accessToken = accessToken, refreshToken = refreshToken)
+            UserIdTokens(userId = userId, accessToken = accessToken, refreshToken = refreshToken)
+        } catch (e: NoSuchElementException) {
+            UserIdTokens()
+        }
     }
 
     suspend fun rememberUser(data: Boolean) {

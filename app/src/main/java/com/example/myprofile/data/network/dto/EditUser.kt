@@ -1,13 +1,14 @@
 package com.example.myprofile.data.network.dto
 
 data class EditUser(
-    val name: String? = null,
-    val phone: String? = null,
-    val address: String? = null,
-    val career: String? = null,
-    val birthday: String? = null,
-    val facebook: String? = null,
-    val instagram: String? = null,
-    val twitter: String? = null,
-    val linkedin: String? = null
+    val name: String? = "",
+    val phone: String? = "",
+    val address: String? = "",
+    val career: String? = "",
+    val birthday: String? = "",
+    val facebook: String? = "",
+    val instagram: String? = "",
+    val twitter: String? = "",
+    val linkedin: String? = "",
+    val image: String? = "",
 )

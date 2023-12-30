@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.myprofile.data.model.User
 import com.example.myprofile.data.network.dto.EditUser
 import com.example.myprofile.databinding.FragmentSignUpExtendedBinding
 import com.example.myprofile.ui.base.BaseFragment
@@ -60,11 +61,11 @@ class SingUpExtendedFragment : BaseFragment<FragmentSignUpExtendedBinding>(Fragm
         }
     }
 
-    private fun createUpdatedUser(): EditUser? {
+    private fun createUpdatedUser(): User? {
         val name = binding.usernameEdit.text.toString()
         val phone = binding.phoneEdit.text.toString()
         return if (name.isNotEmpty() && phone.isNotEmpty() ) {
-            EditUser(name = name, phone = phone)
+            User(name = name, phone = phone)
         } else {
             null
         }
