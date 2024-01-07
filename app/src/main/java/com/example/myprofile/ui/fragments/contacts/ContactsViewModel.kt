@@ -4,23 +4,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.data.repository.ContactsRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 
 class ContactsViewModel(private val contactsRepository: ContactsRepository) : ViewModel() {
 
     val contactsFlow = contactsRepository.getContacts()
 
-
-    private var _photoUri = ""
-    val photoUri: String
-        get() = _photoUri
+    private var _photoUri = MutableStateFlow("")
+    val photoUri = _photoUri.asStateFlow()
 
 
     fun deleteContact(contactPosition: Int) {
         contactsRepository.deleteContact(contactPosition)
     }
 
-    fun addContact(contact: Contact,index: Int = contactsFlow.value.size) {
+    fun addContact(contact: Contact, index: Int = contactsFlow.value.size) {
         contactsRepository.addContact(contact, index)
     }
 
@@ -38,11 +38,11 @@ class ContactsViewModel(private val contactsRepository: ContactsRepository) : Vi
 
 
     fun setPhotoUri(uri: String) {
-        _photoUri = uri
+        _photoUri.value = uri
     }
 
     fun resetPhotoUri() {
-        _photoUri = ""
+        _photoUri.value = ""
     }
 }
 
