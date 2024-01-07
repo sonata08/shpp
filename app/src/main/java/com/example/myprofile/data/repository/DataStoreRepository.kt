@@ -1,6 +1,6 @@
 package com.example.myprofile.data.repository
 
-import com.example.myprofile.data.network.dto.UserIdTokens
+import com.example.myprofile.data.network.model.UserIdTokens
 
 
 interface DataStoreRepository {

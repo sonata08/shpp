@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
 import com.example.myprofile.data.model.ContactMultiselect
+import com.example.myprofile.data.model.UserMultiselect
 import com.example.myprofile.databinding.ItemContactBinding
 import com.example.myprofile.ui.utils.extentions.loadImage
 
@@ -19,7 +20,7 @@ private const val TRANSITION_NAME = "detail_photo"
 class ContactsAdapter(
     private val listener: OnContactClickListener
 ) :
-    ListAdapter<ContactMultiselect, ContactsAdapter.ContactViewHolder>(
+    ListAdapter<UserMultiselect, ContactsAdapter.ContactViewHolder>(
         ContactsDiffUtilCallBack()
     ) {
 
@@ -28,10 +29,10 @@ class ContactsAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         private val profilePicImageView: ImageView = binding.root.findViewById(R.id.profile_pic)
 
-        fun bind(contact: ContactMultiselect) {
+        fun bind(contact: UserMultiselect) {
             binding.apply {
-                profilePic.loadImage(contact.contact.photo)
-                tvUsername.text = contact.contact.username
+                profilePic.loadImage("") // contact.contact.image
+                tvUsername.text = contact.contact.name
                 tvCareer.text = contact.contact.career
                 isSelectedCheckbox.isChecked = contact.isSelected
                 setupMultiselectMode(contact)
@@ -39,7 +40,7 @@ class ContactsAdapter(
             setListeners()
         }
 
-        private fun setupMultiselectMode(contact: ContactMultiselect) {
+        private fun setupMultiselectMode(contact: UserMultiselect) {
             with(binding) {
                 if (contact.isMultiselectMode) {
                     isSelectedCheckbox.visibility = View.VISIBLE
@@ -60,7 +61,7 @@ class ContactsAdapter(
                 drawable)
         }
 
-        private fun setOnItemClickListener(contact: ContactMultiselect) {
+        private fun setOnItemClickListener(contact: UserMultiselect) {
             binding.root.setOnClickListener {
                 val extras = FragmentNavigatorExtras(profilePicImageView to TRANSITION_NAME)
                 listener.onContactClick(contact, extras)

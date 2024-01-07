@@ -12,7 +12,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.databinding.DialogAddContactBinding
-import com.example.myprofile.ui.main.contacts.ContactsViewModel
+import com.example.myprofile.ui.main.contacts.ContactsTestViewModel
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.ui.utils.extentions.loadImage
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +26,7 @@ class AddContactDialogFragment : DialogFragment() {
         )
     }
 
-    private val viewModel: ContactsViewModel by activityViewModels()
+    private val viewModel: ContactsTestViewModel by activityViewModels()
 
     // Registers a photo picker activity launcher in single-select mode.
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->

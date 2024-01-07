@@ -39,6 +39,9 @@
     <string name="add_contacts">Додати контакти</string>
     <string name="search">Пошук</string>
     <string name="fab_delete">Видалити контакти</string>
+    <string name="contact_added">Контакт доданий</string>
+
+    <string name="users">Користувачі</string>
 
     <!--    Add contact-->
     <string name="add_contact">Додати контакт</string>

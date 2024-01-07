@@ -1,4 +1,4 @@
-package com.example.myprofile.data.network.dto
+package com.example.myprofile.data.network.model
 
 
 data class ErrorResponse(

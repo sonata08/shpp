@@ -11,8 +11,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.myprofile.R
 import com.example.myprofile.data.model.UserCredentialsAuth
-import com.example.myprofile.data.network.dto.AuthUiState
-import com.example.myprofile.data.network.dto.LoginResponseData
+import com.example.myprofile.data.network.model.AuthUiState
+import com.example.myprofile.data.network.model.LoginResponse
 import com.example.myprofile.databinding.FragmentSignUpBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.utils.Validation
@@ -124,6 +124,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.authStateFlow.collect {
                     when (it) {
+                        is AuthUiState.Initial -> {}
                         is AuthUiState.Success -> {
                             if (binding.checkboxRememberMe.isChecked) {
                                 viewModel.saveUserIdTokens(it.data.data)
@@ -168,7 +169,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
     /**
     If singUp is successful -> go to SingUpExtendedFragment
      */
-    private fun goToSignUpExtended(response: LoginResponseData) {
+    private fun goToSignUpExtended(response: LoginResponse) {
         val action = SignUpFragmentDirections.actionSignUpFragmentToSingUpExtendedFragment(
             userId = response.user.id,
             accessToken = response.accessToken,

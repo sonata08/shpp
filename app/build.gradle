@@ -54,13 +54,12 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.6.2'
     implementation("androidx.viewpager2:viewpager2:1.0.0")
 
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.15.1'
 
     // navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.7.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.7.5'
-
-    implementation 'androidx.datastore:datastore-preferences:1.0.0'
-    implementation 'com.github.bumptech.glide:glide:4.15.1'
 
     // Hilt
     implementation'com.google.dagger:hilt-android:2.48.1'

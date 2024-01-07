@@ -1,6 +1,6 @@
 package com.example.myprofile.utils
 
-import com.example.myprofile.data.network.dto.ErrorResponse
+import com.example.myprofile.data.network.model.ErrorResponse
 import com.google.gson.Gson
 import java.lang.Exception
 

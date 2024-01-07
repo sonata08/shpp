@@ -5,49 +5,52 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.myprofile.R
 import com.example.myprofile.data.model.User
+import com.example.myprofile.data.network.model.AuthUiState
 import com.example.myprofile.databinding.FragmentEditProfileBinding
 import com.example.myprofile.ui.base.BaseFragment
-import com.example.myprofile.ui.main.settings.SettingsViewModel
+import com.google.android.material.snackbar.Snackbar
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(FragmentEditProfileBinding::inflate) {
+class EditProfileFragment :
+    BaseFragment<FragmentEditProfileBinding>(FragmentEditProfileBinding::inflate) {
 
-//    private val viewModel: EditProfileViewModel by viewModels()
-    private val viewModel: SettingsViewModel by hiltNavGraphViewModels(R.id.viewPagerFragment)
+    private val viewModel: EditProfileViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        Log.d("FAT_EditProf", "viewModel = ${viewModel.hashCode()}")
-
-        setUserData()
-        setListeners()
+        setupToolbar()
+        observeUiState()
+        setButtonListener()
 
     }
 
-    private fun setUserData() {
+
+
+    private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.user.collect {user ->
-                    Log.d("FAT_EditProf", "user id = ${user.id}")
-                    if (user.id != -1L) {
-                        bindData(user)
+                viewModel.authStateFlow.collect {
+                    when (it) {
+                        is AuthUiState.Initial -> bindUserData(viewModel.getUser())
+                        is AuthUiState.Success -> returnToSettingsFragment()
+                        is AuthUiState.Loading -> showProgressBar()
+                        is AuthUiState.Error -> showError(it.message)
                     }
                 }
             }
         }
     }
 
-    private fun bindData(user: User) {
+
+    private fun bindUserData(user: User) {
         with(binding) {
             usernameEdit.setText(user.name)
             careerEdit.setText(user.career)
@@ -57,23 +60,47 @@ class EditProfileFragment : BaseFragment<FragmentEditProfileBinding>(FragmentEdi
         }
     }
 
-    private fun setListeners() {
+    private fun setButtonListener() {
         binding.btnSave.setOnClickListener {
-            viewModel.updateUser(makeUser())
-            findNavController().popBackStack()
+            viewModel.updateUser(createUser())
         }
     }
 
-    private fun makeUser(): User {
+    private fun createUser(): User {
         return with(binding) {
-           User(
-               name = usernameEdit.text.toString(),
-               career = careerEdit.text.toString(),
-               phone = phoneEdit.text.toString(),
-               address = addressEdit.text.toString(),
-               birthday = birthdateEdit.text.toString(),
-               image = ""
-           )
+            User(
+                name = usernameEdit.text.toString(),
+                career = careerEdit.text.toString(),
+                phone = phoneEdit.text.toString(),
+                address = addressEdit.text.toString(),
+                birthday = birthdateEdit.text.toString(),
+                image = ""
+            )
+        }
+    }
+
+    private fun showError(error: String) {
+        // TODO: think what to do in case of error
+        binding.progressBar.visibility = View.GONE
+        Log.d("FAT_SettingsFrag", "UiState.Error = $error")
+        Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)
+            .show()
+    }
+
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun returnToSettingsFragment() {
+        binding.progressBar.visibility = View.GONE
+        Log.d("FAT_SettingsFrag", "UiState = Success")
+        findNavController().popBackStack()
+    }
+
+    private fun setupToolbar() {
+        // when back button is pressed
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
     }
 }

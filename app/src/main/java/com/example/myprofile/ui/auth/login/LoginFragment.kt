@@ -12,8 +12,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.myprofile.R
 import com.example.myprofile.data.model.UserCredentialsAuth
-import com.example.myprofile.data.network.dto.AuthUiState
-import com.example.myprofile.data.network.dto.LoginResponseData
+import com.example.myprofile.data.network.model.AuthUiState
+import com.example.myprofile.data.network.model.LoginResponse
 import com.example.myprofile.databinding.FragmentLoginBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.MainActivity
@@ -64,6 +64,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 viewModel.authStateFlow.collect {
 //                    Log.d("FAT_LoginFragment", "uiState = $it")
                     when (it) {
+                        is AuthUiState.Initial -> {}
                         is AuthUiState.Success -> {
                             Log.d("FAT_LoginFragment", "UiState = Success")
                             singInUser(it.data.data)
@@ -84,7 +85,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
     }
 
-    private fun singInUser(data: LoginResponseData) {
+    private fun singInUser(data: LoginResponse) {
         viewModel.rememberUser(binding.checkboxRememberMe.isChecked)
         viewModel.saveUserIdTokens(data)
         gotoProfile()

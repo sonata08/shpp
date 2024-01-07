@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.myprofile.data.model.User
-import com.example.myprofile.data.network.dto.EditUser
 import com.example.myprofile.databinding.FragmentSignUpExtendedBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.utils.extentions.showShortToast
@@ -47,9 +46,7 @@ class SingUpExtendedFragment : BaseFragment<FragmentSignUpExtendedBinding>(Fragm
         binding.btnForward.setOnClickListener {
             if (user != null) {
                 Log.d("FAT_Extended", user.toString())
-                viewModel.editUser(token =  args.accessToken,
-                    userId = args.userId,
-                    user = user)
+                viewModel.editUser(user)
             }
             goToProfile()
         }

@@ -1,104 +1,121 @@
 package com.example.myprofile.data.repository.impl
 
-import com.example.myprofile.data.model.Contact
-import com.example.myprofile.data.model.ContactMultiselect
+import android.util.Log
+import com.example.myprofile.data.model.User
+import com.example.myprofile.data.model.UserInfoHolder
+import com.example.myprofile.data.network.ContactsApiService
+import com.example.myprofile.data.network.model.AuthUiStateTest
+import com.example.myprofile.data.network.model.BaseResponse
+import com.example.myprofile.data.network.model.Contacts
+import com.example.myprofile.data.network.model.UserIdTokens
+import com.example.myprofile.data.network.model.Users
 import com.example.myprofile.data.repository.ContactsRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.myprofile.data.repository.DataStoreRepository
+import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ContactsRepositoryImpl @Inject constructor() : ContactsRepository {
+class ContactsRepositoryImpl @Inject constructor(
+    private val contactsApiService: ContactsApiService,
+    private val dataStoreRepository: DataStoreRepository,
+    private val userInfoHolder: UserInfoHolder
+) : ContactsRepository {
 
-    private val _contactsFlow = MutableStateFlow(contactsList.map { ContactMultiselect(it) })
-    private val contactsFlow = _contactsFlow.asStateFlow()
+    // TODO: maybe remove this line and go to datastore every time we need data from it
 
+    override suspend fun getUsers(): AuthUiStateTest<List<User>> {
+        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        return try {
+            val response = contactsApiService.getAllUsers(userIdTokens.accessToken)
+            Log.d("FAT_ContRep", "getUsers response done")
+            AuthUiStateTest.Success(response.data.users)
+        } catch (e: HttpException) {
+            Log.d("FAT_ContRep_getUsers_catch", e.toString())
+            AuthUiStateTest.Error("")
+        }
+    }
 
-    private var lastDeletedContact: Pair<Int, ContactMultiselect>? = null
-    override fun getContacts() = contactsFlow
+    override suspend fun getUserContacts(): AuthUiStateTest<List<User>> {
+        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        return try {
+            if (userInfoHolder.userContacts.isEmpty()) {
+                val response =
+                    contactsApiService.getAllUserContacts(
+                        token = userIdTokens.accessToken,
+                        userId = userIdTokens.userId,
+                    )
+                Log.d("FAT_ContRep", "getAllContacts response done")
+                userInfoHolder.userContacts = response.data.contacts
+                AuthUiStateTest.Success(response.data.contacts)
+            } else {
+                AuthUiStateTest.Success(userInfoHolder.userContacts)
+            }
 
-    override fun deleteContact(contactPosition: Int) {
-        _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
-            lastDeletedContact = contactPosition to get(contactPosition)
-            remove(lastDeletedContact?.second)
+        } catch (e: HttpException) {
+            Log.d("FAT_ContRep_getAllContacts_catch", e.toString())
+            AuthUiStateTest.Error("")
+        }
+    }
+
+    override suspend fun deleteContact(contactId: Long): AuthUiStateTest<List<User>> {
+        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        return try {
+            val response =
+                contactsApiService.deleteContact(
+                    token = userIdTokens.accessToken,
+                    userId = userIdTokens.userId,
+                    contactId = contactId.toInt()
+                )
+            Log.d("FAT_ContRep", "deleteContact response done")
+            userInfoHolder.userContacts = response.data.contacts
+            AuthUiStateTest.Success(response.data.contacts)
+        } catch (e: HttpException) {
+            Log.d("FAT_ContRep_delContact_catch", e.toString())
+            AuthUiStateTest.Error("")
         }
     }
 
     override fun deleteContacts() {
-        _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
-            removeAll { it.isSelected }
-        }
+        TODO("Not yet implemented")
     }
-
 
     override fun restoreLastDeletedContact() {
-        _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
-            lastDeletedContact?.let {
-                add(it.first, it.second)
-                lastDeletedContact = null
-            }
-        }
+        TODO("Not yet implemented")
     }
 
-    override fun addContact(contact: Contact, index: Int) {
-        _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
-            add(index, ContactMultiselect(contact))
+    override suspend fun addContact(
+        contactId: Long
+    ): AuthUiStateTest<List<User>> {
+        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        return try {
+            val response = contactsApiService.addContact(
+                token = userIdTokens.accessToken,
+                userId = userIdTokens.userId,
+                contactId.toInt()
+            )
+            Log.d("FAT_ContRep", "addContact response done")
+            userInfoHolder.userContacts = response.data.contacts
+            AuthUiStateTest.Success(response.data.contacts)
+        } catch (e: HttpException) {
+            Log.d("FAT_ContRep_addContact_catch", e.toString())
+            AuthUiStateTest.Error("")
         }
     }
 
     override fun makeSelected(contactPosition: Int, isChecked: Boolean) {
-        _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
-            get(contactPosition).isSelected = isChecked
-        }
+        TODO("Not yet implemented")
     }
 
     override fun countSelected(): Int {
-        _contactsFlow.value.apply {
-            return filter { it.isSelected }.size
-        }
+        TODO("Not yet implemented")
     }
 
     override fun deactivateMultiselectMode() {
-        _contactsFlow.value =
-            _contactsFlow.value.map { contact -> contact.copy(isSelected = false, isMultiselectMode = false) }
+        TODO("Not yet implemented")
     }
 
     override fun activateMultiselectMode() {
-        _contactsFlow.value = _contactsFlow.value.map { contact -> contact.copy(isMultiselectMode = true) }
-    }
-
-
-    companion object {
-        val contactsList = listOf(
-            Contact(1, "Alice", "Engineer", "https://picsum.photos/200?random=1"),
-            Contact(
-                2,
-                "John VeryLongNameThatDoesDotFitInTheView",
-                "Designer",
-                "https://picsum.photos/200?random=2"
-            ),
-            Contact(3, "Charlie", "Manager", "https://picsum.photos/200?random=3"),
-            Contact(4, "David", "Developer", "https://picsum.photos/200?random=4"),
-            Contact(5, "Emily", "Artist", "https://picsum.photos/200?random=5"),
-            Contact(6, "Frank", "Teacher", "https://picsum.photos/200?random=6"),
-            Contact(7, "Grace", "Musician", "https://picsum.photos/200?random=7"),
-            Contact(8, "Henry", "Doctor", "https://picsum.photos/200?random=8"),
-            Contact(9, "Isabella", "Writer", "https://picsum.photos/200?random=9"),
-            Contact(10, "Jack", "Chef", "https://picsum.photos/200?random=10"),
-            Contact(11, "Katherine", "Scientist", "https://picsum.photos/200?random=11"),
-            Contact(12, "Liam", "Athlete", "https://picsum.photos/200?random=12"),
-            Contact(13, "Mia", "Photographer", "https://picsum.photos/200?random=13"),
-            Contact(14, "Noah", "Architect", "https://picsum.photos/200?random=14"),
-            Contact(15, "Olivia", "Entrepreneur", "https://picsum.photos/200?random=15"),
-            Contact(16, "Peter", "Actor", "https://picsum.photos/200?random=16"),
-            Contact(17, "Quinn", "Lawyer", "https://picsum.photos/200?random=17"),
-            Contact(18, "Ryan", "Pilot", "https://picsum.photos/200?random=18"),
-            Contact(19, "Sophia", "Dancer", "https://picsum.photos/200?random=19"),
-            Contact(20, "Thomas", "Engineer", "https://picsum.photos/200?random=20"),
-            Contact(21, "Alice", "Engineer", "https://picsum.photos/200?random=21"),
-            Contact(22, "John VeryLongNameThatDoesDotFitInTheView", "Designer", "https://picsum.photos/200?random=22"),
-            Contact(23, "Charlie", "Manager", "https://picsum.photos/200?random=23")
-        )
+        TODO("Not yet implemented")
     }
 }

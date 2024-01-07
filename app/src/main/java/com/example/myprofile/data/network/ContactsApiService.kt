@@ -1,0 +1,39 @@
+package com.example.myprofile.data.network
+
+import com.example.myprofile.data.network.model.BaseResponse
+import com.example.myprofile.data.network.model.Contacts
+import com.example.myprofile.data.network.model.Users
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.PUT
+import retrofit2.http.Path
+
+interface ContactsApiService {
+
+    @GET("users/")
+    suspend fun getAllUsers(
+        @Header("Authorization") token: String,
+    ): BaseResponse<Users>
+
+    @PUT("users/{userId}/contacts")
+    suspend fun addContact(
+       @Header("Authorization") token: String,
+       @Path("userId") userId: Long,
+       @Body contactId: Int
+    ): BaseResponse<Contacts>
+
+    @DELETE("users/{userId}/contacts/{contactId}")
+    suspend fun deleteContact(
+        @Header("Authorization") token: String,
+        @Path("userId") userId: Long,
+        @Path("contactId") contactId: Int,
+    ): BaseResponse<Contacts>
+
+    @GET("users/{userId}/contacts")
+    suspend fun getAllUserContacts(
+        @Header("Authorization") token: String,
+        @Path("userId") userId: Long,
+    ): BaseResponse<Contacts>
+}

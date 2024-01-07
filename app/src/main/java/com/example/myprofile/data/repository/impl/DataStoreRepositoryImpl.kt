@@ -1,7 +1,6 @@
 package com.example.myprofile.data.repository.impl
 
 import com.example.myprofile.data.datastore.DataStorePreferences
-import com.example.myprofile.data.network.dto.UserIdTokens
 import com.example.myprofile.data.repository.DataStoreRepository
 import javax.inject.Inject
 import javax.inject.Singleton

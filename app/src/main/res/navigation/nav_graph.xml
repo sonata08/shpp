@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_viewPagerFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_addContactsFragment"
+            app:destination="@id/addContactsFragment" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
@@ -66,4 +69,13 @@
         android:name="com.example.myprofile.ui.auth.AuthActivity"
         android:label="activity_auth"
         tools:layout="@layout/activity_auth" />
+    <fragment
+        android:id="@+id/addContactsFragment"
+        android:name="com.example.myprofile.ui.main.add_contacts.AddContactsFragment"
+        android:label="@string/users"
+        tools:layout="@layout/fragment_add_contacts" >
+        <action
+            android:id="@+id/action_addContactsFragment_to_detailViewFragment"
+            app:destination="@id/detailViewFragment" />
+    </fragment>
 </navigation>

@@ -5,3 +5,11 @@ data class ContactMultiselect(
     var isSelected: Boolean = false,
     var isMultiselectMode: Boolean = false
 )
+
+data class UserMultiselect(
+    val contact: User,
+    var isSelected: Boolean = false,
+    var isMultiselectMode: Boolean = false
+) {
+    constructor(user: User) : this(user, false, false)
+}

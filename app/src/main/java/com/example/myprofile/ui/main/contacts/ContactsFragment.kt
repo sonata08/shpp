@@ -2,8 +2,10 @@ package com.example.myprofile.ui.main.contacts
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -15,7 +17,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
-import com.example.myprofile.data.model.ContactMultiselect
+import com.example.myprofile.data.model.User
+import com.example.myprofile.data.model.UserMultiselect
+import com.example.myprofile.data.network.model.AuthUiStateTest
 import com.example.myprofile.databinding.FragmentContactsBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.contacts.adapter.ContactsAdapter
@@ -34,7 +38,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate) {
 
-    private val viewModel: ContactsViewModel by activityViewModels()
+    private val viewModelTest: ContactsTestViewModel by activityViewModels()
+    private val viewModel: ContactsViewModel by viewModels()
 
     private val adapter: ContactsAdapter by lazy {
         ContactsAdapter(object : OnContactClickListener {
@@ -43,7 +48,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
             }
 
             override fun onContactClick(
-                contact: ContactMultiselect,
+                contact: UserMultiselect,
                 extras: FragmentNavigator.Extras
             ) {
                 val action =
@@ -52,15 +57,15 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
             }
 
             override fun onContactLongClick(contactPosition: Int) {
-                viewModel.activateMultiselectMode(contactPosition)
+                viewModelTest.activateMultiselectMode(contactPosition)
                 binding.fab.show()
                 setFabOnclickListener()
             }
 
             override fun onItemSelect(contactPosition: Int, isChecked: Boolean) {
-                viewModel.makeSelected(contactPosition, isChecked)
+                viewModelTest.makeSelected(contactPosition, isChecked)
                 // If no contacts are selected -> deactivate MultiselectMode and hide FAB
-                if (viewModel.isNothingSelected()) {
+                if (viewModelTest.isNothingSelected()) {
                     binding.fab.hide()
                 }
             }
@@ -71,22 +76,48 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
         setupRecyclerView()
+        observeUiState()
         setupAddContactListener()
-        showContacts()
+        viewModel.getUserContacts()
+//        showContacts()
         deactivateMultiselectMode()
     }
 
-    private fun showContacts() {
+    private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.contactsFlow.collect {
-                    adapter.submitList(it){
-                        // scrolls to the selected contact in multiselect mode
-                        binding.recyclerView.scrollToPosition(viewModel.scrollPosition)
+                viewModel.authStateFlow.collect {
+                    when (it) {
+                        is AuthUiStateTest.Initial -> {}
+                        is AuthUiStateTest.Success -> showContacts(it.data)
+                        is AuthUiStateTest.Loading -> showProgressBar()
+                        is AuthUiStateTest.Error -> showError(it.message)
                     }
                 }
             }
         }
+    }
+
+
+
+    private fun showContacts(contacts: List<User>) {
+        binding.progressBar.visibility = View.GONE
+        adapter.submitList(contacts.map { UserMultiselect(it) }) {
+            // scrolls to the selected contact in multiselect mode
+            binding.recyclerView.scrollToPosition(viewModelTest.scrollPosition)
+        }
+    }
+
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun showError(error: String) {
+        // TODO: think what to do in case of error
+        binding.progressBar.visibility = View.GONE
+        Log.d("FAT_AddContactFrag", "UiState.Error = $error")
+        Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)
+            .show()
     }
 
     private fun setupToolbar() {
@@ -112,15 +143,15 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
     private fun setupAddContactListener() {
         binding.tvAddContact.setOnClickListener {
             val action =
-                ViewPagerFragmentDirections.actionViewPagerFragmentToAddContactDialogFragment()
+                ViewPagerFragmentDirections.actionViewPagerFragmentToAddContactsFragment()
             findNavController().navigate(action)
         }
     }
 
     private fun setFabOnclickListener() {
         binding.fab.setOnClickListener { _ ->
-            viewModel.deleteContacts()
-            viewModel.deactivateMultiselectMode()
+            viewModelTest.deleteContacts()
+            viewModelTest.deactivateMultiselectMode()
             binding.fab.hide()
         }
     }
@@ -135,20 +166,20 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         with(binding) {
             recyclerView.layoutManager = LinearLayoutManager(root.context)
             recyclerView.addItemDecoration(itemDecoration)
-            recyclerView.adapter = adapter
+//            recyclerView.adapter = adapter
             // uncomment to activate swipe-to-delete behavior
 //            itemTouchHelper.attachToRecyclerView(recyclerView)
         }
     }
 
     private fun deleteContactWithSnackbar(position: Int) {
-        viewModel.deleteContact(position)
+        viewModelTest.deleteContact(position)
         showUndoSnackbar()
     }
 
     private fun showUndoSnackbar() {
         Snackbar.make(binding.root, R.string.contact_deleted, Snackbar.LENGTH_SHORT)
-            .setAction(R.string.undo) { viewModel.restoreLastDeletedContact() }
+            .setAction(R.string.undo) { viewModelTest.restoreLastDeletedContact() }
             .show()
     }
 
@@ -162,7 +193,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
     private fun deactivateMultiselectMode() {
         viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onPause(owner: LifecycleOwner) {
-                viewModel.deactivateMultiselectMode()            }
+                viewModelTest.deactivateMultiselectMode()            }
         })
 
     }

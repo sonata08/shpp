@@ -8,8 +8,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.myprofile.data.model.UserCredentials
-import com.example.myprofile.data.network.dto.Tokens
-import com.example.myprofile.data.network.dto.UserIdTokens
+import com.example.myprofile.data.network.model.UserIdTokens
 import com.example.myprofile.utils.Parser
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -28,7 +27,7 @@ class DataStorePreferences @Inject constructor(private val dataStore: DataStore<
 
     suspend fun saveUserIdTokens(userId: Long, accessToken: String, refreshToken: String) {
         dataStore.edit { preferences ->
-            preferences[ACCESS_TOKEN] = accessToken
+            preferences[ACCESS_TOKEN] = "Bearer $accessToken"
             preferences[REFRESH_TOKEN] = refreshToken
             preferences[USER_ID] = userId
         }

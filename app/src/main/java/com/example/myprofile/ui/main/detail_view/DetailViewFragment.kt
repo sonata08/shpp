@@ -8,7 +8,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.example.myprofile.databinding.FragmentDetailViewBinding
 import com.example.myprofile.ui.base.BaseFragment
-import com.example.myprofile.ui.main.contacts.ContactsViewModel
+import com.example.myprofile.ui.main.contacts.ContactsTestViewModel
 import com.example.myprofile.ui.utils.extentions.loadImage
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,7 +17,7 @@ class DetailViewFragment :
     BaseFragment<FragmentDetailViewBinding>(FragmentDetailViewBinding::inflate) {
 
     private val args: DetailViewFragmentArgs by navArgs()
-    private val viewModel: ContactsViewModel by activityViewModels()
+    private val viewModel: ContactsTestViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -2,13 +2,14 @@ package com.example.myprofile.ui.main.contacts.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.myprofile.data.model.ContactMultiselect
+import com.example.myprofile.data.model.UserMultiselect
 
-class ContactsDiffUtilCallBack : DiffUtil.ItemCallback<ContactMultiselect>() {
-    override fun areItemsTheSame(oldItem: ContactMultiselect, newItem: ContactMultiselect): Boolean {
+class ContactsDiffUtilCallBack : DiffUtil.ItemCallback<UserMultiselect>() {
+    override fun areItemsTheSame(oldItem: UserMultiselect, newItem: UserMultiselect): Boolean {
         return oldItem.contact.id == newItem.contact.id
     }
 
-    override fun areContentsTheSame(oldItem: ContactMultiselect, newItem: ContactMultiselect): Boolean {
+    override fun areContentsTheSame(oldItem: UserMultiselect, newItem: UserMultiselect): Boolean {
         return oldItem == newItem
     }
 }
