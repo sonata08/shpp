@@ -13,7 +13,6 @@ import com.example.myprofile.ui.activities.main.MainActivity
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.utils.extentions.dataStore
 
-const val DATA_STORE_NAME = "settings"
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -38,7 +37,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun autologinIfCredentialsSaved() {
         lifecycleScope.launch {
             dataStorePreferences.getCredentialsFlow.collect {
-                if (it.email.isNotEmpty() && it.password != "") {
+                if (it.email.isNotEmpty() && it.password.isNotEmpty()) {
                     goToProfile()
                 }
             }
