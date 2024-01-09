@@ -1,0 +1,53 @@
+[versions]
+agp = "8.2.1"
+kotlin = "1.9.0"
+coreKtx = "1.12.0"
+appcompat = "1.6.1"
+material = "1.11.0"
+recyclerview = "1.3.2"
+constraintlayout = "2.1.4"
+activity = "1.8.2"
+fragmentKtx = "1.6.2"
+viewpager = "1.0.0"
+datastore = "1.0.0"
+navigationFragmentKtx = "2.7.6"
+navigationUiKtx = "2.7.6"
+viewmodel = "2.6.1"
+glide = "4.15.1"
+hilt = "2.48.1"
+hiltNavigation = "1.1.0"
+annotation = "1.6.0"
+retrofit = "2.9.0"
+serializationGson = "1.5.1"
+
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-fragment = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
+androidx-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager" }
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
+androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "viewmodel" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+androidx-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-fragment", version.ref = "hiltNavigation" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationGson" }
+
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigationUiKtx" }
+daggerHilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
