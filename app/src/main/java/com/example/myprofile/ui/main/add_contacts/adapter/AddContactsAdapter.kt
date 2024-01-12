@@ -1,6 +1,8 @@
 package com.example.myprofile.ui.main.add_contacts.adapter
 
+
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -27,7 +29,7 @@ class AddContactsAdapter(
 
         fun bind(contact: User) {
             binding.apply {
-                profilePic.loadImage("") // contact.contact.image
+                profilePic.loadImage(contact.image)
                 tvUsername.text = contact.name
                 tvCareer.text = contact.career
 //                isSelectedCheckbox.isChecked = contact.isSelected
@@ -35,15 +37,17 @@ class AddContactsAdapter(
             setListeners(contact)
         }
 
-
-
         private fun setListeners(contact: User) {
-            binding.addContactLayout.setOnClickListener {
-                listener.onAddContact(contact.id)
-            }
-            binding.root.setOnClickListener {
-                val extras = FragmentNavigatorExtras(profilePicImageView to TRANSITION_NAME)
-                listener.onContactClick(contact, extras)
+            with(binding) {
+                addContactLayout.setOnClickListener {
+                    addContactLayout.visibility = View.GONE
+                    icAddContactDone.visibility = View.VISIBLE
+                    listener.onAddContact(contact.id)
+                }
+                root.setOnClickListener {
+                    val extras = FragmentNavigatorExtras(profilePicImageView to TRANSITION_NAME)
+                    listener.onContactClick(contact, extras)
+                }
             }
         }
     }

@@ -16,5 +16,18 @@ data class User(
     val instagram: String? = "",
     val twitter: String? = "",
     val linkedin: String? = "",
-    val image: String = "",
-)
+    val image: String? = "",
+) {
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as User
+
+        return id == other.id
+    }
+}

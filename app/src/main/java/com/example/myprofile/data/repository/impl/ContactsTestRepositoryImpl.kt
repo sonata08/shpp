@@ -4,8 +4,6 @@ import com.example.myprofile.data.model.Contact
 import com.example.myprofile.data.model.ContactMultiselect
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
-import javax.inject.Singleton
 
 
 class ContactsTestRepositoryImpl {
@@ -29,7 +27,6 @@ class ContactsTestRepositoryImpl {
             removeAll { it.isSelected }
         }
     }
-
 
     fun restoreLastDeletedContact() {
         _contactsFlow.value = _contactsFlow.value.toMutableList().apply {

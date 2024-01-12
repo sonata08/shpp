@@ -16,3 +16,7 @@ data class Users(
 data class Contacts(
     val contacts: List<User>
 )
+
+data class AddContactRequest (
+    val contactId: Int
+)

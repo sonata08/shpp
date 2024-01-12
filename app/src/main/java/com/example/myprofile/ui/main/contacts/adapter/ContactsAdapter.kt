@@ -10,7 +10,6 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
-import com.example.myprofile.data.model.ContactMultiselect
 import com.example.myprofile.data.model.UserMultiselect
 import com.example.myprofile.databinding.ItemContactBinding
 import com.example.myprofile.ui.utils.extentions.loadImage
@@ -31,13 +30,13 @@ class ContactsAdapter(
 
         fun bind(contact: UserMultiselect) {
             binding.apply {
-                profilePic.loadImage("") // contact.contact.image
+                profilePic.loadImage(contact.contact.image)
                 tvUsername.text = contact.contact.name
                 tvCareer.text = contact.contact.career
                 isSelectedCheckbox.isChecked = contact.isSelected
                 setupMultiselectMode(contact)
             }
-            setListeners()
+            setListeners(contact)
         }
 
         private fun setupMultiselectMode(contact: UserMultiselect) {
@@ -58,7 +57,8 @@ class ContactsAdapter(
         private fun setItemBackground(drawable: Int) {
             binding.root.background = ContextCompat.getDrawable(
                 binding.root.context,
-                drawable)
+                drawable
+            )
         }
 
         private fun setOnItemClickListener(contact: UserMultiselect) {
@@ -68,15 +68,13 @@ class ContactsAdapter(
             }
         }
 
-        private fun setListeners() {
+        private fun setListeners(contact: UserMultiselect) {
             with(binding) {
                 icDelete.setOnClickListener {
-                    // checks if item has not been removed from the adapter
-                    if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
-                        listener.onContactDelete(bindingAdapterPosition)
-                    }
+                    listener.onContactDelete(contact.contact.id)
                 }
                 root.setOnLongClickListener {
+                    // checks if item has not been removed from the adapter
                     if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
                         listener.onContactLongClick(bindingAdapterPosition)
                     }

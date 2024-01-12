@@ -26,12 +26,12 @@ class ContactsItemDecoration(
         outRect.left = sideSpacing
         outRect.right = sideSpacing
 
-        if (isLastItem(parent, view, state)) {
+        if (isLastItem(parent, view)) {
             outRect.bottom = spacingBottom
         }
     }
 
-    private fun isLastItem(parent: RecyclerView, view: View, state: RecyclerView.State): Boolean {
-        return parent.getChildAdapterPosition(view) == state.itemCount - 1
+    private fun isLastItem(parent: RecyclerView, view: View): Boolean {
+        return parent.getChildAdapterPosition(view) == parent.adapter?.itemCount?.minus(1)
     }
 }

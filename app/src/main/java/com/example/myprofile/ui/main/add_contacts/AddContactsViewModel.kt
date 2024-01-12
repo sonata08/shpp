@@ -4,10 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myprofile.data.model.User
 import com.example.myprofile.data.network.model.AuthUiStateTest
-import com.example.myprofile.data.network.model.UserIdTokens
-import com.example.myprofile.data.network.model.Users
 import com.example.myprofile.data.repository.ContactsRepository
-import com.example.myprofile.data.repository.DataStoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,19 +16,19 @@ class AddContactsViewModel @Inject constructor(
     private val contactsRepository: ContactsRepository,
 ) : ViewModel() {
 
-    private val _authStateFlow = MutableStateFlow<AuthUiStateTest<List<User>>>(AuthUiStateTest.Loading)
-    val authStateFlow = _authStateFlow.asStateFlow()
+    private val _uiStateFlow = MutableStateFlow<AuthUiStateTest<List<User>>>(AuthUiStateTest.Loading)
+    val uiStateFlow = _uiStateFlow.asStateFlow()
 
 
     fun getContacts() {
         viewModelScope.launch {
-            _authStateFlow.value = contactsRepository.getUsers()
+            _uiStateFlow.value = contactsRepository.getUsers()
         }
     }
 
     fun addContactToUser(contactId: Long) {
         viewModelScope.launch {
-            _authStateFlow.value = contactsRepository.addContact(
+            _uiStateFlow.value = contactsRepository.addContact(
                 contactId = contactId
             )
         }
@@ -39,7 +36,7 @@ class AddContactsViewModel @Inject constructor(
 
     fun deleteContactFromUser(contactId: Long) {
         viewModelScope.launch {
-            _authStateFlow.value = contactsRepository.deleteContact(
+            _uiStateFlow.value = contactsRepository.deleteContact(
                 contactId = contactId
             )
         }

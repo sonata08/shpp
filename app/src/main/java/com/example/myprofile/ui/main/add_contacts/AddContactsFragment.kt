@@ -12,15 +12,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myprofile.R
 import com.example.myprofile.data.model.User
-import com.example.myprofile.data.model.UserMultiselect
 import com.example.myprofile.data.network.model.AuthUiStateTest
 import com.example.myprofile.databinding.FragmentAddContactsBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.add_contacts.adapter.AddContactsAdapter
 import com.example.myprofile.ui.main.add_contacts.adapter.OnAddContactClickListener
-import com.example.myprofile.ui.main.contacts.adapter.ContactsAdapter
 import com.example.myprofile.ui.main.contacts.adapter.ContactsItemDecoration
-import com.example.myprofile.ui.main.contacts.adapter.OnContactClickListener
 import com.example.myprofile.utils.extentions.showShortToast
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,7 +64,7 @@ class AddContactsFragment : BaseFragment<FragmentAddContactsBinding>(FragmentAdd
     private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.authStateFlow.collect {
+                viewModel.uiStateFlow.collect {
                     when (it) {
                         is AuthUiStateTest.Initial -> {}
                         is AuthUiStateTest.Success -> showContactList(it.data)
@@ -81,7 +78,6 @@ class AddContactsFragment : BaseFragment<FragmentAddContactsBinding>(FragmentAdd
 
     private fun showContactList(users: List<User>) {
         binding.progressBar.visibility = View.GONE
-        Log.d("FAT_AddContactFrag", "UiState = Success")
         adapter.submitList(users)
     }
 

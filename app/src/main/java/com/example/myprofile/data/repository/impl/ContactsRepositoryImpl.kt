@@ -2,16 +2,19 @@ package com.example.myprofile.data.repository.impl
 
 import android.util.Log
 import com.example.myprofile.data.model.User
-import com.example.myprofile.data.model.UserInfoHolder
+import com.example.myprofile.data.model.UserMultiselect
 import com.example.myprofile.data.network.ContactsApiService
+import com.example.myprofile.data.network.model.AddContactRequest
 import com.example.myprofile.data.network.model.AuthUiStateTest
 import com.example.myprofile.data.network.model.BaseResponse
 import com.example.myprofile.data.network.model.Contacts
 import com.example.myprofile.data.network.model.UserIdTokens
-import com.example.myprofile.data.network.model.Users
 import com.example.myprofile.data.repository.ContactsRepository
 import com.example.myprofile.data.repository.DataStoreRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import retrofit2.HttpException
+import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,17 +22,22 @@ import javax.inject.Singleton
 class ContactsRepositoryImpl @Inject constructor(
     private val contactsApiService: ContactsApiService,
     private val dataStoreRepository: DataStoreRepository,
-    private val userInfoHolder: UserInfoHolder
 ) : ContactsRepository {
 
-    // TODO: maybe remove this line and go to datastore every time we need data from it
+
+    private val _userContactsFlow = MutableStateFlow<List<UserMultiselect>>(emptyList())
+    override val userContactsFlow = _userContactsFlow.asStateFlow()
+
+
+    private var lastDeletedContact: Long? = null
 
     override suspend fun getUsers(): AuthUiStateTest<List<User>> {
-        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        val userIdTokens = getUserIdTokens()
         return try {
             val response = contactsApiService.getAllUsers(userIdTokens.accessToken)
             Log.d("FAT_ContRep", "getUsers response done")
-            AuthUiStateTest.Success(response.data.users)
+
+            AuthUiStateTest.Success(removeExistingContacts(response.data.users))
         } catch (e: HttpException) {
             Log.d("FAT_ContRep_getUsers_catch", e.toString())
             AuthUiStateTest.Error("")
@@ -37,28 +45,55 @@ class ContactsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUserContacts(): AuthUiStateTest<List<User>> {
-        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        val userIdTokens = getUserIdTokens()
         return try {
-            if (userInfoHolder.userContacts.isEmpty()) {
+            if (_userContactsFlow.value.isEmpty()) {
                 val response =
                     contactsApiService.getAllUserContacts(
                         token = userIdTokens.accessToken,
                         userId = userIdTokens.userId,
                     )
-                Log.d("FAT_ContRep", "getAllContacts response done")
-                userInfoHolder.userContacts = response.data.contacts
+                Log.d("FAT_ContRep", "getAllContacts")
+                updateContactsFlow(response.data.contacts)
                 AuthUiStateTest.Success(response.data.contacts)
-            } else {
-                AuthUiStateTest.Success(userInfoHolder.userContacts)
+            }
+            else {
+                AuthUiStateTest.Success(_userContactsFlow.value.map { it.contact })
             }
 
         } catch (e: HttpException) {
             Log.d("FAT_ContRep_getAllContacts_catch", e.toString())
-            AuthUiStateTest.Error("")
+            AuthUiStateTest.Error(e.toString())
         }
     }
 
+    // contact info for DetailViewFragment
+    override suspend fun getContact(contactId: Long): AuthUiStateTest<User> {
+        val contact = _userContactsFlow.value.find { it.contact.id == contactId }
+        if (contact != null) {
+            return AuthUiStateTest.Success(contact.contact)
+        }
+        val userIdTokens = getUserIdTokens()
+        return try {
+            val response = contactsApiService.getAllUsers(userIdTokens.accessToken)
+
+            val contactFromServer = response.data.users.find { it.id == contactId }
+            if (contactFromServer != null) {
+                AuthUiStateTest.Success(contactFromServer)
+            } else {
+                AuthUiStateTest.Error("no such user")
+            }
+
+        } catch (e: Exception) {
+            Log.d("FAT_AuthRep_get_catch", "getUser_error = $e")
+            AuthUiStateTest.Error(e.message ?: "unknown ERROR")
+        }
+
+
+    }
+
     override suspend fun deleteContact(contactId: Long): AuthUiStateTest<List<User>> {
+        lastDeletedContact = contactId
         val userIdTokens = dataStoreRepository.getUserIdTokens()
         return try {
             val response =
@@ -68,7 +103,7 @@ class ContactsRepositoryImpl @Inject constructor(
                     contactId = contactId.toInt()
                 )
             Log.d("FAT_ContRep", "deleteContact response done")
-            userInfoHolder.userContacts = response.data.contacts
+            updateContactsFlow(response.data.contacts)
             AuthUiStateTest.Success(response.data.contacts)
         } catch (e: HttpException) {
             Log.d("FAT_ContRep_delContact_catch", e.toString())
@@ -76,27 +111,50 @@ class ContactsRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun deleteContacts() {
-        TODO("Not yet implemented")
+    override suspend fun deleteContacts(): AuthUiStateTest<List<User>> {
+        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        val list = _userContactsFlow.value
+        return try {
+            var response = BaseResponse("","", "", Contacts(emptyList()))
+            for (user in list) {
+                if(user.isSelected) {
+                    response = contactsApiService.deleteContact(
+                        token = userIdTokens.accessToken,
+                        userId = userIdTokens.userId,
+                        contactId = user.contact.id.toInt()
+                    )
+                }
+            }
+            updateContactsFlow(response.data.contacts)
+            AuthUiStateTest.Success(response.data.contacts)
+        } catch (e: HttpException) {
+            Log.d("FAT_ContRep_delContacts_catch", e.toString())
+            AuthUiStateTest.Error("")
+        }
     }
 
-    override fun restoreLastDeletedContact() {
-        TODO("Not yet implemented")
+    override suspend fun restoreLastDeletedContact() {
+        Log.d("FAT_ContRep_delContacts_catch", "RESTORE contact")
+        lastDeletedContact?.let {
+            addContact(it)
+        }
+        lastDeletedContact = null
     }
 
     override suspend fun addContact(
         contactId: Long
     ): AuthUiStateTest<List<User>> {
         val userIdTokens = dataStoreRepository.getUserIdTokens()
+        Log.d("FAT_ContRep", "contactId = $contactId, userId = ${userIdTokens.userId}")
         return try {
             val response = contactsApiService.addContact(
                 token = userIdTokens.accessToken,
                 userId = userIdTokens.userId,
-                contactId.toInt()
+                AddContactRequest(contactId.toInt())
             )
             Log.d("FAT_ContRep", "addContact response done")
-            userInfoHolder.userContacts = response.data.contacts
-            AuthUiStateTest.Success(response.data.contacts)
+            updateContactsFlow(response.data.contacts)
+            AuthUiStateTest.Initial
         } catch (e: HttpException) {
             Log.d("FAT_ContRep_addContact_catch", e.toString())
             AuthUiStateTest.Error("")
@@ -104,18 +162,48 @@ class ContactsRepositoryImpl @Inject constructor(
     }
 
     override fun makeSelected(contactPosition: Int, isChecked: Boolean) {
-        TODO("Not yet implemented")
+        _userContactsFlow.value = _userContactsFlow.value.toMutableList().apply {
+            get(contactPosition).isSelected = isChecked
+        }
     }
 
-    override fun countSelected(): Int {
-        TODO("Not yet implemented")
+    override fun countSelectedItems(): Int {
+        _userContactsFlow.value.apply {
+            return filter { it.isSelected }.size
+        }
     }
 
     override fun deactivateMultiselectMode() {
-        TODO("Not yet implemented")
+        _userContactsFlow.value = _userContactsFlow.value.map { contact ->
+            contact.copy(
+                isSelected = false,
+                isMultiselectMode = false
+            )
+        }
     }
 
     override fun activateMultiselectMode() {
-        TODO("Not yet implemented")
+        _userContactsFlow.value =
+            _userContactsFlow.value.map { contact -> contact.copy(isMultiselectMode = true) }
+    }
+
+
+    private suspend fun getUserIdTokens(): UserIdTokens {
+        return dataStoreRepository.getUserIdTokens()
+    }
+
+    /**
+     * Filter the list of users to remove existing user's contacts from it
+     *
+     * @param serverList list of users received from server
+     * @return new users list or [serverList] if there is no user's contacts
+     */
+    private fun removeExistingContacts(serverList: List<User>): List<User> {
+        val users = _userContactsFlow.value.map {it.contact}
+        return serverList.subtract(users).toList()
+    }
+
+    private fun updateContactsFlow(users: List<User>) {
+        _userContactsFlow.value = users.map {UserMultiselect(it)}
     }
 }
