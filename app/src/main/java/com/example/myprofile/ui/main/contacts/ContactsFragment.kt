@@ -171,7 +171,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
             recyclerView.addItemDecoration(itemDecoration)
             recyclerView.adapter = adapter
             // uncomment to activate swipe-to-delete behavior
-//            itemTouchHelper.attachToRecyclerView(recyclerView)
+            itemTouchHelper.attachToRecyclerView(recyclerView)
         }
     }
 
@@ -188,8 +188,9 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
 
     private val swipeHandler = object : SwipeToDeleteCallback() {
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            val contactId = viewHolder.itemId
-//            val position = viewHolder.bindingAdapterPosition
+            val position = viewHolder.bindingAdapterPosition
+            val userMultiselect = adapter.currentList[position]
+            val contactId = userMultiselect.contact.id
             deleteContactWithSnackbar(contactId)
         }
     }

@@ -6,5 +6,5 @@ import com.example.myprofile.data.model.User
 interface OnAddContactClickListener {
     fun onContactClick(contact: User, extras: FragmentNavigator.Extras)
     fun onAddContact(contactId: Long)
-    fun onContactDelete(contactId: Long)
+//    fun onContactDelete(contactId: Long)
 }

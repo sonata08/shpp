@@ -6,28 +6,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class User(
     val id: Long = -1,
-    val email: String? = "",
-    val name: String? = "",
-    val phone: String? = "",
-    val address: String? = "",
-    val career: String? = "",
-    val birthday: String? = "",
-    val facebook: String? = "",
-    val instagram: String? = "",
-    val twitter: String? = "",
-    val linkedin: String? = "",
-    val image: String? = "",
-) {
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as User
-
-        return id == other.id
-    }
-}
+    val email: String? = null,
+    val name: String? = null,
+    val phone: String? = null,
+    val address: String? = null,
+    val career: String? = null,
+    val birthday: String? = null,
+    val facebook: String? = null,
+    val instagram: String? = null,
+    val twitter: String? = null,
+    val linkedin: String? = null,
+    val image: String? = null,
+)

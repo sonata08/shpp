@@ -35,8 +35,6 @@ class ContactsRepositoryImpl @Inject constructor(
         val userIdTokens = getUserIdTokens()
         return try {
             val response = contactsApiService.getAllUsers(userIdTokens.accessToken)
-            Log.d("FAT_ContRep", "getUsers response done")
-
             AuthUiStateTest.Success(removeExistingContacts(response.data.users))
         } catch (e: HttpException) {
             Log.d("FAT_ContRep_getUsers_catch", e.toString())
@@ -53,7 +51,6 @@ class ContactsRepositoryImpl @Inject constructor(
                         token = userIdTokens.accessToken,
                         userId = userIdTokens.userId,
                     )
-                Log.d("FAT_ContRep", "getAllContacts")
                 updateContactsFlow(response.data.contacts)
                 AuthUiStateTest.Success(response.data.contacts)
             }
@@ -102,7 +99,6 @@ class ContactsRepositoryImpl @Inject constructor(
                     userId = userIdTokens.userId,
                     contactId = contactId.toInt()
                 )
-            Log.d("FAT_ContRep", "deleteContact response done")
             updateContactsFlow(response.data.contacts)
             AuthUiStateTest.Success(response.data.contacts)
         } catch (e: HttpException) {
@@ -134,7 +130,6 @@ class ContactsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun restoreLastDeletedContact() {
-        Log.d("FAT_ContRep_delContacts_catch", "RESTORE contact")
         lastDeletedContact?.let {
             addContact(it)
         }
@@ -145,14 +140,12 @@ class ContactsRepositoryImpl @Inject constructor(
         contactId: Long
     ): AuthUiStateTest<List<User>> {
         val userIdTokens = dataStoreRepository.getUserIdTokens()
-        Log.d("FAT_ContRep", "contactId = $contactId, userId = ${userIdTokens.userId}")
         return try {
             val response = contactsApiService.addContact(
                 token = userIdTokens.accessToken,
                 userId = userIdTokens.userId,
                 AddContactRequest(contactId.toInt())
             )
-            Log.d("FAT_ContRep", "addContact response done")
             updateContactsFlow(response.data.contacts)
             AuthUiStateTest.Initial
         } catch (e: HttpException) {

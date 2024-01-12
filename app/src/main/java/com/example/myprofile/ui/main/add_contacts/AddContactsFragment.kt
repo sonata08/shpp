@@ -40,15 +40,12 @@ class AddContactsFragment : BaseFragment<FragmentAddContactsBinding>(FragmentAdd
 
             override fun onAddContact(contactId: Long) {
                 viewModel.addContactToUser(contactId)
-                requireContext().showShortToast("onAddContact")
             }
 
-            override fun onContactDelete(contactId: Long) {
-                viewModel.deleteContactFromUser(contactId)
-                requireContext().showShortToast("onContactDelete")
-            }
-
-
+//            override fun onContactDelete(contactId: Long) {
+//                viewModel.deleteContactFromUser(contactId)
+//                requireContext().showShortToast("onContactDelete")
+//            }
         })
     }
 
@@ -124,10 +121,6 @@ class AddContactsFragment : BaseFragment<FragmentAddContactsBinding>(FragmentAdd
             recyclerView.layoutManager = LinearLayoutManager(root.context)
             recyclerView.addItemDecoration(itemDecoration)
             recyclerView.adapter = adapter
-            // uncomment to activate swipe-to-delete behavior
-//            itemTouchHelper.attachToRecyclerView(recyclerView)
         }
     }
-
-
 }

@@ -33,12 +33,12 @@ class AddContactsViewModel @Inject constructor(
             )
         }
     }
-
-    fun deleteContactFromUser(contactId: Long) {
-        viewModelScope.launch {
-            _uiStateFlow.value = contactsRepository.deleteContact(
-                contactId = contactId
-            )
-        }
-    }
+//
+//    fun deleteContactFromUser(contactId: Long) {
+//        viewModelScope.launch {
+//            _uiStateFlow.value = contactsRepository.deleteContact(
+//                contactId = contactId
+//            )
+//        }
+//    }
 }
