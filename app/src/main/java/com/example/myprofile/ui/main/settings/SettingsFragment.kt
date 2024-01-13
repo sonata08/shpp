@@ -11,7 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.myprofile.data.datastore.DataStorePreferences
 import com.example.myprofile.data.model.User
-import com.example.myprofile.data.network.model.AuthUiState
+import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentSettingsBinding
 import com.example.myprofile.ui.auth.AuthActivity
 import com.example.myprofile.ui.base.BaseFragment
@@ -33,7 +33,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        viewModel.getUser()
         observeUiState()
         setListeners()
         viewModel.getUser()
@@ -61,10 +60,10 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.authStateFlow.collect {
                     when (it) {
-                        is AuthUiState.Initial -> {}
-                        is AuthUiState.Success -> showUserData(it.data.data.user)
-                        is AuthUiState.Loading -> showProgressBar()
-                        is AuthUiState.Error -> showError(it.message)
+                        is UiState.Initial -> {}
+                        is UiState.Success -> showUserData(it.data.users.first())
+                        is UiState.Loading -> showProgressBar()
+                        is UiState.Error -> showError(it.message)
                     }
                 }
             }

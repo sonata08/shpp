@@ -11,8 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.myprofile.R
-import com.example.myprofile.data.model.UserCredentialsAuth
-import com.example.myprofile.data.network.model.AuthUiState
+import com.example.myprofile.data.model.UserCredentials
+import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.LoginResponse
 import com.example.myprofile.databinding.FragmentLoginBinding
 import com.example.myprofile.ui.base.BaseFragment
@@ -48,7 +48,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         binding.btnLogin.setOnClickListener {
             val email = binding.emailEdit.text.toString()
             val password = binding.passwordEdit.text.toString()
-            val userCredentials = UserCredentialsAuth(email, password)
+            val userCredentials = UserCredentials(email, password)
             viewModel.loginUser(userCredentials)
         }
     }
@@ -62,18 +62,18 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.authStateFlow.collect {
-//                    Log.d("FAT_LoginFragment", "uiState = $it")
+//                    Log.d("FAT_LoginFragment", "UiState = $it")
                     when (it) {
-                        is AuthUiState.Initial -> {}
-                        is AuthUiState.Success -> {
+                        is UiState.Initial -> {}
+                        is UiState.Success -> {
                             Log.d("FAT_LoginFragment", "UiState = Success")
-                            singInUser(it.data.data)
+                            singInUser(it.data)
                         }
-                        is AuthUiState.Loading -> {
+                        is UiState.Loading -> {
                             Log.d("FAT_LoginFragment", "UiState = Loading")
                             //TODO
                         }
-                        is AuthUiState.Error -> {
+                        is UiState.Error -> {
                             Log.d("FAT_LoginFragment", "UiState.Error = ${it.message}")
                             showAuthError(it.message)
                         }

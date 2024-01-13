@@ -1,8 +1,8 @@
 package com.example.myprofile.di
 
 import com.example.myprofile.data.network.BASE_URL
-import com.example.myprofile.data.network.ContactsApiService
-import com.example.myprofile.data.network.UserApiService
+import com.example.myprofile.data.network.api.ContactsApiService
+import com.example.myprofile.data.network.api.UserApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

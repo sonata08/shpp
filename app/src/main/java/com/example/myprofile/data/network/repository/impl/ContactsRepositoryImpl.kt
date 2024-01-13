@@ -1,15 +1,15 @@
-package com.example.myprofile.data.repository.impl
+package com.example.myprofile.data.network.repository.impl
 
 import android.util.Log
 import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserMultiselect
-import com.example.myprofile.data.network.ContactsApiService
+import com.example.myprofile.data.network.api.ContactsApiService
 import com.example.myprofile.data.network.model.AddContactRequest
-import com.example.myprofile.data.network.model.AuthUiStateTest
+import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.BaseResponse
 import com.example.myprofile.data.network.model.Contacts
 import com.example.myprofile.data.network.model.UserIdTokens
-import com.example.myprofile.data.repository.ContactsRepository
+import com.example.myprofile.data.network.repository.ContactsRepository
 import com.example.myprofile.data.repository.DataStoreRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,18 +31,18 @@ class ContactsRepositoryImpl @Inject constructor(
 
     private var lastDeletedContact: Long? = null
 
-    override suspend fun getUsers(): AuthUiStateTest<List<User>> {
+    override suspend fun getUsers(): UiState<List<User>> {
         val userIdTokens = getUserIdTokens()
         return try {
             val response = contactsApiService.getAllUsers(userIdTokens.accessToken)
-            AuthUiStateTest.Success(removeExistingContacts(response.data.users))
+            UiState.Success(removeExistingContacts(response.data.users))
         } catch (e: HttpException) {
             Log.d("FAT_ContRep_getUsers_catch", e.toString())
-            AuthUiStateTest.Error("")
+            UiState.Error("")
         }
     }
 
-    override suspend fun getUserContacts(): AuthUiStateTest<List<User>> {
+    override suspend fun getUserContacts(): UiState<List<User>> {
         val userIdTokens = getUserIdTokens()
         return try {
             if (_userContactsFlow.value.isEmpty()) {
@@ -52,23 +52,23 @@ class ContactsRepositoryImpl @Inject constructor(
                         userId = userIdTokens.userId,
                     )
                 updateContactsFlow(response.data.contacts)
-                AuthUiStateTest.Success(response.data.contacts)
+                UiState.Success(response.data.contacts)
             }
             else {
-                AuthUiStateTest.Success(_userContactsFlow.value.map { it.contact })
+                UiState.Success(_userContactsFlow.value.map { it.contact })
             }
 
         } catch (e: HttpException) {
             Log.d("FAT_ContRep_getAllContacts_catch", e.toString())
-            AuthUiStateTest.Error(e.toString())
+            UiState.Error(e.toString())
         }
     }
 
     // contact info for DetailViewFragment
-    override suspend fun getContact(contactId: Long): AuthUiStateTest<User> {
+    override suspend fun getContact(contactId: Long): UiState<User> {
         val contact = _userContactsFlow.value.find { it.contact.id == contactId }
         if (contact != null) {
-            return AuthUiStateTest.Success(contact.contact)
+            return UiState.Success(contact.contact)
         }
         val userIdTokens = getUserIdTokens()
         return try {
@@ -76,20 +76,20 @@ class ContactsRepositoryImpl @Inject constructor(
 
             val contactFromServer = response.data.users.find { it.id == contactId }
             if (contactFromServer != null) {
-                AuthUiStateTest.Success(contactFromServer)
+                UiState.Success(contactFromServer)
             } else {
-                AuthUiStateTest.Error("no such user")
+                UiState.Error("no such user")
             }
 
         } catch (e: Exception) {
             Log.d("FAT_AuthRep_get_catch", "getUser_error = $e")
-            AuthUiStateTest.Error(e.message ?: "unknown ERROR")
+            UiState.Error(e.message ?: "unknown ERROR")
         }
 
 
     }
 
-    override suspend fun deleteContact(contactId: Long): AuthUiStateTest<List<User>> {
+    override suspend fun deleteContact(contactId: Long): UiState<List<User>> {
         lastDeletedContact = contactId
         val userIdTokens = dataStoreRepository.getUserIdTokens()
         return try {
@@ -100,14 +100,14 @@ class ContactsRepositoryImpl @Inject constructor(
                     contactId = contactId.toInt()
                 )
             updateContactsFlow(response.data.contacts)
-            AuthUiStateTest.Success(response.data.contacts)
+            UiState.Success(response.data.contacts)
         } catch (e: HttpException) {
             Log.d("FAT_ContRep_delContact_catch", e.toString())
-            AuthUiStateTest.Error("")
+            UiState.Error("")
         }
     }
 
-    override suspend fun deleteContacts(): AuthUiStateTest<List<User>> {
+    override suspend fun deleteContacts(): UiState<List<User>> {
         val userIdTokens = dataStoreRepository.getUserIdTokens()
         val list = _userContactsFlow.value
         return try {
@@ -122,10 +122,10 @@ class ContactsRepositoryImpl @Inject constructor(
                 }
             }
             updateContactsFlow(response.data.contacts)
-            AuthUiStateTest.Success(response.data.contacts)
+            UiState.Success(response.data.contacts)
         } catch (e: HttpException) {
             Log.d("FAT_ContRep_delContacts_catch", e.toString())
-            AuthUiStateTest.Error("")
+            UiState.Error("")
         }
     }
 
@@ -138,7 +138,7 @@ class ContactsRepositoryImpl @Inject constructor(
 
     override suspend fun addContact(
         contactId: Long
-    ): AuthUiStateTest<List<User>> {
+    ): UiState<List<User>> {
         val userIdTokens = dataStoreRepository.getUserIdTokens()
         return try {
             val response = contactsApiService.addContact(
@@ -147,10 +147,10 @@ class ContactsRepositoryImpl @Inject constructor(
                 AddContactRequest(contactId.toInt())
             )
             updateContactsFlow(response.data.contacts)
-            AuthUiStateTest.Initial
+            UiState.Initial
         } catch (e: HttpException) {
             Log.d("FAT_ContRep_addContact_catch", e.toString())
-            AuthUiStateTest.Error("")
+            UiState.Error("")
         }
     }
 

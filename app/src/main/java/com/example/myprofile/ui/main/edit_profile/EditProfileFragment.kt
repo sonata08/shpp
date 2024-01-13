@@ -2,6 +2,7 @@ package com.example.myprofile.ui.main.edit_profile
 
 
 import android.os.Bundle
+import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -10,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.myprofile.data.model.User
-import com.example.myprofile.data.network.model.AuthUiState
+import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentEditProfileBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.google.android.material.snackbar.Snackbar
@@ -28,8 +29,7 @@ class EditProfileFragment :
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
         observeUiState()
-        setButtonListener()
-
+        setListeners()
     }
 
 
@@ -39,10 +39,10 @@ class EditProfileFragment :
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.authStateFlow.collect {
                     when (it) {
-                        is AuthUiState.Initial -> bindUserData(viewModel.getUser())
-                        is AuthUiState.Success -> returnToSettingsFragment()
-                        is AuthUiState.Loading -> showProgressBar()
-                        is AuthUiState.Error -> showError(it.message)
+                        is UiState.Initial -> bindUserData(viewModel.getUser())
+                        is UiState.Success -> returnToSettingsFragment()
+                        is UiState.Loading -> showProgressBar()
+                        is UiState.Error -> showError(it.message)
                     }
                 }
             }
@@ -60,9 +60,12 @@ class EditProfileFragment :
         }
     }
 
-    private fun setButtonListener() {
-        binding.btnSave.setOnClickListener {
-            viewModel.updateUser(createUser())
+    private fun setListeners() {
+        with(binding) {
+            btnSave.setOnClickListener {
+                viewModel.updateUser(createUser())
+            }
+            phoneEdit.addTextChangedListener(PhoneNumberFormattingTextWatcher())
         }
     }
 

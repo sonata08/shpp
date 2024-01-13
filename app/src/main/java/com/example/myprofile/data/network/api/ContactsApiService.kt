@@ -1,4 +1,4 @@
-package com.example.myprofile.data.network
+package com.example.myprofile.data.network.api
 
 import com.example.myprofile.data.network.model.AddContactRequest
 import com.example.myprofile.data.network.model.BaseResponse

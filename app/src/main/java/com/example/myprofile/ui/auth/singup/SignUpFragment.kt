@@ -10,8 +10,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.myprofile.R
-import com.example.myprofile.data.model.UserCredentialsAuth
-import com.example.myprofile.data.network.model.AuthUiState
+import com.example.myprofile.data.model.UserCredentials
+import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.LoginResponse
 import com.example.myprofile.databinding.FragmentSignUpBinding
 import com.example.myprofile.ui.base.BaseFragment
@@ -58,6 +58,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
     }
 
     private fun setListeners() {
+        setUpAuthStateListener()
         setupRegisterButtonClickListener()
         setupSignInBtnListener()
         setupEmailListener()
@@ -88,10 +89,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         }
     }
 
-    /**
-    Listens to user's actions on email field.
-    Shows error only if Register button has already been clicked.
-     */
     private fun setupEmailListener() {
         binding.emailEdit.doAfterTextChanged {
             if (!Validation.isValidEmail(it.toString())) {
@@ -102,19 +99,15 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         }
     }
 
-    /**
-    Gets email and password from user's input then starts MyProfile activity
-    or shows errors.
-     */
+
     private fun setupRegisterButtonClickListener() {
         binding.btnRegister.setOnClickListener {
             val email = binding.emailEdit.text.toString()
             val password = binding.passwordEdit.text.toString()
-            val credentials = UserCredentialsAuth(email, password)
+            val credentials = UserCredentials(email, password)
 
             if(isValidCredentials(credentials)) {
                 viewModel.createUser(credentials)
-                setUpAuthStateListener()
             }
         }
     }
@@ -124,17 +117,17 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.authStateFlow.collect {
                     when (it) {
-                        is AuthUiState.Initial -> {}
-                        is AuthUiState.Success -> {
+                        is UiState.Initial -> {}
+                        is UiState.Success -> {
                             if (binding.checkboxRememberMe.isChecked) {
-                                viewModel.saveUserIdTokens(it.data.data)
+                                viewModel.saveUserIdTokens(it.data)
                             }
-                            goToSignUpExtended(it.data.data)
+                            goToSignUpExtended(it.data)
                         }
-                        is AuthUiState.Loading -> {
+                        is UiState.Loading -> {
                             Log.d("FAT_SignInFr", "AuthUiState.Loading")
                         } //TODO
-                        is AuthUiState.Error -> {
+                        is UiState.Error -> {
                             requireContext().showShortToast(localizeError(it.message, requireContext()))
                             Log.d("FAT_SignInFr", "error = ${it.message}")
                             goToSignUpTest()
@@ -150,7 +143,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
     if checkbox is checked, saves name to datastore and goes to MyProfile activity.
     Otherwise shows an error.
      */
-    private fun isValidCredentials(credentials: UserCredentialsAuth): Boolean {
+    private fun isValidCredentials(credentials: UserCredentials): Boolean {
         return if (Validation.isValidEmail(credentials.email) && Validation.isValidPassword(credentials.password)) {
             true
         } else {

@@ -3,8 +3,8 @@ package com.example.myprofile.ui.main.contacts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myprofile.data.model.User
-import com.example.myprofile.data.network.model.AuthUiStateTest
-import com.example.myprofile.data.repository.ContactsRepository
+import com.example.myprofile.data.network.model.UiState
+import com.example.myprofile.data.network.repository.ContactsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +17,7 @@ class ContactsViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val _uiStateFlow = MutableStateFlow<AuthUiStateTest<List<User>>>(AuthUiStateTest.Loading)
+    private val _uiStateFlow = MutableStateFlow<UiState<List<User>>>(UiState.Loading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
     val contactsListFlow = contactsRepository.userContactsFlow

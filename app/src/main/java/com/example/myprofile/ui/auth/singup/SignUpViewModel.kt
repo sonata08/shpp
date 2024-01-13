@@ -2,10 +2,10 @@ package com.example.myprofile.ui.auth.singup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myprofile.data.model.UserCredentialsAuth
-import com.example.myprofile.data.network.model.AuthUiState
+import com.example.myprofile.data.model.UserCredentials
+import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.LoginResponse
-import com.example.myprofile.data.repository.AuthRepository
+import com.example.myprofile.data.network.repository.AuthRepository
 import com.example.myprofile.data.repository.DataStoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,10 +19,11 @@ class SignUpViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository
 ): ViewModel() {
 
-    private val _authStateFlow = MutableStateFlow<AuthUiState>(AuthUiState.Initial)
+    private val _authStateFlow = MutableStateFlow<UiState<LoginResponse>>(UiState.Initial)
     val authStateFlow = _authStateFlow.asStateFlow()
 
-    fun createUser(userCredentials: UserCredentialsAuth) {
+
+    fun createUser(userCredentials: UserCredentials) {
         viewModelScope.launch {
             _authStateFlow.value = authRepository.createUser(userCredentials)
         }

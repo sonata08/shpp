@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myprofile.R
 import com.example.myprofile.data.model.User
-import com.example.myprofile.data.network.model.AuthUiStateTest
+import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentAddContactsBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.add_contacts.adapter.AddContactsAdapter
@@ -63,10 +63,10 @@ class AddContactsFragment : BaseFragment<FragmentAddContactsBinding>(FragmentAdd
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiStateFlow.collect {
                     when (it) {
-                        is AuthUiStateTest.Initial -> {}
-                        is AuthUiStateTest.Success -> showContactList(it.data)
-                        is AuthUiStateTest.Loading -> showProgressBar()
-                        is AuthUiStateTest.Error -> showError(it.message)
+                        is UiState.Initial -> {}
+                        is UiState.Success -> showContactList(it.data)
+                        is UiState.Loading -> showProgressBar()
+                        is UiState.Error -> showError(it.message)
                     }
                 }
             }

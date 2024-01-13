@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.example.myprofile.data.model.User
-import com.example.myprofile.data.network.model.AuthUiStateTest
+import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentDetailViewBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.utils.extentions.loadImage
@@ -54,10 +54,10 @@ class DetailViewFragment :
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiStateFlow.collect {
                     when (it) {
-                        is AuthUiStateTest.Initial -> {}
-                        is AuthUiStateTest.Success -> bindContact(it.data)
-                        is AuthUiStateTest.Loading -> showProgressBar()
-                        is AuthUiStateTest.Error -> showError(it.message)
+                        is UiState.Initial -> {}
+                        is UiState.Success -> bindContact(it.data)
+                        is UiState.Loading -> showProgressBar()
+                        is UiState.Error -> showError(it.message)
                     }
                 }
             }

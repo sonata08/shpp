@@ -1,21 +1,17 @@
 package com.example.myprofile.di
 
-import com.example.myprofile.data.repository.AuthRepository
-import com.example.myprofile.data.repository.ContactsRepository
+import com.example.myprofile.data.network.repository.AuthRepository
+import com.example.myprofile.data.network.repository.ContactsRepository
 import com.example.myprofile.data.repository.DataStoreRepository
-import com.example.myprofile.data.repository.impl.AuthRepositoryImpl
-import com.example.myprofile.data.repository.impl.ContactsRepositoryImpl
-import com.example.myprofile.data.repository.impl.ContactsTestRepositoryImpl
+import com.example.myprofile.data.network.repository.impl.AuthRepositoryImpl
+import com.example.myprofile.data.network.repository.impl.ContactsRepositoryImpl
 import com.example.myprofile.data.repository.impl.DataStoreRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
-/**
- * This module is responsible for binding the concrete implementation
- * [ContactsTestRepositoryImpl] to the [ContactsRepository] interface
- */
+
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
@@ -34,9 +30,4 @@ abstract class RepositoryModule {
     abstract fun bindDataStoreRepository(
         repositoryImpl: DataStoreRepositoryImpl
     ): DataStoreRepository
-
-//    @Binds
-//    abstract fun bindContactsTestRepository(
-//        repositoryImpl: ContactsTestRepositoryImpl
-//    ): ContactsTestRepositoryImpl
 }

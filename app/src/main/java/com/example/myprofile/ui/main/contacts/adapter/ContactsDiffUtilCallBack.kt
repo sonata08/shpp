@@ -1,7 +1,6 @@
 package com.example.myprofile.ui.main.contacts.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.myprofile.data.model.ContactMultiselect
 import com.example.myprofile.data.model.UserMultiselect
 
 class ContactsDiffUtilCallBack : DiffUtil.ItemCallback<UserMultiselect>() {

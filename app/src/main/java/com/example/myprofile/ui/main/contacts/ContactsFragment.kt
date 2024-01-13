@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
 import com.example.myprofile.data.model.UserMultiselect
-import com.example.myprofile.data.network.model.AuthUiStateTest
+import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentContactsBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.contacts.adapter.ContactsAdapter
@@ -85,10 +85,10 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiStateFlow.collect {
                     when (it) {
-                        is AuthUiStateTest.Initial -> {}
-                        is AuthUiStateTest.Success -> showContacts()
-                        is AuthUiStateTest.Loading -> showProgressBar()
-                        is AuthUiStateTest.Error -> showError(it.message)
+                        is UiState.Initial -> {}
+                        is UiState.Success -> showContacts()
+                        is UiState.Loading -> showProgressBar()
+                        is UiState.Error -> showError(it.message)
                     }
                 }
             }
