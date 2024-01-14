@@ -4,7 +4,8 @@ import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserCredentials
 import com.example.myprofile.data.network.model.BaseResponse
 import com.example.myprofile.data.network.model.LoginResponse
-import com.example.myprofile.data.network.model.Users
+import com.example.myprofile.data.network.model.Tokens
+import com.example.myprofile.data.network.model.UserGet
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -32,17 +33,17 @@ interface UserApiService {
         @Header("Authorization") token: String,
         @Path("userId") userId: Long,
         @Body user: User
-    ): BaseResponse<Users>
+    ): BaseResponse<UserGet>
 
     @GET("users/{userId}")
     suspend fun getUser(
         @Path("userId") userId: Long,
         @Header("Authorization") token: String,
-    ): BaseResponse<Users>
+    ): BaseResponse<UserGet>
 
     @POST("refresh")
     suspend fun refreshToken(
         @Header("RefreshToken") refreshToken: String
-    ): String
+    ): BaseResponse<Tokens>
 
 }

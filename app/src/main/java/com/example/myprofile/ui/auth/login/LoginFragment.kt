@@ -19,6 +19,7 @@ import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.MainActivity
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.utils.extentions.showShortToast
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -29,9 +30,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        autoLoginUser()
+        autoLoginUser()
         setListeners()
-        setAuthStateObserver()
+        observeUiState()
 
         with(binding) {
             emailEdit.setText("t@mail.com")
@@ -39,63 +40,78 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
     }
 
-    private fun setListeners() {
-        binding.signUp.setOnClickListener {
-            val action = LoginFragmentDirections.actionLoginFragmentToSignUpFragment()
-            findNavController().navigate(action)
-        }
-
-        binding.btnLogin.setOnClickListener {
-            val email = binding.emailEdit.text.toString()
-            val password = binding.passwordEdit.text.toString()
-            val userCredentials = UserCredentials(email, password)
-            viewModel.loginUser(userCredentials)
-        }
-    }
-
     private fun autoLoginUser() {
         viewModel.autoLoginUser()
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.autoLoginFlow.collect {
+                    when (it) {
+                        is UiState.Initial -> {}
+                        is UiState.Success -> {gotoProfile()}
+                        is UiState.Loading -> showProgressBar()
+                        is UiState.Error -> showError(it.message)
+                    }
+                }
+            }
+        }
     }
 
 
-    private fun setAuthStateObserver() {
+    private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.authStateFlow.collect {
-//                    Log.d("FAT_LoginFragment", "UiState = $it")
                     when (it) {
                         is UiState.Initial -> {}
-                        is UiState.Success -> {
-                            Log.d("FAT_LoginFragment", "UiState = Success")
-                            singInUser(it.data)
-                        }
-                        is UiState.Loading -> {
-                            Log.d("FAT_LoginFragment", "UiState = Loading")
-                            //TODO
-                        }
-                        is UiState.Error -> {
-                            Log.d("FAT_LoginFragment", "UiState.Error = ${it.message}")
-                            showAuthError(it.message)
-                        }
+                        is UiState.Success -> singInUser(it.data)
+                        is UiState.Loading -> showProgressBar()
+                        is UiState.Error -> showError(it.message)
                     }
-
-
                 }
             }
         }
     }
 
     private fun singInUser(data: LoginResponse) {
+        binding.progressBar.visibility = View.GONE
         viewModel.rememberUser(binding.checkboxRememberMe.isChecked)
         viewModel.saveUserIdTokens(data)
         gotoProfile()
-        Log.d("FAT_LoginFragment", "user id = ${data.user.id}")
-
     }
 
-    private fun showAuthError(message: String) {
-        Log.d("FAT_LoginFragment", "showAuthError = $message")
-        requireContext().showShortToast(message)
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun showError(error: String) {
+        binding.progressBar.visibility = View.GONE
+        Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)
+            .show()
+    }
+
+    private fun setListeners() {
+        setupSignUpListener()
+        setupLoginListener()
+        setupEmailListener()
+        setupPasswordListener()
+    }
+
+    private fun setupLoginListener() {
+        binding.btnLogin.setOnClickListener {
+            val email = binding.emailEdit.text.toString()
+            val password = binding.passwordEdit.text.toString()
+            val userCredentials = UserCredentials(email, password)
+            if (Validation.isValidEmail(email) && Validation.isValidPassword(password)) {
+                viewModel.loginUser(userCredentials)
+            }
+        }
+    }
+
+    private fun setupSignUpListener() {
+        binding.signUp.setOnClickListener {
+            val action = LoginFragmentDirections.actionLoginFragmentToSignUpFragment()
+            findNavController().navigate(action)
+        }
     }
 
     private fun setupPasswordListener() {

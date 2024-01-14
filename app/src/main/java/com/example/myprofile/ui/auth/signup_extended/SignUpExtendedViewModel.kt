@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myprofile.data.model.User
 import com.example.myprofile.data.network.model.UiState
-import com.example.myprofile.data.network.model.Users
 import com.example.myprofile.data.network.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +16,7 @@ class SignUpExtendedViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    private val _authStateFlow = MutableStateFlow<UiState<Users>>(UiState.Loading)
+    private val _authStateFlow = MutableStateFlow<UiState<User>>(UiState.Loading)
     val authStateFlow = _authStateFlow.asStateFlow()
 
     private var _photoUri = MutableStateFlow("")

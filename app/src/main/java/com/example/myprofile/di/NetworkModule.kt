@@ -3,49 +3,55 @@ package com.example.myprofile.di
 import com.example.myprofile.data.network.BASE_URL
 import com.example.myprofile.data.network.api.ContactsApiService
 import com.example.myprofile.data.network.api.UserApiService
+import com.example.myprofile.data.network.interceptor.TokenAuthenticator
+import com.example.myprofile.data.network.repository.TokenManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Authenticator
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RetrofitModule {
-
-//    @Provides
-//    @Singleton
-//    fun provideRetrofit(): UserApiService {
-//        val retrofit = Retrofit.Builder()
-//            .addConverterFactory(GsonConverterFactory.create())
-////            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-//            .baseUrl(BASE_URL)
-//            .build()
-//        return retrofit.create(UserApiService::class.java)
-//    }
+object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_URL)
+    fun provideTokenAuthenticator(tokenManager: TokenManager): Authenticator {
+        return TokenAuthenticator(tokenManager)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(tokenAuthenticator: TokenAuthenticator): OkHttpClient {
+        return OkHttpClient.Builder()
+            .authenticator(tokenAuthenticator)
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideUserApiService(): UserApiService {
-        val retrofit = provideRetrofit()
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserApiService(retrofit: Retrofit): UserApiService {
         return retrofit.create(UserApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideContactsApiService(): ContactsApiService {
-        val retrofit = provideRetrofit()
+    fun provideContactsApiService(retrofit: Retrofit): ContactsApiService {
         return retrofit.create(ContactsApiService::class.java)
     }
 

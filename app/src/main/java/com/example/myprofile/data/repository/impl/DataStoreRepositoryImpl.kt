@@ -13,6 +13,11 @@ class DataStoreRepositoryImpl @Inject constructor(
     override suspend fun saveUserIdTokens(userId: Long, accessToken: String, refreshToken: String) {
         dataStorePreferences.saveUserIdTokens(userId, accessToken, refreshToken)
     }
+
+    override suspend fun saveTokens(accessToken: String, refreshToken: String) {
+        dataStorePreferences.saveTokens(accessToken, refreshToken)
+    }
+
     override suspend fun getUserIdTokens() = dataStorePreferences.getUserIdTokens()
 
     override suspend fun rememberUser(data: Boolean) {

@@ -38,6 +38,13 @@ class DataStorePreferences @Inject constructor(private val dataStore: DataStore<
         }
     }
 
+    suspend fun saveTokens(accessToken: String, refreshToken: String) {
+        dataStore.edit { preferences ->
+            preferences[ACCESS_TOKEN] = "Bearer $accessToken"
+            preferences[REFRESH_TOKEN] = refreshToken
+        }
+    }
+
     suspend fun rememberUser(data: Boolean) {
         dataStore.edit { preferences ->
             preferences[REMEMBER_USER] = data

@@ -6,14 +6,13 @@ import com.example.myprofile.data.model.UserCredentials
 import com.example.myprofile.data.network.api.UserApiService
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.LoginResponse
-import com.example.myprofile.data.network.model.Users
 import com.example.myprofile.data.network.repository.AuthRepository
 import com.example.myprofile.data.repository.DataStoreRepository
 import com.example.myprofile.utils.getMessageFromHttpException
 import retrofit2.HttpException
-import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.Exception
 
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
@@ -29,8 +28,8 @@ class AuthRepositoryImpl @Inject constructor(
             savedUser = response.data.user
             UiState.Success(response.data)
         } catch (e: HttpException) {
-            val error = e.response()?.errorBody()?.string()
-            UiState.Error(getMessageFromHttpException(error))
+            val error = e.response()?.errorBody()?.string() ?: "createUser ERROR"
+            UiState.Error(error)
         } catch (e: Exception) {
             Log.d("FAT_AuthRep_create_Exc", e.toString())
             UiState.Error("")
@@ -45,32 +44,37 @@ class AuthRepositoryImpl @Inject constructor(
             UiState.Success(response.data)
         } catch (e: HttpException) {
             Log.d("FAT_AuthRep_login_catch", e.toString())
-            UiState.Error("")
+            UiState.Error(e.message())
         }
 
     }
 
-    override suspend fun getUser(): UiState<Users> {
+    override suspend fun getUser(): UiState<User> {
         val userIdTokens = dataStoreRepository.getUserIdTokens()
         return try {
             if (savedUser.id == -1L) {
+                Log.d("FAT_AuthRep_get", "before userApiService.getUser")
                 val response = userApiService.getUser(
                     userId = userIdTokens.userId,
-                    token = userIdTokens.accessToken
+                    token = ""//userIdTokens.accessToken
                 )
-                savedUser = response.data.users.first()
-                UiState.Success(response.data)
+                savedUser = response.data.user
+                UiState.Success(savedUser)
             } else {
-                UiState.Success(Users(users = emptyList()))
+                UiState.Success(savedUser)
             }
-
-        } catch (e: Exception) {
-            Log.d("FAT_AuthRep_get_catch", "getUser_error = $e")
+        } catch (e: HttpException) {
+            val error = e.code()
+            Log.d("FAT_AuthRep_get_catch1", "error = ${e.code()}")
+            UiState.Error(error.toString())
+        }
+        catch (e: Exception) {
+            Log.d("FAT_AuthRep_get_catch2", "getUser_error = $e")
             UiState.Error(e.message ?: "unknown ERROR")
         }
     }
 
-    override suspend fun editUser(user: User): UiState<Users> {
+    override suspend fun editUser(user: User): UiState<User> {
         val userIdTokens = dataStoreRepository.getUserIdTokens()
         return try {
             val response = userApiService.editUser(
@@ -78,12 +82,29 @@ class AuthRepositoryImpl @Inject constructor(
                 userId = userIdTokens.userId,
                 user = user
             )
-            savedUser = response.data.users.first()
-            UiState.Success(response.data)
+            savedUser = response.data.user
+            UiState.Success(savedUser)
         } catch (e: HttpException) {
             val error = e.response()?.errorBody()?.string()
             Log.d("FAT_AuthRep_edit_catch", "editUser_error = $error")
             UiState.Error(getMessageFromHttpException(error))
+        }
+    }
+
+    override suspend fun refreshToken() {
+        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        try {
+            Log.d("FAT_AuthRep", "refreshToken")
+            val response = userApiService.refreshToken(
+                userIdTokens.refreshToken
+            )
+            dataStoreRepository.saveTokens(response.data.accessToken, response.data.refreshToken)
+        } catch (e: HttpException) {
+            val error = e.response()?.errorBody()?.string() ?: "unknown error"
+            Log.d("FAT_AuthRep_catch", "refreshToken HttpError = $error")
+        } catch (e: Exception) {
+            Log.d("FAT_AuthRep_catch", "refreshToken_error")
+
         }
     }
 

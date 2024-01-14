@@ -61,7 +61,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
                 viewModel.authStateFlow.collect {
                     when (it) {
                         is UiState.Initial -> {}
-                        is UiState.Success -> showUserData(it.data.users.first())
+                        is UiState.Success -> showUserData(it.data)
                         is UiState.Loading -> showProgressBar()
                         is UiState.Error -> showError(it.message)
                     }

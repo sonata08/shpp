@@ -2,9 +2,11 @@ package com.example.myprofile.di
 
 import com.example.myprofile.data.network.repository.AuthRepository
 import com.example.myprofile.data.network.repository.ContactsRepository
+import com.example.myprofile.data.network.repository.TokenManager
 import com.example.myprofile.data.repository.DataStoreRepository
 import com.example.myprofile.data.network.repository.impl.AuthRepositoryImpl
 import com.example.myprofile.data.network.repository.impl.ContactsRepositoryImpl
+import com.example.myprofile.data.network.repository.impl.TokenManagerImpl
 import com.example.myprofile.data.repository.impl.DataStoreRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -30,4 +32,9 @@ abstract class RepositoryModule {
     abstract fun bindDataStoreRepository(
         repositoryImpl: DataStoreRepositoryImpl
     ): DataStoreRepository
+
+    @Binds
+    abstract fun bindTokenManager(
+        tokenManagerImpl: TokenManagerImpl
+    ): TokenManager
 }
