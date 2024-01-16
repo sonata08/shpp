@@ -1,5 +1,6 @@
 package com.example.myprofile.ui.auth.signup_extended
 
+import android.content.Intent
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.Log
@@ -13,9 +14,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.myprofile.data.model.User
+import com.example.myprofile.data.network.model.LoginResponse
+import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentSignUpExtendedBinding
 import com.example.myprofile.ui.base.BaseFragment
+import com.example.myprofile.ui.main.MainActivity
 import com.example.myprofile.ui.utils.extentions.loadImage
+import com.example.myprofile.utils.localizeError
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -25,7 +31,7 @@ import kotlinx.coroutines.launch
 class SingUpExtendedFragment :
     BaseFragment<FragmentSignUpExtendedBinding>(FragmentSignUpExtendedBinding::inflate) {
 
-    val args: SingUpExtendedFragmentArgs by navArgs()
+
     private val viewModel: SignUpExtendedViewModel by viewModels()
 
     private val pickMedia =
@@ -38,8 +44,40 @@ class SingUpExtendedFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeUiState()
         setListeners()
         observePhoto()
+    }
+
+    private fun observeUiState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.authStateFlow.collect {
+                    when (it) {
+                        is UiState.Initial -> {}
+                        is UiState.Success -> singInUser()
+                        is UiState.Loading -> showProgressBar()
+                        is UiState.Error -> showError(it.message)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun singInUser() {
+        binding.progressBar.visibility = View.GONE
+        goToProfile()
+    }
+
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun showError(error: String) {
+        val localizedError = localizeError(error, requireContext())
+        binding.progressBar.visibility = View.GONE
+        Snackbar.make(binding.root, localizedError, Snackbar.LENGTH_LONG)
+            .show()
     }
 
     private fun observePhoto() {
@@ -67,25 +105,28 @@ class SingUpExtendedFragment :
     }
 
     private fun setupForwardBtnListener() {
-        val user = createUpdatedUser()
         binding.btnForward.setOnClickListener {
-            user?.let { viewModel.editUser(it) }
-            goToProfile()
+            val user = createUpdatedUser()
+            Log.d("FAT_SignUpExt", "singUpFr user id = $user")
+            user?.let { viewModel.editUser(it) } ?: goToProfile()
         }
     }
 
     private fun createUpdatedUser(): User? {
         val name = binding.usernameEdit.text.toString()
         val phone = binding.phoneEdit.text.toString()
-        return if (name.isNotEmpty() && phone.isNotEmpty()) {
-            User(name = name, phone = phone)
-        } else {
+        Log.d("FAT_SignUpExt", "name = $name")
+        Log.d("FAT_SignUpExt", "phone = $phone")
+        return if (name.isEmpty() && phone.isEmpty()) {
             null
+        } else {
+            User(name = name, phone = phone)
         }
     }
 
     private fun goToProfile() {
-        val action = SingUpExtendedFragmentDirections.actionSingUpExtendedFragmentToMainActivity()
-        findNavController().navigate((action))
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 }

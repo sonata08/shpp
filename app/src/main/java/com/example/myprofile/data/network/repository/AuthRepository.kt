@@ -12,6 +12,5 @@ interface AuthRepository {
     suspend fun loginUser(userCredentials: UserCredentials): UiState<LoginResponse>
     suspend fun getUser(): UiState<User>
     suspend fun editUser(user: User): UiState<User>
-    suspend fun refreshToken()
     fun getSavedUser(): User
 }

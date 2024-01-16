@@ -1,6 +1,5 @@
 package com.example.myprofile.data.network.repository.impl
 
-import android.util.Log
 import com.example.myprofile.data.network.api.UserApiService
 import com.example.myprofile.data.network.repository.TokenManager
 import com.example.myprofile.data.repository.DataStoreRepository
@@ -8,6 +7,12 @@ import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
 
+/**
+ * Implementation of the [TokenManager] interface responsible for refreshing user tokens.
+ *
+ * @property userApiService The API service used to interact with the user-related endpoints.
+ * @property dataStoreRepository The repository responsible for managing token data in the data store.
+ */
 @Singleton
 class TokenManagerImpl @Inject constructor(
     // to avoid dependency cycle -> Provider<T> + .get()
@@ -23,10 +28,8 @@ class TokenManagerImpl @Inject constructor(
                 userIdTokens.refreshToken
             )
             dataStoreRepository.saveTokens(response.data.accessToken, response.data.refreshToken)
-            Log.d("FAT_TokenManager", "refreshToken DONE")
             response.data.accessToken
         } catch (e: Exception) {
-            Log.d("FAT_TokenManager_catch", "refreshToken ERROR")
             null
         }
     }

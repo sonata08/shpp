@@ -2,6 +2,7 @@ package com.example.myprofile.ui.auth.singup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserCredentials
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.LoginResponse
@@ -24,6 +25,7 @@ class SignUpViewModel @Inject constructor(
 
 
     fun createUser(userCredentials: UserCredentials) {
+        _authStateFlow.value = UiState.Initial
         viewModelScope.launch {
             _authStateFlow.value = authRepository.createUser(userCredentials)
         }
@@ -35,4 +37,16 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
+    fun rememberUser(data: Boolean) {
+        viewModelScope.launch {
+            dataStoreRepository.rememberUser(data)
+        }
+    }
+
+    fun loginUserTEST(userCredentials: UserCredentials) {
+        _authStateFlow.value = UiState.Loading
+        viewModelScope.launch {
+            _authStateFlow.value = authRepository.loginUser(userCredentials)
+        }
+    }
 }

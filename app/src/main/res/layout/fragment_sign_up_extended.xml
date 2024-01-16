@@ -42,10 +42,10 @@
             android:id="@+id/txt_your_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16"
             android:text="@string/your_profile_data"
             android:textColor="?attr/colorPrimaryVariant"
             android:textSize="@dimen/h1"
-            android:layout_marginTop="@dimen/margin_16"
             app:layout_constraintBottom_toTopOf="@id/txt_fill_profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -130,34 +130,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintVertical_chainStyle="spread_inside" />
 
-
-        <!--        <androidx.constraintlayout.widget.Guideline-->
-        <!--            android:id="@+id/left_guideline"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:orientation="vertical"-->
-        <!--            app:layout_constraintGuide_begin="@dimen/basic_layout_horizontal_margins" />-->
-
-        <!--        <androidx.constraintlayout.widget.Guideline-->
-        <!--            android:id="@+id/right_guideline"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:orientation="vertical"-->
-        <!--            app:layout_constraintGuide_end="@dimen/basic_layout_horizontal_margins" />-->
-
-        <!--        <androidx.constraintlayout.widget.Guideline-->
-        <!--            android:id="@+id/top_guideline"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:orientation="horizontal"-->
-        <!--            app:layout_constraintGuide_begin="@dimen/basic_layout_vertical_margins" />-->
-
-        <!--        <androidx.constraintlayout.widget.Guideline-->
-        <!--            android:id="@+id/bottom_guideline"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:orientation="horizontal"-->
-        <!--            app:layout_constraintGuide_end="@dimen/basic_layout_vertical_margins" />-->
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

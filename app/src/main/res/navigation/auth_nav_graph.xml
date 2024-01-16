@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_mainActivity"
-            app:destination="@id/mainActivity" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -33,26 +30,5 @@
         android:id="@+id/singUpExtendedFragment"
         android:name="com.example.myprofile.ui.auth.signup_extended.SingUpExtendedFragment"
         android:label="fragment_sign_up_extended"
-        tools:layout="@layout/fragment_sign_up_extended" >
-        <argument
-            android:name="userId"
-            app:argType="long"
-            android:defaultValue="-1L" />
-        <argument
-            android:name="accessToken"
-            app:argType="string" />
-        <argument
-            android:name="refreshToken"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_singUpExtendedFragment_to_mainActivity"
-            app:destination="@id/mainActivity" />
-    </fragment>
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.example.myprofile.ui.main.MainActivity"
-        tools:layout="@layout/fragment_settings" />
-    <include app:graph="@navigation/nav_graph" />
-
-
+        tools:layout="@layout/fragment_sign_up_extended" />
 </navigation>

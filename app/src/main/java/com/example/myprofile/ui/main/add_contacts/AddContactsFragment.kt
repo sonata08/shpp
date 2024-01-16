@@ -79,7 +79,6 @@ class AddContactsFragment : BaseFragment<FragmentAddContactsBinding>(FragmentAdd
     }
 
     private fun showError(error: String) {
-        // TODO: think what to do in case of error
         binding.progressBar.visibility = View.GONE
         Log.d("FAT_AddContactFrag", "UiState.Error = $error")
         Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)

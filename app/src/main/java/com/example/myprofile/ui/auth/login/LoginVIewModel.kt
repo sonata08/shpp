@@ -16,12 +16,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val dataStoreRepository: DataStoreRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _authStateFlow = MutableStateFlow<UiState<LoginResponse>>(UiState.Initial)
     val authStateFlow = _authStateFlow.asStateFlow()
@@ -49,9 +48,10 @@ class LoginViewModel @Inject constructor(
     }
 
     fun autoLoginUser() {
-        Log.d("FAT_ViewModel_auto", "autoLoginUser")
+        Log.d("FAT_ViewModel_auto", "autoLoginUser start")
         viewModelScope.launch {
             if (dataStoreRepository.getRememberUser()) {
+                Log.d("FAT_ViewModel_auto", "autoLoginUser getRememberUser")
                 _autoLoginFlow.value = UiState.Loading
                 _autoLoginFlow.value = authRepository.getUser()
             }

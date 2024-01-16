@@ -20,6 +20,8 @@ class EditProfileViewModel @Inject constructor(
     private val _authStateFlow = MutableStateFlow<UiState<User>>(UiState.Initial)
     val authStateFlow = _authStateFlow.asStateFlow()
 
+    private var _photoUri = MutableStateFlow("")
+    val photoUri = _photoUri.asStateFlow()
 
     fun getUser() = authRepository.getSavedUser()
 
@@ -29,5 +31,9 @@ class EditProfileViewModel @Inject constructor(
             _authStateFlow.value = authRepository.editUser(user)
             Log.d("FAT_EditProf_VM", "user updated")
         }
+    }
+
+    fun setPhotoUri(uri: String) {
+        _photoUri.value = uri
     }
 }

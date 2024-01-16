@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.myprofile.R
 
 /**
- * Translates error into user's language
+ * Shows error in user's language
  */
 fun localizeError(error: String, context: Context): String {
     val errorMessage = when(error) {

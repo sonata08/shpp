@@ -18,7 +18,7 @@ import com.example.myprofile.databinding.FragmentLoginBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.MainActivity
 import com.example.myprofile.utils.Validation
-import com.example.myprofile.utils.extentions.showShortToast
+import com.example.myprofile.utils.localizeError
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -30,7 +30,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        autoLoginUser()
+        Log.d("FAT_Login", "login Fragment onViewCreated")
+
+//        autoLoginUser()
         setListeners()
         observeUiState()
 
@@ -47,9 +49,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 viewModel.autoLoginFlow.collect {
                     when (it) {
                         is UiState.Initial -> {}
-                        is UiState.Success -> {gotoProfile()}
+                        is UiState.Success -> gotoProfile()
                         is UiState.Loading -> showProgressBar()
-                        is UiState.Error -> showError(it.message)
+                        is UiState.Error -> {binding.progressBar.visibility = View.GONE}
                     }
                 }
             }
@@ -84,8 +86,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     }
 
     private fun showError(error: String) {
+        val localizedError = localizeError(error, requireContext())
         binding.progressBar.visibility = View.GONE
-        Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)
+        Snackbar.make(binding.root, localizedError, Snackbar.LENGTH_LONG)
             .show()
     }
 
@@ -142,8 +145,5 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         val intent = Intent(requireContext(), MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
-
-//        val action = LoginFragmentDirections.actionLoginFragmentToMainActivity()
-//        findNavController().navigate((action))
     }
 }

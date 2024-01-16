@@ -70,6 +70,21 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
         }
     }
 
+    private fun showUserData(user: User) {
+        binding.progressBar.visibility = View.GONE
+        bindUsersData(user)
+    }
+    private fun showProgressBar() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun showError(error: String) {
+        // TODO: think what to do in case of error
+        binding.progressBar.visibility = View.GONE
+        Log.d("FAT_SettingsFrag", "UiState.Error = $error")
+        Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)
+            .show()
+    }
 
     private fun bindUsersData(user: User) {
         with(binding) {
@@ -87,24 +102,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
         val intent = Intent(requireContext(), AuthActivity::class.java)
         startActivity(intent)
     }
-
-    private fun showError(error: String) {
-        // TODO: think what to do in case of error
-        binding.progressBar.visibility = View.GONE
-        Log.d("FAT_SettingsFrag", "UiState.Error = $error")
-        Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)
-            .show()
-    }
-
-    private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
-
-    private fun showUserData(user: User) {
-        binding.progressBar.visibility = View.GONE
-        bindUsersData(user)
-    }
-
 
     private fun goToLoginFragment() {
         val action = ViewPagerFragmentDirections.actionViewPagerFragmentToAuthActivity()

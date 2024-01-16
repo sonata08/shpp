@@ -28,6 +28,7 @@ interface UserApiService {
         @Body userCredentials: UserCredentials,
     ): BaseResponse<LoginResponse>
 
+
     @PUT("users/{userId}")
     suspend fun editUser(
         @Header("Authorization") token: String,
