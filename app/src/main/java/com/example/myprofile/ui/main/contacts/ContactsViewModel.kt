@@ -6,6 +6,7 @@ import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserMultiselect
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.repository.ContactsRepository
+import com.example.myprofile.ui.main.contacts.adapter.MultiselectManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ContactsViewModel @Inject constructor(
     private val contactsRepository: ContactsRepository,
+    private val multiselectManager: MultiselectManager,
 ) : ViewModel() {
 
     private val _uiStateFlow = MutableStateFlow<UiState<List<User>>>(UiState.Loading)
@@ -52,7 +54,7 @@ class ContactsViewModel @Inject constructor(
     }
 
     fun isNothingSelected(): Boolean {
-        if (contactsRepository.countSelectedItems() == 0) {
+        if (multiselectManager.countSelectedItems() == 0) {
             deactivateMultiselectMode()
             return true
         }
@@ -60,16 +62,16 @@ class ContactsViewModel @Inject constructor(
     }
 
     fun activateMultiselectMode(contactPosition: Int) {
-        contactsRepository.activateMultiselectMode()
+        multiselectManager.activateMultiselectMode()
         makeSelected(contactPosition, true)
     }
 
     fun deactivateMultiselectMode() {
-        contactsRepository.deactivateMultiselectMode()
+        multiselectManager.deactivateMultiselectMode()
     }
 
     fun makeSelected(contactPosition: Int, isChecked: Boolean) {
-        contactsRepository.makeSelected(contactPosition, isChecked)
+        multiselectManager.makeSelected(contactPosition, isChecked)
     }
 
     fun filterUsers(query: String?) {

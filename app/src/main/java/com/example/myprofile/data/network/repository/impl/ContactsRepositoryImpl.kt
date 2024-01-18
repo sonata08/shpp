@@ -50,18 +50,19 @@ class ContactsRepositoryImpl @Inject constructor(
         val userIdTokens = getUserIdTokens()
         return try {
             if (_userContactsFlow.value.isEmpty()) {
+                Log.d("FAT_ConRep", "userContacts list is empty")
                 val response =
                     contactsApiService.getAllUserContacts(
                         token = userIdTokens.accessToken,
                         userId = userIdTokens.userId,
                     )
-                updateContactsFlow(response.data.contacts)
+                _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
+                Log.d("FAT_ConRep", "userContacts: ${_userContactsFlow.value}")
                 UiState.Success(response.data.contacts)
             }
             else {
                 UiState.Success(_userContactsFlow.value.map { it.contact })
             }
-
         } catch (e: HttpException) {
             val error = e.response()?.errorBody()?.string()
             UiState.Error(getMessageFromHttpException(error))
@@ -95,6 +96,26 @@ class ContactsRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun addContact(
+        contactId: Long
+    ): UiState<List<User>> {
+        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        return try {
+            val response = contactsApiService.addContact(
+                token = userIdTokens.accessToken,
+                userId = userIdTokens.userId,
+                AddContactRequest(contactId.toInt())
+            )
+            _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
+            UiState.Initial
+        } catch (e: HttpException) {
+            val error = e.response()?.errorBody()?.string()
+            UiState.Error(getMessageFromHttpException(error))
+        } catch (e: Exception) {
+            UiState.Error(e.message ?: UNKNOWN_ERROR)
+        }
+    }
+
     override suspend fun deleteContact(contactId: Long): UiState<List<User>> {
         lastDeletedContact = contactId
         val userIdTokens = dataStoreRepository.getUserIdTokens()
@@ -105,7 +126,7 @@ class ContactsRepositoryImpl @Inject constructor(
                     userId = userIdTokens.userId,
                     contactId = contactId.toInt()
                 )
-            updateContactsFlow(response.data.contacts)
+            _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
             UiState.Success(response.data.contacts)
         } catch (e: HttpException) {
             val error = e.response()?.errorBody()?.string()
@@ -128,7 +149,7 @@ class ContactsRepositoryImpl @Inject constructor(
                         userId = userIdTokens.userId,
                         contactId = user.contact.id.toInt()
                     )
-                    updateContactsFlow(response.data.contacts)
+                    _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
                 }
             }
             UiState.Success(response.data.contacts)
@@ -152,50 +173,8 @@ class ContactsRepositoryImpl @Inject constructor(
         _userContactsFlow.value = emptyList()
     }
 
-    override suspend fun addContact(
-        contactId: Long
-    ): UiState<List<User>> {
-        val userIdTokens = dataStoreRepository.getUserIdTokens()
-        return try {
-            val response = contactsApiService.addContact(
-                token = userIdTokens.accessToken,
-                userId = userIdTokens.userId,
-                AddContactRequest(contactId.toInt())
-            )
-            updateContactsFlow(response.data.contacts)
-            UiState.Initial
-        } catch (e: HttpException) {
-            val error = e.response()?.errorBody()?.string()
-            UiState.Error(getMessageFromHttpException(error))
-        } catch (e: Exception) {
-            UiState.Error(e.message ?: UNKNOWN_ERROR)
-        }
-    }
-
-    override fun makeSelected(contactPosition: Int, isChecked: Boolean) {
-        _userContactsFlow.value = _userContactsFlow.value.toMutableList().apply {
-            get(contactPosition).isSelected = isChecked
-        }
-    }
-
-    override fun countSelectedItems(): Int {
-        _userContactsFlow.value.apply {
-            return filter { it.isSelected }.size
-        }
-    }
-
-    override fun deactivateMultiselectMode() {
-        _userContactsFlow.value = _userContactsFlow.value.map { contact ->
-            contact.copy(
-                isSelected = false,
-                isMultiselectMode = false
-            )
-        }
-    }
-
-    override fun activateMultiselectMode() {
-        _userContactsFlow.value =
-            _userContactsFlow.value.map { contact -> contact.copy(isMultiselectMode = true) }
+    override fun updateContactsFlow(users: List<UserMultiselect>) {
+        _userContactsFlow.value = users
     }
 
 
@@ -214,7 +193,7 @@ class ContactsRepositoryImpl @Inject constructor(
         return serverList.subtract(users).toList()
     }
 
-    private fun updateContactsFlow(users: List<User>) {
-        _userContactsFlow.value = users.map {UserMultiselect(it)}
+    private fun mapToUserMultiselect(users: List<User>): List<UserMultiselect> {
+        return users.map {UserMultiselect(it)}
     }
 }
