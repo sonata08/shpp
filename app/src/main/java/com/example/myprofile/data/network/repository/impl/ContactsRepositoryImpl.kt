@@ -3,6 +3,8 @@ package com.example.myprofile.data.network.repository.impl
 import android.util.Log
 import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserMultiselect
+import com.example.myprofile.data.network.NO_USER_ERROR
+import com.example.myprofile.data.network.UNKNOWN_ERROR
 import com.example.myprofile.data.network.api.ContactsApiService
 import com.example.myprofile.data.network.model.AddContactRequest
 import com.example.myprofile.data.network.model.UiState
@@ -11,6 +13,7 @@ import com.example.myprofile.data.network.model.Contacts
 import com.example.myprofile.data.network.model.UserIdTokens
 import com.example.myprofile.data.network.repository.ContactsRepository
 import com.example.myprofile.data.repository.DataStoreRepository
+import com.example.myprofile.utils.getMessageFromHttpException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import retrofit2.HttpException
@@ -24,10 +27,9 @@ class ContactsRepositoryImpl @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
 ) : ContactsRepository {
 
-
+    // list of user's contacts
     private val _userContactsFlow = MutableStateFlow<List<UserMultiselect>>(emptyList())
     override val userContactsFlow = _userContactsFlow.asStateFlow()
-
 
     private var lastDeletedContact: Long? = null
 
@@ -37,8 +39,10 @@ class ContactsRepositoryImpl @Inject constructor(
             val response = contactsApiService.getAllUsers(userIdTokens.accessToken)
             UiState.Success(removeExistingContacts(response.data.users))
         } catch (e: HttpException) {
-            Log.d("FAT_ContRep_getUsers_catch", e.toString())
-            UiState.Error("")
+            val error = e.response()?.errorBody()?.string()
+            UiState.Error(getMessageFromHttpException(error))
+        } catch (e: Exception) {
+            UiState.Error(e.message ?: UNKNOWN_ERROR)
         }
     }
 
@@ -59,17 +63,20 @@ class ContactsRepositoryImpl @Inject constructor(
             }
 
         } catch (e: HttpException) {
-            Log.d("FAT_ContRep_getAllContacts_catch", e.toString())
-            UiState.Error(e.toString())
+            val error = e.response()?.errorBody()?.string()
+            UiState.Error(getMessageFromHttpException(error))
+        } catch (e: Exception) {
+            UiState.Error(e.message ?: UNKNOWN_ERROR)
         }
     }
 
     // contact info for DetailViewFragment
     override suspend fun getContact(contactId: Long): UiState<User> {
+        // if contact is clicked from user's contact list
         val contact = _userContactsFlow.value.find { it.contact.id == contactId }
-        if (contact != null) {
-            return UiState.Success(contact.contact)
-        }
+        if (contact != null) return UiState.Success(contact.contact)
+
+        // if contact is clicked from general user's list
         val userIdTokens = getUserIdTokens()
         return try {
             val response = contactsApiService.getAllUsers(userIdTokens.accessToken)
@@ -78,15 +85,14 @@ class ContactsRepositoryImpl @Inject constructor(
             if (contactFromServer != null) {
                 UiState.Success(contactFromServer)
             } else {
-                UiState.Error("no such user")
+                UiState.Error(NO_USER_ERROR)
             }
-
+        } catch (e: HttpException) {
+            val error = e.response()?.errorBody()?.string()
+            UiState.Error(getMessageFromHttpException(error))
         } catch (e: Exception) {
-            Log.d("FAT_AuthRep_get_catch", "getUser_error = $e")
-            UiState.Error(e.message ?: "unknown ERROR")
+            UiState.Error(e.message ?: UNKNOWN_ERROR)
         }
-
-
     }
 
     override suspend fun deleteContact(contactId: Long): UiState<List<User>> {
@@ -102,16 +108,19 @@ class ContactsRepositoryImpl @Inject constructor(
             updateContactsFlow(response.data.contacts)
             UiState.Success(response.data.contacts)
         } catch (e: HttpException) {
-            Log.d("FAT_ContRep_delContact_catch", e.toString())
-            UiState.Error("")
+            val error = e.response()?.errorBody()?.string()
+            UiState.Error(getMessageFromHttpException(error))
+        } catch (e: Exception) {
+            UiState.Error(e.message ?: UNKNOWN_ERROR)
         }
     }
 
+    // delete multiple contacts when multiselect mode
     override suspend fun deleteContacts(): UiState<List<User>> {
         val userIdTokens = dataStoreRepository.getUserIdTokens()
         val list = _userContactsFlow.value
         return try {
-            var response = BaseResponse("","", "", Contacts(emptyList()))
+            var response = BaseResponse(data = Contacts(emptyList()))
             for (user in list) {
                 if(user.isSelected) {
                     response = contactsApiService.deleteContact(
@@ -119,13 +128,15 @@ class ContactsRepositoryImpl @Inject constructor(
                         userId = userIdTokens.userId,
                         contactId = user.contact.id.toInt()
                     )
+                    updateContactsFlow(response.data.contacts)
                 }
             }
-            updateContactsFlow(response.data.contacts)
             UiState.Success(response.data.contacts)
         } catch (e: HttpException) {
-            Log.d("FAT_ContRep_delContacts_catch", e.toString())
-            UiState.Error("")
+            val error = e.response()?.errorBody()?.string()
+            UiState.Error(getMessageFromHttpException(error))
+        } catch (e: Exception) {
+            UiState.Error(e.message ?: UNKNOWN_ERROR)
         }
     }
 
@@ -134,6 +145,11 @@ class ContactsRepositoryImpl @Inject constructor(
             addContact(it)
         }
         lastDeletedContact = null
+    }
+
+    override suspend fun logOut() {
+        dataStoreRepository.logOut()
+        _userContactsFlow.value = emptyList()
     }
 
     override suspend fun addContact(
@@ -149,8 +165,10 @@ class ContactsRepositoryImpl @Inject constructor(
             updateContactsFlow(response.data.contacts)
             UiState.Initial
         } catch (e: HttpException) {
-            Log.d("FAT_ContRep_addContact_catch", e.toString())
-            UiState.Error("")
+            val error = e.response()?.errorBody()?.string()
+            UiState.Error(getMessageFromHttpException(error))
+        } catch (e: Exception) {
+            UiState.Error(e.message ?: UNKNOWN_ERROR)
         }
     }
 

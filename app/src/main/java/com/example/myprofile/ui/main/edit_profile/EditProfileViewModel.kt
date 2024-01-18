@@ -1,6 +1,5 @@
 package com.example.myprofile.ui.main.edit_profile
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myprofile.data.model.User
@@ -29,7 +28,6 @@ class EditProfileViewModel @Inject constructor(
         viewModelScope.launch {
             _authStateFlow.value = UiState.Loading
             _authStateFlow.value = authRepository.editUser(user)
-            Log.d("FAT_EditProf_VM", "user updated")
         }
     }
 

@@ -1,7 +1,6 @@
 package com.example.myprofile.ui.main.add_contacts
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -18,13 +17,13 @@ import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.add_contacts.adapter.AddContactsAdapter
 import com.example.myprofile.ui.main.add_contacts.adapter.OnAddContactClickListener
 import com.example.myprofile.ui.main.contacts.adapter.ContactsItemDecoration
-import com.example.myprofile.utils.extentions.showShortToast
-import com.google.android.material.snackbar.Snackbar
+import com.example.myprofile.utils.showError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AddContactsFragment : BaseFragment<FragmentAddContactsBinding>(FragmentAddContactsBinding::inflate) {
+class AddContactsFragment :
+    BaseFragment<FragmentAddContactsBinding>(FragmentAddContactsBinding::inflate) {
 
     private val viewModel: AddContactsViewModel by viewModels()
 
@@ -34,18 +33,16 @@ class AddContactsFragment : BaseFragment<FragmentAddContactsBinding>(FragmentAdd
                 contact: User,
                 extras: FragmentNavigator.Extras
             ) {
-                val action = AddContactsFragmentDirections.actionAddContactsFragmentToDetailViewFragment(contact.id)
+                val action =
+                    AddContactsFragmentDirections.actionAddContactsFragmentToDetailViewFragment(
+                        contact.id
+                    )
                 findNavController().navigate(action, extras)
             }
 
             override fun onAddContact(contactId: Long) {
                 viewModel.addContactToUser(contactId)
             }
-
-//            override fun onContactDelete(contactId: Long) {
-//                viewModel.deleteContactFromUser(contactId)
-//                requireContext().showShortToast("onContactDelete")
-//            }
         })
     }
 
@@ -54,9 +51,9 @@ class AddContactsFragment : BaseFragment<FragmentAddContactsBinding>(FragmentAdd
         setupToolbar()
         setupRecyclerView()
         observeUiState()
+        observeSearchState()
         viewModel.getContacts()
     }
-
 
     private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -66,7 +63,7 @@ class AddContactsFragment : BaseFragment<FragmentAddContactsBinding>(FragmentAdd
                         is UiState.Initial -> {}
                         is UiState.Success -> showContactList(it.data)
                         is UiState.Loading -> showProgressBar()
-                        is UiState.Error -> showError(it.message)
+                        is UiState.Error -> showError(binding.root, binding.progressBar, it.message)
                     }
                 }
             }
@@ -78,18 +75,19 @@ class AddContactsFragment : BaseFragment<FragmentAddContactsBinding>(FragmentAdd
         adapter.submitList(users)
     }
 
-    private fun showError(error: String) {
-        binding.progressBar.visibility = View.GONE
-        Log.d("FAT_AddContactFrag", "UiState.Error = $error")
-        Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)
-            .show()
-    }
-
     private fun showProgressBar() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
-
+    private fun observeSearchState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchResult.collect {
+                    adapter.submitList(it)
+                }
+            }
+        }
+    }
 
     private fun setupToolbar() {
         with(binding.toolbar) {
@@ -98,16 +96,26 @@ class AddContactsFragment : BaseFragment<FragmentAddContactsBinding>(FragmentAdd
                 findNavController().navigateUp()
             }
             inflateMenu(R.menu.contacts_menu)
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.search -> {
-                        requireContext().showShortToast("SEARCH")
-                        true
-                    }
-                    else -> false
-                }
-            }
+            setupSearchListener()
         }
+    }
+
+    private fun setupSearchListener() {
+        val searchView =
+            binding.toolbar.menu.findItem(R.id.search).actionView as androidx.appcompat.widget.SearchView
+        searchView.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                viewModel.filterUsers(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.filterUsers(newText)
+                return true
+            }
+        })
+
     }
 
     private fun setupRecyclerView() {

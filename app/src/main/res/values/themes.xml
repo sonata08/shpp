@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
+        <item name="android:editTextColor">@android:color/white</item>
     </style>
     
     <style name="MyToolbar" parent="Widget.Material3.Toolbar">

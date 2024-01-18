@@ -16,6 +16,7 @@ import com.example.myprofile.databinding.FragmentSignUpBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.utils.localizeError
+import com.example.myprofile.utils.showError
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -25,7 +26,6 @@ import kotlinx.coroutines.launch
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding::inflate) {
 
     private val viewModel: SignUpViewModel by viewModels()
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -37,7 +37,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         }
     }
 
-
     private fun setListeners() {
         observeUiState()
         setupRegisterButtonClickListener()
@@ -45,7 +44,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
         setupEmailListener()
         setupPasswordListener()
     }
-
 
     private fun setupSignInBtnListener() {
         binding.signIn.setOnClickListener {
@@ -101,12 +99,12 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                         }
                         is UiState.Loading -> showProgressBar()
                         is UiState.Error -> {
-                            showError(it.message)
+                            showError(binding.root, binding.progressBar, it.message)
 
+                            // TODO: remove
                             val credentials = UserCredentials("t@mail.com", "123")
                             viewModel.loginUserTEST(credentials)
                             goToSignUpExtended()
-
                         }
                     }
                 }
@@ -116,13 +114,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
 
     private fun showProgressBar() {
         binding.progressBar.visibility = View.VISIBLE
-    }
-
-    private fun showError(error: String) {
-        val localizedError = localizeError(error, requireContext())
-        binding.progressBar.visibility = View.GONE
-        Snackbar.make(binding.root, localizedError, Snackbar.LENGTH_LONG)
-            .show()
     }
 
     private fun saveUserData(data: LoginResponse) {

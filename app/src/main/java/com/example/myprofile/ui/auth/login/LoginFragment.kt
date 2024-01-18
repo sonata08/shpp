@@ -2,7 +2,6 @@ package com.example.myprofile.ui.auth.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
@@ -19,6 +18,7 @@ import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.MainActivity
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.utils.localizeError
+import com.example.myprofile.utils.showError
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -30,11 +30,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("FAT_Login", "login Fragment onViewCreated")
-
-//        autoLoginUser()
-        setListeners()
+        viewModel.autoLoginUser()
+        observeAutoLoginState()
         observeUiState()
+        setListeners()
 
         with(binding) {
             emailEdit.setText("t@mail.com")
@@ -42,8 +41,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
     }
 
-    private fun autoLoginUser() {
-        viewModel.autoLoginUser()
+    private fun observeAutoLoginState() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.autoLoginFlow.collect {
@@ -58,7 +56,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
     }
 
-
     private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -67,7 +64,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         is UiState.Initial -> {}
                         is UiState.Success -> singInUser(it.data)
                         is UiState.Loading -> showProgressBar()
-                        is UiState.Error -> showError(it.message)
+                        is UiState.Error -> showError(binding.root, binding.progressBar, it.message)
                     }
                 }
             }
@@ -83,13 +80,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     private fun showProgressBar() {
         binding.progressBar.visibility = View.VISIBLE
-    }
-
-    private fun showError(error: String) {
-        val localizedError = localizeError(error, requireContext())
-        binding.progressBar.visibility = View.GONE
-        Snackbar.make(binding.root, localizedError, Snackbar.LENGTH_LONG)
-            .show()
     }
 
     private fun setListeners() {

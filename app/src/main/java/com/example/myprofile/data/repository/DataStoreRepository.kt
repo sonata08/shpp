@@ -10,5 +10,5 @@ interface DataStoreRepository {
     suspend fun getUserIdTokens(): UserIdTokens
     suspend fun rememberUser(data: Boolean)
     suspend fun getRememberUser(): Boolean
-
+    suspend fun logOut()
 }

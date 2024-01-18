@@ -19,10 +19,16 @@ class AddContactsViewModel @Inject constructor(
     private val _uiStateFlow = MutableStateFlow<UiState<List<User>>>(UiState.Loading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
+    private val _searchResult = MutableStateFlow(emptyList<User>())
+    val searchResult = _searchResult.asStateFlow()
 
     fun getContacts() {
         viewModelScope.launch {
-            _uiStateFlow.value = contactsRepository.getUsers()
+            val uiState = contactsRepository.getUsers()
+            _uiStateFlow.value = uiState
+            if (uiState is UiState.Success) {
+                _searchResult.value = uiState.data
+            }
         }
     }
 
@@ -33,12 +39,17 @@ class AddContactsViewModel @Inject constructor(
             )
         }
     }
-//
-//    fun deleteContactFromUser(contactId: Long) {
-//        viewModelScope.launch {
-//            _uiStateFlow.value = contactsRepository.deleteContact(
-//                contactId = contactId
-//            )
-//        }
-//    }
+
+    fun filterUsers(query: String?) {
+        if (_uiStateFlow.value is UiState.Success) {
+            _searchResult.value = (_uiStateFlow.value as UiState.Success<List<User>>).data
+        }
+        if (!query.isNullOrBlank()) {
+            val filteredUsers = _searchResult.value.filter { user ->
+                (user.name?.contains(query, ignoreCase = true) ?: false) ||
+                (user.career?.contains(query, ignoreCase = true) ?: false)
+            }
+            _searchResult.value = filteredUsers
+        }
+    }
 }

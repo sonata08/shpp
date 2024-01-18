@@ -1,7 +1,6 @@
 package com.example.myprofile.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import com.example.myprofile.R
 import dagger.hilt.android.AndroidEntryPoint
 

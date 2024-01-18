@@ -32,7 +32,6 @@ class AddContactsAdapter(
                 profilePic.loadImage(contact.image)
                 tvUsername.text = contact.name
                 tvCareer.text = contact.career
-//                isSelectedCheckbox.isChecked = contact.isSelected
             }
             setListeners(contact)
         }
@@ -40,7 +39,7 @@ class AddContactsAdapter(
         private fun setListeners(contact: User) {
             with(binding) {
                 addContactLayout.setOnClickListener {
-                    addContactLayout.visibility = View.GONE
+                    addContactLayout.visibility = View.INVISIBLE
                     icAddContactDone.visibility = View.VISIBLE
                     listener.onAddContact(contact.id)
                 }

@@ -1,6 +1,5 @@
 package com.example.myprofile.ui.auth.login
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myprofile.data.model.User
@@ -48,14 +47,11 @@ class LoginViewModel @Inject constructor(
     }
 
     fun autoLoginUser() {
-        Log.d("FAT_ViewModel_auto", "autoLoginUser start")
         viewModelScope.launch {
             if (dataStoreRepository.getRememberUser()) {
-                Log.d("FAT_ViewModel_auto", "autoLoginUser getRememberUser")
                 _autoLoginFlow.value = UiState.Loading
                 _autoLoginFlow.value = authRepository.getUser()
             }
         }
     }
-
 }

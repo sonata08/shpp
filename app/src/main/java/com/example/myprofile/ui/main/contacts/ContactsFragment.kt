@@ -27,7 +27,7 @@ import com.example.myprofile.ui.main.contacts.adapter.SwipeToDeleteCallback
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragment
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragment.Companion.SETTINGS_FRAGMENT
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragmentDirections
-import com.example.myprofile.utils.extentions.showShortToast
+import com.example.myprofile.utils.showError
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -36,7 +36,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate) {
 
-//    private val viewModelTest: ContactsTestViewModel by activityViewModels()
     private val viewModel: ContactsViewModel by viewModels()
 
     private val adapter: ContactsAdapter by lazy {
@@ -75,6 +74,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         setupToolbar()
         setupRecyclerView()
         observeUiState()
+        observeSearchState()
         setupAddContactListener()
         deactivateMultiselectMode()
         viewModel.getUserContacts()
@@ -88,22 +88,21 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
                         is UiState.Initial -> {}
                         is UiState.Success -> showContacts()
                         is UiState.Loading -> showProgressBar()
-                        is UiState.Error -> showError(it.message)
+                        is UiState.Error -> showError(binding.root, binding.progressBar, it.message)
                     }
                 }
             }
         }
     }
 
-
     private fun showContacts() {
         binding.progressBar.visibility = View.GONE
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contactsListFlow.collect {
-                        adapter.submitList(it) {
-                            // removes bottom margin after the previous last item
-                            binding.recyclerView.invalidateItemDecorations()
+                    adapter.submitList(it) {
+                        // removes bottom margin after the previous last item
+                        binding.recyclerView.invalidateItemDecorations()
                     }
                 }
             }
@@ -114,12 +113,14 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         binding.progressBar.visibility = View.VISIBLE
     }
 
-    private fun showError(error: String) {
-        // TODO: think what to do in case of error
-        binding.progressBar.visibility = View.GONE
-        Log.d("FAT_ContactFrag", "UiState.Error = $error")
-        Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)
-            .show()
+    private fun observeSearchState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchResult.collect {
+                    adapter.submitList(it)
+                }
+            }
+        }
     }
 
     private fun setupToolbar() {
@@ -130,17 +131,28 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
                 viewPagerFragment.goToFragment(SETTINGS_FRAGMENT)
             }
             inflateMenu(R.menu.contacts_menu)
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.search -> {
-                        requireContext().showShortToast("SEARCH")
-                        true
-                    }
-
-                    else -> false
-                }
-            }
+            setupSearchListener()
         }
+    }
+
+    private fun setupSearchListener() {
+        val searchView =
+            binding.toolbar.menu.findItem(R.id.search).actionView as androidx.appcompat.widget.SearchView
+        searchView.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                Log.d("FAT_", "onQueryTextSubmit")
+                viewModel.filterUsers(query)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                Log.d("FAT_", "onQueryTextChange: $newText")
+                viewModel.filterUsers(newText)
+                return true
+            }
+        })
+
     }
 
     private fun setupAddContactListener() {
@@ -201,11 +213,5 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
                 viewModel.deactivateMultiselectMode()
             }
         })
-
     }
-
-//    override fun onPause() {
-//        super.onPause()
-//        viewModel.deactivateMultiselectMode()
-//    }
 }

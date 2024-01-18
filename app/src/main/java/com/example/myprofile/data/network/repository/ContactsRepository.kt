@@ -14,6 +14,7 @@ interface ContactsRepository {
     suspend fun deleteContact(contactId: Long): UiState<List<User>>
     suspend fun deleteContacts(): UiState<List<User>>
     suspend fun restoreLastDeletedContact()
+    suspend fun logOut()
     fun makeSelected(contactPosition: Int, isChecked: Boolean)
     fun countSelectedItems(): Int
     fun deactivateMultiselectMode()

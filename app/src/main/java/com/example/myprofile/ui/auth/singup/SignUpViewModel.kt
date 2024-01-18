@@ -2,7 +2,6 @@ package com.example.myprofile.ui.auth.singup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserCredentials
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.LoginResponse

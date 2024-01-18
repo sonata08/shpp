@@ -24,4 +24,5 @@ class DataStoreRepositoryImpl @Inject constructor(
         dataStorePreferences.rememberUser(data)
     }
     override suspend fun getRememberUser(): Boolean = dataStorePreferences.getRememberUser()
+    override suspend fun logOut() = dataStorePreferences.clear()
 }

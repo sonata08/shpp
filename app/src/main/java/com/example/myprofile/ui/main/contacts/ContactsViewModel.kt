@@ -3,6 +3,7 @@ package com.example.myprofile.ui.main.contacts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myprofile.data.model.User
+import com.example.myprofile.data.model.UserMultiselect
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.repository.ContactsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,11 +17,13 @@ class ContactsViewModel @Inject constructor(
     private val contactsRepository: ContactsRepository,
 ) : ViewModel() {
 
-
     private val _uiStateFlow = MutableStateFlow<UiState<List<User>>>(UiState.Loading)
     val uiStateFlow = _uiStateFlow.asStateFlow()
 
     val contactsListFlow = contactsRepository.userContactsFlow
+
+    private val _searchResult = MutableStateFlow(emptyList<UserMultiselect>())
+    val searchResult = _searchResult.asStateFlow()
 
     fun getUserContacts() {
         viewModelScope.launch {
@@ -67,5 +70,16 @@ class ContactsViewModel @Inject constructor(
 
     fun makeSelected(contactPosition: Int, isChecked: Boolean) {
         contactsRepository.makeSelected(contactPosition, isChecked)
+    }
+
+    fun filterUsers(query: String?) {
+        _searchResult.value = contactsListFlow.value
+        if (!query.isNullOrBlank()) {
+            val filteredUsers = _searchResult.value.filter { user ->
+                (user.contact.name?.contains(query, ignoreCase = true) ?: false) ||
+                        (user.contact.career?.contains(query, ignoreCase = true) ?: false)
+            }
+            _searchResult.value = filteredUsers
+        }
     }
 }

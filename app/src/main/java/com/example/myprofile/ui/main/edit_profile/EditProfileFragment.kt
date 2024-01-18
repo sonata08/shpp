@@ -1,9 +1,7 @@
 package com.example.myprofile.ui.main.edit_profile
 
 
-import android.database.Cursor
 import android.os.Bundle
-import android.provider.MediaStore
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.Log
 import android.view.View
@@ -19,6 +17,7 @@ import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentEditProfileBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.utils.extentions.loadImage
+import com.example.myprofile.utils.showError
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -46,7 +45,6 @@ class EditProfileFragment :
         setListeners()
     }
 
-
     private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -55,7 +53,7 @@ class EditProfileFragment :
                         is UiState.Initial -> bindUserData(viewModel.getUser())
                         is UiState.Success -> returnToSettingsFragment()
                         is UiState.Loading -> showProgressBar()
-                        is UiState.Error -> showError(it.message)
+                        is UiState.Error -> showError(binding.root, binding.progressBar, it.message)
                     }
                 }
             }
@@ -108,22 +106,12 @@ class EditProfileFragment :
         }
     }
 
-
-    private fun showError(error: String) {
-        // TODO: think what to do in case of error
-        binding.progressBar.visibility = View.GONE
-        Log.d("FAT_SettingsFrag", "UiState.Error = $error")
-        Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG)
-            .show()
-    }
-
     private fun showProgressBar() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
     private fun returnToSettingsFragment() {
         binding.progressBar.visibility = View.GONE
-        Log.d("FAT_SettingsFrag", "UiState = Success")
         findNavController().popBackStack()
     }
 
