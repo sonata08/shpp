@@ -2,7 +2,6 @@ package com.example.myprofile.ui.main.contacts
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -53,15 +52,14 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
                 findNavController().navigate(action, extras)
             }
 
-            override fun onContactLongClick(contactId: Long) {
-                viewModel.activateMultiselectMode(contactId)
+            override fun onContactLongClick(contactPosition: Int) {
+                viewModel.activateMultiselectMode(contactPosition)
                 binding.fab.show()
                 setFabOnclickListener()
             }
 
-            override fun onItemSelect(contactId: Long, isChecked: Boolean) {
-                Log.d("FAT_ContFr", "onItemSelect: $contactId, isChecked = $isChecked")
-                viewModel.makeSelected(contactId, isChecked)
+            override fun onItemSelect(contactPosition: Int, isChecked: Boolean) {
+                viewModel.makeSelected(contactPosition, isChecked)
                 // If no contacts are selected -> deactivate MultiselectMode and hide FAB
                 if (viewModel.isNothingSelected()) {
                     binding.fab.hide()
@@ -101,10 +99,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contactsListFlow.collect {
-                    adapter.submitList(it) {
-                        // removes bottom margin after the previous last item
-//                        binding.recyclerView.invalidateItemDecorations()
-                    }
+                    adapter.submitList(it)
                 }
             }
         }
@@ -142,7 +137,6 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         searchView.setOnQueryTextListener(object :
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Log.d("FAT_", "onQueryTextSubmit")
                 viewModel.filterUsers(query)
                 return false
             }

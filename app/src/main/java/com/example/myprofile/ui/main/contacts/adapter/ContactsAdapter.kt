@@ -1,7 +1,6 @@
 package com.example.myprofile.ui.main.contacts.adapter
 
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,13 +74,14 @@ class ContactsAdapter(
                     listener.onContactDelete(contact.contact.id)
                 }
                 root.setOnLongClickListener {
-                    listener.onContactLongClick(contact.contact.id)
-                    Log.d("FAT_adapter", "long id = ${contact.contact.id}, isChecked = ${contact.isSelected}")
+                    // checks if item has not been removed from the adapter
+                    if (bindingAdapterPosition != RecyclerView.NO_POSITION) {
+                        listener.onContactLongClick(bindingAdapterPosition)
+                    }
                     true
                 }
                 isSelectedCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                    listener.onItemSelect(contact.contact.id, isChecked)
-                    Log.d("FAT_adapter", "OnChecked: id = ${contact.contact.id}, isChecked = $isChecked")
+                    listener.onItemSelect(bindingAdapterPosition, isChecked)
                 }
             }
         }
