@@ -50,14 +50,12 @@ class ContactsRepositoryImpl @Inject constructor(
         val userIdTokens = getUserIdTokens()
         return try {
             if (_userContactsFlow.value.isEmpty()) {
-                Log.d("FAT_ConRep", "userContacts list is empty")
                 val response =
                     contactsApiService.getAllUserContacts(
                         token = userIdTokens.accessToken,
                         userId = userIdTokens.userId,
                     )
                 _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
-                Log.d("FAT_ConRep", "userContacts: ${_userContactsFlow.value}")
                 UiState.Success(response.data.contacts)
             }
             else {

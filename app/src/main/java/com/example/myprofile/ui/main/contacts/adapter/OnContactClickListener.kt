@@ -6,6 +6,6 @@ import com.example.myprofile.data.model.UserMultiselect
 interface OnContactClickListener {
      fun onContactDelete(contactId: Long)
      fun onContactClick(contact: UserMultiselect, extras: FragmentNavigator.Extras)
-     fun onContactLongClick(contactPosition: Int)
-     fun onItemSelect(contactPosition: Int, isChecked: Boolean)
+     fun onContactLongClick(contactId: Long)
+     fun onItemSelect(contactId: Long, isChecked: Boolean)
 }

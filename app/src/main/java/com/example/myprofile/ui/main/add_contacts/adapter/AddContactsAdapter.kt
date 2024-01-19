@@ -26,12 +26,22 @@ class AddContactsAdapter(
         private val binding: ItemAddContactBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         private val profilePicImageView: ImageView = binding.root.findViewById(R.id.profile_pic)
+        private val addedUsers = mutableListOf<Long>()
 
         fun bind(contact: User) {
             binding.apply {
                 profilePic.loadImage(contact.image)
                 tvUsername.text = contact.name
                 tvCareer.text = contact.career
+
+                // shows icAddContactDone only for clicked users
+                if (addedUsers.contains(contact.id)) {
+                    addContactLayout.visibility = View.GONE
+                    icAddContactDone.visibility = View.VISIBLE
+                } else {
+                    addContactLayout.visibility = View.VISIBLE
+                    icAddContactDone.visibility = View.GONE
+                }
             }
             setListeners(contact)
         }
@@ -39,8 +49,9 @@ class AddContactsAdapter(
         private fun setListeners(contact: User) {
             with(binding) {
                 addContactLayout.setOnClickListener {
-                    addContactLayout.visibility = View.INVISIBLE
+                    addContactLayout.visibility = View.GONE
                     icAddContactDone.visibility = View.VISIBLE
+                    addedUsers.add(contact.id)
                     listener.onAddContact(contact.id)
                 }
                 root.setOnClickListener {

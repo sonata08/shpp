@@ -53,14 +53,15 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
                 findNavController().navigate(action, extras)
             }
 
-            override fun onContactLongClick(contactPosition: Int) {
-                viewModel.activateMultiselectMode(contactPosition)
+            override fun onContactLongClick(contactId: Long) {
+                viewModel.activateMultiselectMode(contactId)
                 binding.fab.show()
                 setFabOnclickListener()
             }
 
-            override fun onItemSelect(contactPosition: Int, isChecked: Boolean) {
-                viewModel.makeSelected(contactPosition, isChecked)
+            override fun onItemSelect(contactId: Long, isChecked: Boolean) {
+                Log.d("FAT_ContFr", "onItemSelect: $contactId, isChecked = $isChecked")
+                viewModel.makeSelected(contactId, isChecked)
                 // If no contacts are selected -> deactivate MultiselectMode and hide FAB
                 if (viewModel.isNothingSelected()) {
                     binding.fab.hide()
@@ -102,7 +103,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
                 viewModel.contactsListFlow.collect {
                     adapter.submitList(it) {
                         // removes bottom margin after the previous last item
-                        binding.recyclerView.invalidateItemDecorations()
+//                        binding.recyclerView.invalidateItemDecorations()
                     }
                 }
             }
@@ -147,7 +148,6 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                Log.d("FAT_", "onQueryTextChange: $newText")
                 viewModel.filterUsers(newText)
                 return true
             }

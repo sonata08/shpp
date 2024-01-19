@@ -1,5 +1,6 @@
 package com.example.myprofile.ui.main.contacts
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myprofile.data.model.User
@@ -55,25 +56,29 @@ class ContactsViewModel @Inject constructor(
 
     fun isNothingSelected(): Boolean {
         if (multiselectManager.countSelectedItems() == 0) {
+            Log.d("FAT_VM", "isNothingSelected")
             deactivateMultiselectMode()
             return true
         }
         return false
     }
 
-    fun activateMultiselectMode(contactPosition: Int) {
+    fun activateMultiselectMode(contactId: Long) {
         multiselectManager.activateMultiselectMode()
-        makeSelected(contactPosition, true)
+        Log.d("FAT_VM", "activateMult: id: ${contactId}")
+        makeSelected(contactId, true)
     }
 
     fun deactivateMultiselectMode() {
+        Log.d("FAT_VM", "deactivateMultiselectMode")
         multiselectManager.deactivateMultiselectMode()
     }
 
-    fun makeSelected(contactPosition: Int, isChecked: Boolean) {
-        multiselectManager.makeSelected(contactPosition, isChecked)
+    fun makeSelected(contactId: Long, isChecked: Boolean) {
+        multiselectManager.makeSelected(contactId, isChecked)
     }
 
+    // search filter
     fun filterUsers(query: String?) {
         _searchResult.value = contactsListFlow.value
         if (!query.isNullOrBlank()) {
