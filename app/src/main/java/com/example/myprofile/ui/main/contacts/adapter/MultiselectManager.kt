@@ -4,6 +4,11 @@ import com.example.myprofile.data.network.repository.ContactsRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Manages the multiselect mode for user contacts.
+ *
+ * @property contactsRepository The repository for managing user contacts.
+ */
 @Singleton
 class MultiselectManager @Inject constructor(
     private val contactsRepository: ContactsRepository

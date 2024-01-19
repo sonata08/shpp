@@ -41,11 +41,4 @@ class SignUpViewModel @Inject constructor(
             dataStoreRepository.rememberUser(data)
         }
     }
-
-    fun loginUserTEST(userCredentials: UserCredentials) {
-        _authStateFlow.value = UiState.Loading
-        viewModelScope.launch {
-            _authStateFlow.value = authRepository.loginUser(userCredentials)
-        }
-    }
 }

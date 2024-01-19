@@ -15,9 +15,7 @@ import com.example.myprofile.data.network.model.LoginResponse
 import com.example.myprofile.databinding.FragmentSignUpBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.utils.Validation
-import com.example.myprofile.utils.localizeError
 import com.example.myprofile.utils.showError
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -30,11 +28,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
-
-        with(binding) {
-            emailEdit.setText("t@mail.com")
-            passwordEdit.setText("123")
-        }
     }
 
     private fun setListeners() {
@@ -98,14 +91,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
                             goToSignUpExtended()
                         }
                         is UiState.Loading -> showProgressBar()
-                        is UiState.Error -> {
-                            showError(binding.root, binding.progressBar, it.message)
-
-                            // TODO: remove
-                            val credentials = UserCredentials("t@mail.com", "123")
-                            viewModel.loginUserTEST(credentials)
-                            goToSignUpExtended()
-                        }
+                        is UiState.Error -> showError(binding.root, binding.progressBar, it.message)
                     }
                 }
             }

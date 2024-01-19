@@ -1,6 +1,13 @@
 package com.example.myprofile.data.network
 
-// retrofit base url
+
+/**
+ * Constants file containing network-related constants for the application.
+ */
+
+/**
+ * Base URL for the Retrofit API calls.
+ */
 const val BASE_URL = "http://178.63.9.114:7777/api/"
 
 const val UNKNOWN_ERROR = "Unknown error"

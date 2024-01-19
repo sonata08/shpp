@@ -23,6 +23,7 @@ class TokenManagerImpl @Inject constructor(
 ): TokenManager {
     override suspend fun refreshTokens(): String? {
         val userIdTokens = dataStoreRepository.getUserIdTokens()
+        if (userIdTokens.refreshToken.isEmpty()) return null
         return try {
             val response = userApiService.get().refreshToken(
                 userIdTokens.refreshToken

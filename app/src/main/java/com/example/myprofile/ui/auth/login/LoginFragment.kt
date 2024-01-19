@@ -17,9 +17,7 @@ import com.example.myprofile.databinding.FragmentLoginBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.MainActivity
 import com.example.myprofile.utils.Validation
-import com.example.myprofile.utils.localizeError
 import com.example.myprofile.utils.showError
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -34,11 +32,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         observeAutoLoginState()
         observeUiState()
         setListeners()
-
-        with(binding) {
-            emailEdit.setText("t@mail.com")
-            passwordEdit.setText("123")
-        }
     }
 
     private fun observeAutoLoginState() {

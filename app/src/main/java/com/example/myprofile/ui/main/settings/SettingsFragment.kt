@@ -8,7 +8,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.myprofile.data.datastore.DataStorePreferences
 import com.example.myprofile.data.model.User
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentSettingsBinding
@@ -20,7 +19,6 @@ import com.example.myprofile.ui.main.viewpager.ViewPagerFragmentDirections
 import com.example.myprofile.utils.showError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsBinding::inflate) {

@@ -1,6 +1,5 @@
 package com.example.myprofile.data.network.interceptor
 
-import android.util.Log
 import com.example.myprofile.data.network.repository.TokenManager
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
@@ -10,6 +9,14 @@ import okhttp3.Route
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Authenticator for handling token refresh when a request returns a 401 (Unauthorized) response.
+ *
+ * This class implements the Authenticator interface and is responsible for refreshing the access token
+ * using the provided TokenManager when a request returns a 401 response.
+ *
+ * @property tokenManager The TokenManager responsible for refreshing tokens.
+ */
 @Singleton
 class TokenAuthenticator @Inject constructor(
     private val tokenManager: TokenManager
@@ -25,7 +32,6 @@ class TokenAuthenticator @Inject constructor(
             }
             // if token was updated successfully -> builds new request
             return if (newAccessToken != null) {
-                Log.d("FAT_Authenticator", "response: ${response.request()}")
                 response.request().newBuilder()
                     .header("Authorization", "Bearer $newAccessToken")
                     .build()

@@ -3,7 +3,6 @@ package com.example.myprofile.ui.main.edit_profile
 
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
-import android.util.Log
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,7 +17,6 @@ import com.example.myprofile.databinding.FragmentEditProfileBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.utils.extentions.loadImage
 import com.example.myprofile.utils.showError
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

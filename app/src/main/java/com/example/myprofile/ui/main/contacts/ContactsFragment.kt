@@ -72,9 +72,9 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
         setupRecyclerView()
+        setupAddContactListener()
         observeUiState()
         observeSearchState()
-        setupAddContactListener()
         deactivateMultiselectMode()
         viewModel.getUserContacts()
     }
@@ -170,13 +170,12 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         val itemDecoration = ContactsItemDecoration(
             R.dimen.basic_layout_horizontal_margins,
             R.dimen.margin_between_items,
-            R.dimen.margin_last_item_bottom
+            R.dimen.margin_0
         )
         with(binding) {
             recyclerView.layoutManager = LinearLayoutManager(root.context)
-            recyclerView.addItemDecoration(itemDecoration)
             recyclerView.adapter = adapter
-            // uncomment to activate swipe-to-delete behavior
+            recyclerView.addItemDecoration(itemDecoration)
             itemTouchHelper.attachToRecyclerView(recyclerView)
         }
     }

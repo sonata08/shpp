@@ -4,7 +4,13 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-// Draws dividers between items and background frame
+/**
+ * Item decoration for adding spacing and margins between items in a RecyclerView.
+ *
+ * @param sideMargin The side margin (left and right) applied to each item in pixels.
+ * @param marginBetween The vertical spacing between items in pixels.
+ * @param marginBottom The bottom margin applied only to the last item in pixels.
+ */
 class ContactsItemDecoration(
     private val sideMargin: Int,
     private val marginBetween: Int,

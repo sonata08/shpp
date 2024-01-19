@@ -8,10 +8,20 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
 
-
+/**
+ * A custom [ItemTouchHelper.SimpleCallback] for implementing swipe-to-delete functionality
+ * in a RecyclerView.
+ *
+ * This class provides the visual representation of the swipe action and allows customization
+ * of the appearance, including background color and delete icon.
+ */
 abstract class SwipeToDeleteCallback :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
+    /**
+     * Called when items are moved in the RecyclerView. In this implementation, it always returns false
+     * as this callback is for swipe-to-delete only, not item rearrangement.
+     */
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
@@ -20,6 +30,18 @@ abstract class SwipeToDeleteCallback :
         return false
     }
 
+    /**
+     * Called when the item is being swiped or dragged, allowing customization of the appearance.
+     * This implementation provides a background color and a delete icon for the swipe action.
+     *
+     * @param c The [Canvas] on which to draw the background and icon.
+     * @param recyclerView The [RecyclerView] to which this [SwipeToDeleteCallback] is attached.
+     * @param viewHolder The [RecyclerView.ViewHolder] being swiped.
+     * @param dX The horizontal distance that the item view is currently swiped.
+     * @param dY The vertical distance that the item view is currently swiped.
+     * @param actionState The type of interaction on the item (e.g., swiping).
+     * @param isCurrentlyActive True if the item view is currently being controlled by user input.
+     */
     override fun onChildDraw(
         c: Canvas,
         recyclerView: RecyclerView,
