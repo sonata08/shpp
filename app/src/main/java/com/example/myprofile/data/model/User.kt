@@ -1,9 +1,5 @@
 package com.example.myprofile.data.model
 
-import kotlinx.serialization.Serializable
-
-
-@Serializable
 data class User(
     val id: Long = -1,
     val email: String? = null,

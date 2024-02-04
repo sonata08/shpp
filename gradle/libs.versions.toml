@@ -18,7 +18,6 @@ hilt = "2.48.1"
 hiltNavigation = "1.1.0"
 annotation = "1.7.1"
 retrofit = "2.9.0"
-serializationGson = "1.5.1"
 
 
 [libraries]
@@ -41,7 +40,6 @@ androidx-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-fr
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationGson" }
 
 
 [plugins]
@@ -50,4 +48,3 @@ jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "k
 safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigationUiKtx" }
 daggerHilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
