@@ -15,7 +15,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.databinding.DialogAddContactBinding
-import com.example.myprofile.ui.fragments.BaseFragment
 import com.example.myprofile.ui.fragments.contacts.ContactsViewModel
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.ui.utils.extentions.loadImage

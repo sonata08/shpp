@@ -12,11 +12,10 @@ import javax.inject.Singleton
 class ContactsRepositoryImpl @Inject constructor() : ContactsRepository {
 
     private val _contactsFlow = MutableStateFlow(contactsList.map { ContactMultiselect(it) })
-    private val contactsFlow = _contactsFlow.asStateFlow()
-
 
     private var lastDeletedContact: Pair<Int, ContactMultiselect>? = null
-    override fun getContacts() = contactsFlow
+
+    override fun getContacts() = _contactsFlow.asStateFlow()
 
     override fun deleteContact(contactPosition: Int) {
         _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
