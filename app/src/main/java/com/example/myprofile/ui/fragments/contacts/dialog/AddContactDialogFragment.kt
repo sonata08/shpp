@@ -9,13 +9,18 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.databinding.DialogAddContactBinding
+import com.example.myprofile.ui.fragments.BaseFragment
 import com.example.myprofile.ui.fragments.contacts.ContactsViewModel
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.ui.utils.extentions.loadImage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AddContactDialogFragment : DialogFragment() {
@@ -29,13 +34,13 @@ class AddContactDialogFragment : DialogFragment() {
     private val viewModel: ContactsViewModel by activityViewModels()
 
     // Registers a photo picker activity launcher in single-select mode.
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        // Callback is invoked after the user selects a media item or closes the photo picker.
-        if (uri != null) {
-            viewModel.setPhotoUri(uri.toString())
-            binding.photo.loadImage(viewModel.photoUri)
+    private val pickMedia =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // Callback is invoked after the user selects a media item or closes the photo picker.
+            if (uri != null) {
+                viewModel.setPhotoUri(uri.toString())
+            }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,17 +52,9 @@ class AddContactDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
-        binding.photo.loadImage(viewModel.photoUri)
-        setupAddPhotoListener()
-        setupSaveListener()
+        setListeners()
     }
 
-    private fun setupToolbar() {
-        binding.toolbar.setNavigationOnClickListener {
-            viewModel.resetPhotoUri()
-            dismiss()
-        }
-    }
 
     // makes dialog fullscreen if small layout and not fullscreen otherwise
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -69,6 +66,30 @@ class AddContactDialogFragment : DialogFragment() {
         }
     }
 
+
+    private fun setupToolbar() {
+        binding.toolbar.setNavigationOnClickListener {
+            viewModel.resetPhotoUri()
+            dismiss()
+        }
+    }
+
+    private fun setListeners() {
+        setupPhotoListener()
+        setupAddPhotoListener()
+        setupSaveBtnListener()
+    }
+
+    private fun setupPhotoListener() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.photoUri.collect {
+                    binding.photo.loadImage(it)
+                }
+            }
+        }
+    }
+
     private fun setupAddPhotoListener() {
         binding.btnAddPhoto.setOnClickListener {
             // Launches the photo picker and let the user choose image
@@ -76,10 +97,10 @@ class AddContactDialogFragment : DialogFragment() {
         }
     }
 
-    private fun setupSaveListener() {
+    private fun setupSaveBtnListener() {
         binding.btnSave.setOnClickListener {
             if (isValidUsername()) {
-                val contact = createContact(viewModel.photoUri)
+                val contact = createContact()
                 viewModel.addContact(contact)
                 viewModel.resetPhotoUri()
                 dismiss()
@@ -87,7 +108,8 @@ class AddContactDialogFragment : DialogFragment() {
         }
     }
 
-    private fun createContact(uri: String): Contact {
+    private fun createContact(): Contact {
+        val uri = viewModel.photoUri.value
         with(binding) {
             val id = viewModel.getNextId()
             val username = usernameEdit.text.toString()

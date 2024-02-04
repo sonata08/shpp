@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import com.example.myprofile.data.model.Contact
 import com.example.myprofile.data.repository.ContactsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -13,13 +15,8 @@ class ContactsViewModel @Inject constructor(
 
     val contactsFlow = contactsRepository.getContacts()
 
-    private var _photoUri = ""
-    val photoUri: String
-        get() = _photoUri
-
-    // position of the first selected item in multiselect mode
-    // or 0 if not in multiselect mode
-    var scrollPosition = 0
+    private var _photoUri = MutableStateFlow("")
+    val photoUri = _photoUri.asStateFlow()
 
     fun deleteContacts() {
         contactsRepository.deleteContacts()
@@ -40,12 +37,10 @@ class ContactsViewModel @Inject constructor(
     fun activateMultiselectMode(contactPosition: Int) {
         contactsRepository.activateMultiselectMode()
         makeSelected(contactPosition, true)
-        scrollPosition = contactPosition
     }
 
     fun deactivateMultiselectMode() {
         contactsRepository.deactivateMultiselectMode()
-        scrollPosition = 0
     }
 
     fun deleteContact(contactPosition: Int) {
@@ -69,10 +64,10 @@ class ContactsViewModel @Inject constructor(
     }
 
     fun setPhotoUri(uri: String) {
-        _photoUri = uri
+        _photoUri.value = uri
     }
 
     fun resetPhotoUri() {
-        _photoUri = ""
+        _photoUri.value = ""
     }
 }

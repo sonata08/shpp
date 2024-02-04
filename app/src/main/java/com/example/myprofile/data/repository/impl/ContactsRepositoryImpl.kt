@@ -31,7 +31,6 @@ class ContactsRepositoryImpl @Inject constructor() : ContactsRepository {
         }
     }
 
-
     override fun restoreLastDeletedContact() {
         _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
             lastDeletedContact?.let {
@@ -67,7 +66,6 @@ class ContactsRepositoryImpl @Inject constructor() : ContactsRepository {
     override fun activateMultiselectMode() {
         _contactsFlow.value = _contactsFlow.value.map { contact -> contact.copy(isMultiselectMode = true) }
     }
-
 
     companion object {
         val contactsList = listOf(

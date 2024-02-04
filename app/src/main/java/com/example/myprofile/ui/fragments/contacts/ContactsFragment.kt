@@ -78,8 +78,6 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contactsFlow.collect {
                     adapter.submitList(it){
-                        // scrolls to the selected contact in multiselect mode
-                        binding.recyclerView.scrollToPosition(viewModel.scrollPosition)
                     }
                 }
             }
