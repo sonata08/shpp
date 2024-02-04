@@ -13,7 +13,6 @@ import com.example.myprofile.utils.Validation
 import com.example.myprofile.utils.extentions.dataStore
 
 
-
 class SignUpActivity : AppCompatActivity() {
 
     private val binding: ActivitySignUpBinding by lazy {

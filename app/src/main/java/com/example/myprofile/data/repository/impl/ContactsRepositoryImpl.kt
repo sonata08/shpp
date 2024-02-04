@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.asStateFlow
 class ContactsRepositoryImpl : ContactsRepository {
 
     private val _contactsFlow = MutableStateFlow(contactsList)
-    private val contactsFlow = _contactsFlow.asStateFlow()
 
     private var lastDeletedContact: Pair<Int, Contact>? = null
-    override fun getContacts() = contactsFlow
+
+    override fun getContacts() = _contactsFlow.asStateFlow()
 
     override fun deleteContact(contactPosition: Int) {
         _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
