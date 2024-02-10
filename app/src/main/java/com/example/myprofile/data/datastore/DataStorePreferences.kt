@@ -22,7 +22,7 @@ class DataStorePreferences @Inject constructor(private val dataStore: DataStore<
     Throws an error if smth goes wrong.
     Returns an instance of UserCredentials.
      */
-    val getCredentialsFlow: Flow<UserCredentials> = this.dataStore.data
+    val getCredentialsFlow: Flow<UserCredentials> = dataStore.data
         .catch { exception ->
             if (exception is IOException) {
                 emit(emptyPreferences())
