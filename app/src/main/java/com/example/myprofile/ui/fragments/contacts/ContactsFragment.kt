@@ -154,6 +154,9 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         }
     }
 
+    /**
+     * Deactivates the multiselect mode when the user navigates away by swiping between tabs
+     */
     override fun onPause() {
         super.onPause()
         viewModel.deactivateMultiselectMode()

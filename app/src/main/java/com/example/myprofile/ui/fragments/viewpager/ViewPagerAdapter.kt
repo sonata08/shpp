@@ -12,9 +12,6 @@ class ViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     }
 
     override fun createFragment(position: Int): Fragment {
-        when(position) {
-            0 -> return SettingsFragment()
-        }
-        return ContactsFragment()
+        return if (position == 0) SettingsFragment() else ContactsFragment()
     }
 }
