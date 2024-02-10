@@ -3,7 +3,7 @@ package com.example.myprofile.ui.fragments.contacts
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate) {
 
-    private val viewModel: ContactsViewModel by activityViewModels()
+    private val viewModel: ContactsViewModel by viewModels()
 
     private val adapter: ContactsAdapter by lazy {
         ContactsAdapter(object : OnContactClickListener {
@@ -77,8 +77,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contactsFlow.collect {
-                    adapter.submitList(it){
-                    }
+                    adapter.submitList(it)
                 }
             }
         }

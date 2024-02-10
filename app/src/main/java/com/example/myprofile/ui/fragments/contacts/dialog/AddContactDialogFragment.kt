@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -30,7 +30,7 @@ class AddContactDialogFragment : DialogFragment() {
         )
     }
 
-    private val viewModel: ContactsViewModel by activityViewModels()
+    private val viewModel: ContactsViewModel by viewModels()
 
     // Registers a photo picker activity launcher in single-select mode.
     private val pickMedia =
