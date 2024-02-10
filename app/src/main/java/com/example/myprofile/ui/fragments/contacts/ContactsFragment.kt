@@ -51,7 +51,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
 
             override fun onContactLongClick(contactPosition: Int) {
                 viewModel.activateMultiselectMode(contactPosition)
-                binding.fab.show()
+                binding.fabDeleteContacts.show()
                 setFabOnclickListener()
             }
 
@@ -59,7 +59,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
                 viewModel.makeSelected(contactPosition, isChecked)
                 // If no contacts are selected -> deactivate MultiselectMode and hide FAB
                 if (viewModel.isNothingSelected()) {
-                    binding.fab.hide()
+                    binding.fabDeleteContacts.hide()
                 }
             }
         })
@@ -113,10 +113,10 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
     }
 
     private fun setFabOnclickListener() {
-        binding.fab.setOnClickListener { _ ->
+        binding.fabDeleteContacts.setOnClickListener { _ ->
             viewModel.deleteContacts()
             viewModel.deactivateMultiselectMode()
-            binding.fab.hide()
+            binding.fabDeleteContacts.hide()
         }
     }
 
