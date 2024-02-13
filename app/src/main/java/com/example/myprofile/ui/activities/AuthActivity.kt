@@ -37,7 +37,7 @@ class AuthActivity : AppCompatActivity() {
     private fun autologinIfCredentialsSaved() {
         lifecycleScope.launch {
             dataStorePreferences.getCredentialsFlow.collect {
-                if (it.email.isNotEmpty() && it.password != "") {
+                if (it.email.isNotEmpty() && it.password.isNotEmpty()) {
                     goToProfile()
                 }
             }

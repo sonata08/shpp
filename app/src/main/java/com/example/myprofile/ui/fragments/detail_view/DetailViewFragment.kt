@@ -33,7 +33,7 @@ class DetailViewFragment :
 
     private fun setupToolbar() {
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigateUp()
         }
     }
 
