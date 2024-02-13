@@ -46,7 +46,7 @@ class ContactsRepositoryImpl @Inject constructor() : ContactsRepository {
 
     override fun makeSelected(contactPosition: Int, isChecked: Boolean) {
         _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
-            get(contactPosition).isSelected = isChecked
+            this[contactPosition] = get(contactPosition).copy(isSelected = isChecked)
         }
     }
 
