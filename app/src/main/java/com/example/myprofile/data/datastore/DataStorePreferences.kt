@@ -9,12 +9,10 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.myprofile.data.network.model.UserIdTokens
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
 The class is responsible for storing user's data
  */
-@Singleton
 class DataStorePreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
 
 

@@ -31,8 +31,8 @@ class ViewPagerFragment : Fragment() {
 //        val tabLayout = binding.tabLayout
 //        TabLayoutMediator(tabLayout, viewPager) {tab, position ->
 //            when(position) {
-//                SETTINGS_FRAGMENT -> tab.text = resources.getString(R.string.settings)
-//                CONTACTS_FRAGMENT -> tab.text = resources.getString(R.string.contacts)
+//                TabFragments.SETTINGS_FRAGMENT.ordinal -> tab.text = resources.getString(R.string.settings)
+//                TabFragments.CONTACTS_FRAGMENT.ordinal -> tab.text = resources.getString(R.string.contacts)
 //            }
 //        }.attach()
     }
