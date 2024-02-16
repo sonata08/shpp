@@ -13,8 +13,8 @@ import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentSettingsBinding
 import com.example.myprofile.ui.auth.AuthActivity
 import com.example.myprofile.ui.base.BaseFragment
+import com.example.myprofile.ui.main.viewpager.TabFragments
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragment
-import com.example.myprofile.ui.main.viewpager.ViewPagerFragment.Companion.CONTACTS_FRAGMENT
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragmentDirections
 import com.example.myprofile.utils.showError
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +36,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
     private fun setListeners() {
         binding.btnContacts.setOnClickListener {
             val viewPagerFragment = requireParentFragment() as ViewPagerFragment
-            viewPagerFragment.goToFragment(CONTACTS_FRAGMENT)
+            viewPagerFragment.goToFragment(TabFragments.CONTACTS_FRAGMENT.ordinal)
         }
         binding.btnLogout.setOnClickListener {
             logOut()

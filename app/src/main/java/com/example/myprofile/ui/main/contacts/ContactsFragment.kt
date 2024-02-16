@@ -23,8 +23,8 @@ import com.example.myprofile.ui.main.contacts.adapter.ContactsAdapter
 import com.example.myprofile.ui.main.contacts.adapter.ContactsItemDecoration
 import com.example.myprofile.ui.main.contacts.adapter.OnContactClickListener
 import com.example.myprofile.ui.main.contacts.adapter.SwipeToDeleteCallback
+import com.example.myprofile.ui.main.viewpager.TabFragments
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragment
-import com.example.myprofile.ui.main.viewpager.ViewPagerFragment.Companion.SETTINGS_FRAGMENT
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragmentDirections
 import com.example.myprofile.utils.showError
 import com.google.android.material.snackbar.Snackbar
@@ -54,7 +54,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
 
             override fun onContactLongClick(contactPosition: Int) {
                 viewModel.activateMultiselectMode(contactPosition)
-                binding.fab.show()
+                binding.fabDeleteContacts.show()
                 setFabOnclickListener()
             }
 
@@ -62,7 +62,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
                 viewModel.makeSelected(contactPosition, isChecked)
                 // If no contacts are selected -> deactivate MultiselectMode and hide FAB
                 if (viewModel.isNothingSelected()) {
-                    binding.fab.hide()
+                    binding.fabDeleteContacts.hide()
                 }
             }
         })
@@ -124,7 +124,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
             // when back button is pressed
             setNavigationOnClickListener {
                 val viewPagerFragment = requireParentFragment() as ViewPagerFragment
-                viewPagerFragment.goToFragment(SETTINGS_FRAGMENT)
+                viewPagerFragment.goToFragment(TabFragments.SETTINGS_FRAGMENT.ordinal)
             }
             inflateMenu(R.menu.contacts_menu)
             setupSearchListener()
@@ -158,10 +158,10 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
     }
 
     private fun setFabOnclickListener() {
-        binding.fab.setOnClickListener { _ ->
+        binding.fabDeleteContacts.setOnClickListener { _ ->
             viewModel.deleteContacts()
             viewModel.deactivateMultiselectMode()
-            binding.fab.hide()
+            binding.fabDeleteContacts.hide()
         }
     }
 

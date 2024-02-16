@@ -11,10 +11,9 @@ import com.example.myprofile.data.repository.DataStoreRepository
 import com.example.myprofile.utils.getMessageFromHttpException
 import retrofit2.HttpException
 import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.Exception
 
-@Singleton
+
 class AuthRepositoryImpl @Inject constructor(
     private val userApiService: UserApiService,
     private val dataStoreRepository: DataStoreRepository,

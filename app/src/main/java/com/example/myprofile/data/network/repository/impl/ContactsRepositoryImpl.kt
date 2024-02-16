@@ -17,9 +17,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import retrofit2.HttpException
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+
 class ContactsRepositoryImpl @Inject constructor(
     private val contactsApiService: ContactsApiService,
     private val dataStoreRepository: DataStoreRepository,

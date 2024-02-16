@@ -26,16 +26,19 @@ abstract class RepositoryModule {
     ): ContactsRepository
 
     @Binds
+    @Singleton
     abstract fun bindAuthRepository(
         repositoryImpl: AuthRepositoryImpl
     ): AuthRepository
 
     @Binds
+    @Singleton
     abstract fun bindDataStoreRepository(
         repositoryImpl: DataStoreRepositoryImpl
     ): DataStoreRepository
 
     @Binds
+    @Singleton
     abstract fun bindTokenManager(
         tokenManagerImpl: TokenManagerImpl
     ): TokenManager

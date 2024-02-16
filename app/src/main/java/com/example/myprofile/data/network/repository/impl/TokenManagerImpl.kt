@@ -5,7 +5,6 @@ import com.example.myprofile.data.network.repository.TokenManager
 import com.example.myprofile.data.repository.DataStoreRepository
 import javax.inject.Inject
 import javax.inject.Provider
-import javax.inject.Singleton
 
 /**
  * Implementation of the [TokenManager] interface responsible for refreshing user tokens.
@@ -13,7 +12,6 @@ import javax.inject.Singleton
  * @property userApiService The API service used to interact with the user-related endpoints.
  * @property dataStoreRepository The repository responsible for managing token data in the data store.
  */
-@Singleton
 class TokenManagerImpl @Inject constructor(
     // to avoid dependency cycle -> Provider<T> + .get()
     // This means TokenManagerImpl will be created before UserApiService is created

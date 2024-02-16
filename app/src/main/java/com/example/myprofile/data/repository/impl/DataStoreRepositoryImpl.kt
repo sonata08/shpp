@@ -3,10 +3,8 @@ package com.example.myprofile.data.repository.impl
 import com.example.myprofile.data.datastore.DataStorePreferences
 import com.example.myprofile.data.repository.DataStoreRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 
 
-@Singleton
 class DataStoreRepositoryImpl @Inject constructor(
     private val dataStorePreferences: DataStorePreferences
 ): DataStoreRepository {
