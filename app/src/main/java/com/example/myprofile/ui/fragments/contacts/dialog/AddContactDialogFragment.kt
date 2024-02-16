@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -103,6 +104,11 @@ class AddContactDialogFragment : DialogFragment() {
                 viewModel.addContact(contact)
                 viewModel.resetPhotoUri()
                 dismiss()
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.photoUri.collect {
+                binding.photo.loadImage(it)
             }
         }
     }
