@@ -9,18 +9,20 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.navGraphViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.myprofile.R
 import com.example.myprofile.data.model.Contact
-import com.example.myprofile.data.repository.impl.ContactsRepositoryImpl
 import com.example.myprofile.databinding.DialogAddContactBinding
 import com.example.myprofile.ui.fragments.contacts.ContactsViewModel
-import com.example.myprofile.ui.fragments.contacts.ContactsViewModelFactory
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.ui.utils.extentions.loadImage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class AddContactDialogFragment : DialogFragment() {
 
     private val binding: DialogAddContactBinding by lazy {
@@ -29,22 +31,16 @@ class AddContactDialogFragment : DialogFragment() {
         )
     }
 
-    private val viewModel: ContactsViewModel by navGraphViewModels(
-        R.id.contactsFragment,
-        factoryProducer = {
-            ContactsViewModelFactory(
-                ContactsRepositoryImpl()
-            )
-        }
-    )
+    private val viewModel: ContactsViewModel by viewModels()
 
     // Registers a photo picker activity launcher in single-select mode.
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        // Callback is invoked after the user selects a media item or closes the photo picker.
-        if (uri != null) {
-            viewModel.setPhotoUri(uri.toString())
+    private val pickMedia =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // Callback is invoked after the user selects a media item or closes the photo picker.
+            if (uri != null) {
+                viewModel.setPhotoUri(uri.toString())
+            }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,9 +52,9 @@ class AddContactDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
-        setupAddPhotoListener()
-        setupListeners()
+        setListeners()
     }
+
 
     // makes dialog fullscreen if small layout and not fullscreen otherwise
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -70,10 +66,27 @@ class AddContactDialogFragment : DialogFragment() {
         }
     }
 
+
     private fun setupToolbar() {
         binding.toolbar.setNavigationOnClickListener {
             viewModel.resetPhotoUri()
             dismiss()
+        }
+    }
+
+    private fun setListeners() {
+        setupPhotoListener()
+        setupAddPhotoListener()
+        setupSaveBtnListener()
+    }
+
+    private fun setupPhotoListener() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.photoUri.collect {
+                    binding.photo.loadImage(it)
+                }
+            }
         }
     }
 
@@ -84,7 +97,7 @@ class AddContactDialogFragment : DialogFragment() {
         }
     }
 
-    private fun setupListeners() {
+    private fun setupSaveBtnListener() {
         binding.btnSave.setOnClickListener {
             if (isValidUsername()) {
                 val contact = createContact()

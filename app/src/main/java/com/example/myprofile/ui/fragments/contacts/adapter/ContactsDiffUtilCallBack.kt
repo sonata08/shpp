@@ -1,14 +1,14 @@
 package com.example.myprofile.ui.fragments.contacts.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.myprofile.data.model.Contact
+import com.example.myprofile.data.model.ContactMultiselect
 
-class ContactsDiffUtilCallBack : DiffUtil.ItemCallback<Contact>() {
-    override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
-        return oldItem.id == newItem.id
+class ContactsDiffUtilCallBack : DiffUtil.ItemCallback<ContactMultiselect>() {
+    override fun areItemsTheSame(oldItem: ContactMultiselect, newItem: ContactMultiselect): Boolean {
+        return oldItem.contact.id == newItem.contact.id
     }
 
-    override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean {
+    override fun areContentsTheSame(oldItem: ContactMultiselect, newItem: ContactMultiselect): Boolean {
         return oldItem == newItem
     }
 }

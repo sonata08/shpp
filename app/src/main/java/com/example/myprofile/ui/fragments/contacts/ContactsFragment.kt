@@ -2,63 +2,78 @@ package com.example.myprofile.ui.fragments.contacts
 
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
-import com.example.myprofile.data.model.Contact
-import com.example.myprofile.data.repository.impl.ContactsRepositoryImpl
+import com.example.myprofile.data.model.ContactMultiselect
 import com.example.myprofile.databinding.FragmentContactsBinding
+import com.example.myprofile.ui.fragments.BaseFragment
 import com.example.myprofile.ui.fragments.contacts.adapter.ContactsAdapter
 import com.example.myprofile.ui.fragments.contacts.adapter.ContactsItemDecoration
 import com.example.myprofile.ui.fragments.contacts.adapter.OnContactClickListener
 import com.example.myprofile.ui.fragments.contacts.adapter.SwipeToDeleteCallback
+import com.example.myprofile.ui.fragments.viewpager.ViewPagerFragment
+import com.example.myprofile.ui.fragments.viewpager.ViewPagerFragment.Companion.SETTINGS_FRAGMENT
+import com.example.myprofile.ui.fragments.viewpager.ViewPagerFragmentDirections
 import com.example.myprofile.utils.extentions.showShortToast
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-class ContactsFragment : Fragment(), OnContactClickListener {
 
-    private var _binding: FragmentContactsBinding? = null
-    private val binding get() = _binding!!
+@AndroidEntryPoint
+class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate) {
 
-    private val viewModel: ContactsViewModel by navGraphViewModels(
-        R.id.contactsFragment,
-        factoryProducer = {
-            ContactsViewModelFactory(
-                ContactsRepositoryImpl()
-            )
-        }
-    )
-    private lateinit var adapter: ContactsAdapter
+    private val viewModel: ContactsViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentContactsBinding.inflate(inflater, container, false)
-        return binding.root
+    private val adapter: ContactsAdapter by lazy {
+        ContactsAdapter(object : OnContactClickListener {
+            override fun onContactDelete(contactPosition: Int) {
+                deleteContactWithSnackbar(contactPosition)
+            }
+
+            override fun onContactClick(
+                contact: ContactMultiselect,
+                extras: FragmentNavigator.Extras
+            ) {
+                val action =
+                    ViewPagerFragmentDirections.actionViewPagerFragmentToDetailViewFragment(contact.contact.id)
+                findNavController().navigate(action, extras)
+            }
+
+            override fun onContactLongClick(contactPosition: Int) {
+                viewModel.activateMultiselectMode(contactPosition)
+                binding.fabDeleteContacts.show()
+                setFabOnclickListener()
+            }
+
+            override fun onItemSelect(contactPosition: Int, isChecked: Boolean) {
+                viewModel.makeSelected(contactPosition, isChecked)
+                // If no contacts are selected -> deactivate MultiselectMode and hide FAB
+                if (viewModel.isNothingSelected()) {
+                    binding.fabDeleteContacts.hide()
+                }
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupToolbar()
-        adapter = ContactsAdapter(this)
         setupRecyclerView()
         setupAddContactListener()
+        showContacts()
+    }
 
+    private fun showContacts() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contactsFlow.collect {
@@ -69,15 +84,19 @@ class ContactsFragment : Fragment(), OnContactClickListener {
     }
 
     private fun setupToolbar() {
-        with(binding) {
-            toolbar.inflateMenu(R.menu.contacts_menu)
-            toolbar.setOnMenuItemClickListener {
+        with(binding.toolbar) {
+            // when back button is pressed
+            setNavigationOnClickListener {
+                val viewPagerFragment = requireParentFragment() as ViewPagerFragment
+                viewPagerFragment.goToFragment(SETTINGS_FRAGMENT)
+            }
+            inflateMenu(R.menu.contacts_menu)
+            setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.search -> {
                         requireContext().showShortToast("SEARCH")
                         true
                     }
-
                     else -> false
                 }
             }
@@ -87,8 +106,16 @@ class ContactsFragment : Fragment(), OnContactClickListener {
     private fun setupAddContactListener() {
         binding.tvAddContact.setOnClickListener {
             val action =
-                ContactsFragmentDirections.actionContactsFragmentToAddContactDialogFragment()
+                ViewPagerFragmentDirections.actionViewPagerFragmentToAddContactDialogFragment()
             findNavController().navigate(action)
+        }
+    }
+
+    private fun setFabOnclickListener() {
+        binding.fabDeleteContacts.setOnClickListener { _ ->
+            viewModel.deleteContacts()
+            viewModel.deactivateMultiselectMode()
+            binding.fabDeleteContacts.hide()
         }
     }
 
@@ -97,14 +124,14 @@ class ContactsFragment : Fragment(), OnContactClickListener {
         val itemDecoration = ContactsItemDecoration(
             R.dimen.basic_layout_horizontal_margins,
             R.dimen.margin_between_items,
-            R.dimen.margin_last_item_bottom,
-            R.drawable.recyclerview_item_shape
+            R.dimen.margin_last_item_bottom
         )
         with(binding) {
             recyclerView.layoutManager = LinearLayoutManager(root.context)
             recyclerView.addItemDecoration(itemDecoration)
             recyclerView.adapter = adapter
-            itemTouchHelper.attachToRecyclerView(recyclerView)
+            // uncomment to activate swipe-to-delete behavior
+//            itemTouchHelper.attachToRecyclerView(recyclerView)
         }
     }
 
@@ -126,20 +153,11 @@ class ContactsFragment : Fragment(), OnContactClickListener {
         }
     }
 
-    override fun onContactDelete(contactPosition: Int) {
-        deleteContactWithSnackbar(contactPosition)
+    /**
+     * Deactivates the multiselect mode when the user navigates away by swiping between tabs
+     */
+    override fun onPause() {
+        super.onPause()
+        viewModel.deactivateMultiselectMode()
     }
-
-    override fun onContactClick(contact: Contact, extras: FragmentNavigator.Extras) {
-        val action =
-            ContactsFragmentDirections.actionContactsFragmentToDetailViewFragment(contact.id)
-        findNavController().navigate(action, extras)
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 }

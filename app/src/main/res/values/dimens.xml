@@ -16,6 +16,7 @@
     <dimen name="big_button_height">55dp</dimen>
     <dimen name="stroke_width">2dp</dimen>
     <dimen name="letter_spacing">0.15</dimen>
+    <dimen name="btn_log_out_width">120dp</dimen>
 
     <!--     contacts-->
     <dimen name="contact_height">66dp</dimen>

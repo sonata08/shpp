@@ -1,15 +1,18 @@
 package com.example.myprofile.data.repository.impl
 
 import com.example.myprofile.data.model.Contact
+import com.example.myprofile.data.model.ContactMultiselect
 import com.example.myprofile.data.repository.ContactsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class ContactsRepositoryImpl : ContactsRepository {
 
-    private val _contactsFlow = MutableStateFlow(contactsList)
+class ContactsRepositoryImpl @Inject constructor() : ContactsRepository {
 
-    private var lastDeletedContact: Pair<Int, Contact>? = null
+    private val _contactsFlow = MutableStateFlow(contactsList.map { ContactMultiselect(it) })
+
+    private var lastDeletedContact: Pair<Int, ContactMultiselect>? = null
 
     override fun getContacts() = _contactsFlow.asStateFlow()
 
@@ -17,6 +20,12 @@ class ContactsRepositoryImpl : ContactsRepository {
         _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
             lastDeletedContact = contactPosition to get(contactPosition)
             remove(lastDeletedContact?.second)
+        }
+    }
+
+    override fun deleteContacts() {
+        _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
+            removeAll { it.isSelected }
         }
     }
 
@@ -31,8 +40,29 @@ class ContactsRepositoryImpl : ContactsRepository {
 
     override fun addContact(contact: Contact, index: Int) {
         _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
-            add(index, contact)
+            add(index, ContactMultiselect(contact))
         }
+    }
+
+    override fun makeSelected(contactPosition: Int, isChecked: Boolean) {
+        _contactsFlow.value = _contactsFlow.value.toMutableList().apply {
+            this[contactPosition] = get(contactPosition).copy(isSelected = isChecked)
+        }
+    }
+
+    override fun countSelected(): Int {
+        _contactsFlow.value.apply {
+            return filter { it.isSelected }.size
+        }
+    }
+
+    override fun deactivateMultiselectMode() {
+        _contactsFlow.value =
+            _contactsFlow.value.map { contact -> contact.copy(isSelected = false, isMultiselectMode = false) }
+    }
+
+    override fun activateMultiselectMode() {
+        _contactsFlow.value = _contactsFlow.value.map { contact -> contact.copy(isMultiselectMode = true) }
     }
 
     companion object {
@@ -63,12 +93,7 @@ class ContactsRepositoryImpl : ContactsRepository {
             Contact(19, "Sophia", "Dancer", "https://picsum.photos/200?random=19"),
             Contact(20, "Thomas", "Engineer", "https://picsum.photos/200?random=20"),
             Contact(21, "Alice", "Engineer", "https://picsum.photos/200?random=21"),
-            Contact(
-                22,
-                "John VeryLongNameThatDoesDotFitInTheView",
-                "Designer",
-                "https://picsum.photos/200?random=22"
-            ),
+            Contact(22, "John VeryLongNameThatDoesDotFitInTheView", "Designer", "https://picsum.photos/200?random=22"),
             Contact(23, "Charlie", "Manager", "https://picsum.photos/200?random=23")
         )
     }

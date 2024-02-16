@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/contact_height"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground"
     android:orientation="horizontal"
+    android:background="@drawable/recyclerview_item_shape"
     android:padding="@dimen/margin_8"
     android:weightSum="6">
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/is_selected_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/checkbox_selector"
+        android:visibility="gone"
+        />
 
     <ImageView
         android:id="@+id/profile_pic"
