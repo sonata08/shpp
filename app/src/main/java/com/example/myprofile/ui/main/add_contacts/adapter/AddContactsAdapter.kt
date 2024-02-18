@@ -2,7 +2,6 @@ package com.example.myprofile.ui.main.add_contacts.adapter
 
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.navigation.fragment.FragmentNavigatorExtras
@@ -11,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
 import com.example.myprofile.data.model.User
 import com.example.myprofile.databinding.ItemAddContactBinding
+import com.example.myprofile.ui.utils.extentions.hide
 import com.example.myprofile.ui.utils.extentions.loadImage
+import com.example.myprofile.ui.utils.extentions.show
 
 private const val TRANSITION_NAME = "detail_photo"
 
@@ -37,11 +38,11 @@ class AddContactsAdapter(
 
                 // shows icAddContactDone only for clicked users
                 if (addedUsers.contains(contact.id)) {
-                    addContactLayout.visibility = View.GONE
-                    icAddContactDone.visibility = View.VISIBLE
+                    addContactLayout.hide()
+                    icAddContactDone.show()
                 } else {
-                    addContactLayout.visibility = View.VISIBLE
-                    icAddContactDone.visibility = View.GONE
+                    addContactLayout.show()
+                    icAddContactDone.hide()
                 }
             }
             setListeners(contact)
@@ -50,8 +51,8 @@ class AddContactsAdapter(
         private fun setListeners(contact: User) {
             with(binding) {
                 addContactLayout.setOnClickListener {
-                    addContactLayout.visibility = View.GONE
-                    icAddContactDone.visibility = View.VISIBLE
+                    addContactLayout.hide()
+                    icAddContactDone.show()
                     addedUsers.add(contact.id)
                     listener.onAddContact(contact.id)
                 }

@@ -13,7 +13,9 @@ import com.example.myprofile.data.model.User
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentDetailViewBinding
 import com.example.myprofile.ui.base.BaseFragment
+import com.example.myprofile.ui.utils.extentions.hide
 import com.example.myprofile.ui.utils.extentions.loadImage
+import com.example.myprofile.ui.utils.extentions.show
 import com.example.myprofile.utils.showError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -65,7 +67,7 @@ class DetailViewFragment :
 
     private fun bindContact(contact: User) {
         with(binding) {
-            progressBar.visibility = View.GONE
+            progressBar.hide()
             photo.loadImage(contact.image)
             tvUsername.text = contact.name
             tvCareer.text = contact.career
@@ -74,6 +76,6 @@ class DetailViewFragment :
     }
 
     private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
     }
 }

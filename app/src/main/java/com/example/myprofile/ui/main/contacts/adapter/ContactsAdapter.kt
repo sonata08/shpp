@@ -2,7 +2,6 @@ package com.example.myprofile.ui.main.contacts.adapter
 
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
@@ -12,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
 import com.example.myprofile.data.model.UserMultiselect
 import com.example.myprofile.databinding.ItemContactBinding
+import com.example.myprofile.ui.utils.extentions.hide
 import com.example.myprofile.ui.utils.extentions.loadImage
+import com.example.myprofile.ui.utils.extentions.show
 
 private const val TRANSITION_NAME = "detail_photo"
 
@@ -42,12 +43,12 @@ class ContactsAdapter(
         private fun setupMultiselectMode(contact: UserMultiselect) {
             with(binding) {
                 if (contact.isMultiselectMode) {
-                    isSelectedCheckbox.visibility = View.VISIBLE
-                    icDelete.visibility = View.GONE
+                    isSelectedCheckbox.show()
+                    icDelete.hide()
                     setItemBackground(R.drawable.recyclerview_item_shape_multiselect)
                 } else {
-                    isSelectedCheckbox.visibility = View.GONE
-                    icDelete.visibility = View.VISIBLE
+                    isSelectedCheckbox.hide()
+                    icDelete.show()
                     setItemBackground(R.drawable.recyclerview_item_shape)
                     setOnItemClickListener(contact)
                 }

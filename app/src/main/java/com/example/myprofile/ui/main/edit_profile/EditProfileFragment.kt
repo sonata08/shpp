@@ -15,7 +15,9 @@ import com.example.myprofile.data.model.User
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentEditProfileBinding
 import com.example.myprofile.ui.base.BaseFragment
+import com.example.myprofile.ui.utils.extentions.hide
 import com.example.myprofile.ui.utils.extentions.loadImage
+import com.example.myprofile.ui.utils.extentions.show
 import com.example.myprofile.utils.showError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -105,11 +107,11 @@ class EditProfileFragment :
     }
 
     private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
     }
 
     private fun returnToSettingsFragment() {
-        binding.progressBar.visibility = View.GONE
+        binding.progressBar.hide()
         findNavController().popBackStack()
     }
 

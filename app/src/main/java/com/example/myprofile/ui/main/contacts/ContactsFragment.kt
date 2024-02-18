@@ -26,6 +26,8 @@ import com.example.myprofile.ui.main.contacts.adapter.SwipeToDeleteCallback
 import com.example.myprofile.ui.main.viewpager.TabFragments
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragment
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragmentDirections
+import com.example.myprofile.ui.utils.extentions.hide
+import com.example.myprofile.ui.utils.extentions.show
 import com.example.myprofile.utils.showError
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,7 +97,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
     }
 
     private fun showContacts() {
-        binding.progressBar.visibility = View.GONE
+        binding.progressBar.hide()
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.contactsListFlow.collect {
@@ -106,7 +108,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
     }
 
     private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
     }
 
     private fun observeSearchState() {

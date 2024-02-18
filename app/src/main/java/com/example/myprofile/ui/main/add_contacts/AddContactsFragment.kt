@@ -17,6 +17,8 @@ import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.add_contacts.adapter.AddContactsAdapter
 import com.example.myprofile.ui.main.add_contacts.adapter.OnAddContactClickListener
 import com.example.myprofile.ui.main.contacts.adapter.ContactsItemDecoration
+import com.example.myprofile.ui.utils.extentions.hide
+import com.example.myprofile.ui.utils.extentions.show
 import com.example.myprofile.utils.showError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -71,12 +73,12 @@ class AddContactsFragment :
     }
 
     private fun showContactList(users: List<User>) {
-        binding.progressBar.visibility = View.GONE
+        binding.progressBar.hide()
         adapter.submitList(users)
     }
 
     private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
     }
 
     private fun observeSearchState() {

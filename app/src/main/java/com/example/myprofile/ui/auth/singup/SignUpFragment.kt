@@ -14,6 +14,8 @@ import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.LoginResponse
 import com.example.myprofile.databinding.FragmentSignUpBinding
 import com.example.myprofile.ui.base.BaseFragment
+import com.example.myprofile.ui.utils.extentions.hide
+import com.example.myprofile.ui.utils.extentions.show
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.utils.showError
 import dagger.hilt.android.AndroidEntryPoint
@@ -99,11 +101,11 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
     }
 
     private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
     }
 
     private fun saveUserData(data: LoginResponse) {
-        binding.progressBar.visibility = View.GONE
+        binding.progressBar.hide()
         viewModel.rememberUser(binding.checkboxRememberMe.isChecked)
         viewModel.saveUserIdTokens(data)
     }

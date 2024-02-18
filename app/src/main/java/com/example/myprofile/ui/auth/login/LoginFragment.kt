@@ -16,6 +16,8 @@ import com.example.myprofile.data.network.model.LoginResponse
 import com.example.myprofile.databinding.FragmentLoginBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.MainActivity
+import com.example.myprofile.ui.utils.extentions.hide
+import com.example.myprofile.ui.utils.extentions.show
 import com.example.myprofile.utils.Validation
 import com.example.myprofile.utils.showError
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +44,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                         is UiState.Initial -> {}
                         is UiState.Success -> gotoProfile()
                         is UiState.Loading -> showProgressBar()
-                        is UiState.Error -> {binding.progressBar.visibility = View.GONE}
+                        is UiState.Error -> {binding.progressBar.hide()}
                     }
                 }
             }
@@ -65,14 +67,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     }
 
     private fun singInUser(data: LoginResponse) {
-        binding.progressBar.visibility = View.GONE
+        binding.progressBar.hide()
         viewModel.rememberUser(binding.checkboxRememberMe.isChecked)
         viewModel.saveUserIdTokens(data)
         gotoProfile()
     }
 
     private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
     }
 
     private fun setListeners() {

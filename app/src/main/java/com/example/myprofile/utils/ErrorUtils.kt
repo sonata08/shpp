@@ -5,6 +5,7 @@ import android.view.View
 import com.example.myprofile.R
 import com.example.myprofile.data.network.UNKNOWN_ERROR
 import com.example.myprofile.data.network.model.ErrorResponse
+import com.example.myprofile.ui.utils.extentions.hide
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import java.lang.Exception
@@ -14,7 +15,7 @@ import java.lang.Exception
  */
 fun showError(root: View, progressBar: View, error: String) {
     val localizedError = localizeError(error, root.context)
-    progressBar.visibility = View.GONE
+    progressBar.hide()
     Snackbar.make(root, localizedError, Snackbar.LENGTH_LONG)
         .show()
 }

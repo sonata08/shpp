@@ -15,7 +15,9 @@ import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentSignUpExtendedBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.MainActivity
+import com.example.myprofile.ui.utils.extentions.hide
 import com.example.myprofile.ui.utils.extentions.loadImage
+import com.example.myprofile.ui.utils.extentions.show
 import com.example.myprofile.utils.showError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -59,12 +61,12 @@ class SingUpExtendedFragment :
     }
 
     private fun singInUser() {
-        binding.progressBar.visibility = View.GONE
+        binding.progressBar.hide()
         goToProfile()
     }
 
     private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
     }
 
 

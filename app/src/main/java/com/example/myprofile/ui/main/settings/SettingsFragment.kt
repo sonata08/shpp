@@ -16,6 +16,8 @@ import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.viewpager.TabFragments
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragment
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragmentDirections
+import com.example.myprofile.ui.utils.extentions.hide
+import com.example.myprofile.ui.utils.extentions.show
 import com.example.myprofile.utils.showError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -63,11 +65,11 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
     }
 
     private fun showUserData(user: User) {
-        binding.progressBar.visibility = View.GONE
+        binding.progressBar.hide()
         bindUsersData(user)
     }
     private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.show()
     }
 
     private fun bindUsersData(user: User) {
