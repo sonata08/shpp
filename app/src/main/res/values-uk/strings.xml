@@ -74,6 +74,7 @@
     <string name="unauthorized">Не має доступу</string>
     <string name="access_denied">Доступ заборонено</string>
     <string name="invalid_request">Invalid request</string>
-    <string name="default_error">Сталася помилка</string>
+    <string name="no_user">Такого користувача не існує</string>
+    <string name="unknown_error">Сталася помилка</string>
 
 </resources>

@@ -90,7 +90,8 @@
     <string name="unauthorized">Unauthorized</string>
     <string name="access_denied">Access denied</string>
     <string name="invalid_request">Invalid request</string>
-    <string name="default_error">Error</string>
+    <string name="no_user">There is no such user</string>
+    <string name="unknown_error">Error</string>
 
 
 

@@ -3,7 +3,12 @@ package com.example.myprofile.utils
 import android.content.Context
 import android.view.View
 import com.example.myprofile.R
+import com.example.myprofile.data.network.ACCESS_DENIED
+import com.example.myprofile.data.network.INVALID_REQUEST
+import com.example.myprofile.data.network.NO_USER_ERROR
+import com.example.myprofile.data.network.UNAUTHORIZED
 import com.example.myprofile.data.network.UNKNOWN_ERROR
+import com.example.myprofile.data.network.USER_EXISTS
 import com.example.myprofile.data.network.model.ErrorResponse
 import com.example.myprofile.ui.utils.extentions.hide
 import com.google.android.material.snackbar.Snackbar
@@ -37,10 +42,12 @@ fun getMessageFromHttpException(jsonString: String?): String {
  */
 fun localizeError(error: String, context: Context): String {
     val errorMessage = when(error) {
-        "User already exists" -> R.string.user_exists
-        "Unauthorized" -> R.string.unauthorized
-        "Access denied" -> R.string.access_denied
-        "Invalid request" -> R.string.access_denied
+        USER_EXISTS -> R.string.user_exists
+        UNAUTHORIZED -> R.string.unauthorized
+        ACCESS_DENIED -> R.string.access_denied
+        INVALID_REQUEST -> R.string.access_denied
+        NO_USER_ERROR -> R.string.no_user
+        UNKNOWN_ERROR -> R.string.unknown_error
         else-> return error
     }
     return context.getString(errorMessage)
