@@ -1,6 +1,7 @@
 package com.example.myprofile.di
 
-import com.example.myprofile.data.network.BASE_URL
+
+import com.example.myprofile.BuildConfig
 import com.example.myprofile.data.network.api.ContactsApiService
 import com.example.myprofile.data.network.api.UserApiService
 import com.example.myprofile.data.network.interceptor.TokenAuthenticator
@@ -38,7 +39,7 @@ object NetworkModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .build()
     }

@@ -17,6 +17,9 @@ android {
         versionCode 1
         versionName "1.0"
 
+        // Base URL for the Retrofit API calls
+        buildConfigField "String", "BASE_URL", '"http://178.63.9.114:7777/api/"'
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
