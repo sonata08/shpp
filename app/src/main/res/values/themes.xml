@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <!-- Customize your theme here. -->
+        <item name="android:editTextColor">@android:color/white</item>
     </style>
     
     <style name="MyToolbar" parent="Widget.Material3.Toolbar">
@@ -42,6 +43,13 @@
         <item name="android:backgroundTint">?attr/colorOnPrimary</item>
         <item name="android:textColor">@color/grey_text</item>
         <item name="strokeColor">?attr/colorPrimary</item>
+        <item name="strokeWidth">@dimen/stroke_width</item>
+    </style>
+
+    <style name="ButtonPrimaryColorOutlined">
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="strokeColor">?attr/colorOnPrimary</item>
         <item name="strokeWidth">@dimen/stroke_width</item>
     </style>
 
