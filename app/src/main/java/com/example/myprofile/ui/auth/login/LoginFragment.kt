@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.myprofile.R
 import com.example.myprofile.data.model.UserCredentials
 import com.example.myprofile.data.network.model.UiState
-import com.example.myprofile.data.network.model.LoginResponse
+import com.example.myprofile.data.network.model.response_dto.LoginResponse
 import com.example.myprofile.databinding.FragmentLoginBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.MainActivity

@@ -1,9 +1,10 @@
 package com.example.myprofile.data.network.api
 
-import com.example.myprofile.data.network.model.AddContactRequest
 import com.example.myprofile.data.network.model.BaseResponse
-import com.example.myprofile.data.network.model.Contacts
-import com.example.myprofile.data.network.model.Users
+import com.example.myprofile.data.network.model.response_dto.AddContactRequest
+import com.example.myprofile.data.network.model.response_dto.Contacts
+import com.example.myprofile.data.network.model.response_dto.Users
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

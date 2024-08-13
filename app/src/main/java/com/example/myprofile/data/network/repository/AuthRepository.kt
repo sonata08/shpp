@@ -3,7 +3,7 @@ package com.example.myprofile.data.network.repository
 import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserCredentials
 import com.example.myprofile.data.network.model.UiState
-import com.example.myprofile.data.network.model.LoginResponse
+import com.example.myprofile.data.network.model.response_dto.LoginResponse
 
 
 interface AuthRepository {

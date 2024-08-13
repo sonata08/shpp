@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myprofile.data.model.UserCredentials
 import com.example.myprofile.data.network.model.UiState
-import com.example.myprofile.data.network.model.LoginResponse
+import com.example.myprofile.data.network.model.response_dto.LoginResponse
 import com.example.myprofile.data.network.repository.AuthRepository
 import com.example.myprofile.data.repository.DataStoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

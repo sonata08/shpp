@@ -5,11 +5,11 @@ import com.example.myprofile.data.model.UserMultiselect
 import com.example.myprofile.data.network.NO_USER_ERROR
 import com.example.myprofile.data.network.UNKNOWN_ERROR
 import com.example.myprofile.data.network.api.ContactsApiService
-import com.example.myprofile.data.network.model.AddContactRequest
 import com.example.myprofile.data.network.model.BaseResponse
-import com.example.myprofile.data.network.model.Contacts
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.UserIdTokens
+import com.example.myprofile.data.network.model.response_dto.AddContactRequest
+import com.example.myprofile.data.network.model.response_dto.Contacts
 import com.example.myprofile.data.network.repository.ContactsRepository
 import com.example.myprofile.data.repository.DataStoreRepository
 import com.example.myprofile.utils.getMessageFromHttpException

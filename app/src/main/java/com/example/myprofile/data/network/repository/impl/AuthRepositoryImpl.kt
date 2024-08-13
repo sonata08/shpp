@@ -5,7 +5,7 @@ import com.example.myprofile.data.model.UserCredentials
 import com.example.myprofile.data.network.UNKNOWN_ERROR
 import com.example.myprofile.data.network.api.UserApiService
 import com.example.myprofile.data.network.model.UiState
-import com.example.myprofile.data.network.model.LoginResponse
+import com.example.myprofile.data.network.model.response_dto.LoginResponse
 import com.example.myprofile.data.network.repository.AuthRepository
 import com.example.myprofile.data.repository.DataStoreRepository
 import com.example.myprofile.utils.getMessageFromHttpException
