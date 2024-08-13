@@ -12,7 +12,6 @@ import com.example.myprofile.utils.extentions.isInvalidId
 import com.example.myprofile.utils.getMessageFromHttpException
 import retrofit2.HttpException
 import javax.inject.Inject
-import kotlin.Exception
 
 
 class AuthRepositoryImpl @Inject constructor(
@@ -28,11 +27,8 @@ class AuthRepositoryImpl @Inject constructor(
             val response = userApiService.createUser(userCredentials)
             savedUser = response.data.user
             UiState.Success(response.data)
-        } catch (e: HttpException) {
-            val error = e.response()?.errorBody()?.string()
-            UiState.Error(getMessageFromHttpException(error))
-        } catch (e: Exception) {
-            UiState.Error(e.message ?: UNKNOWN_ERROR)
+        } catch (e: Throwable) {
+            handleApiError(e)
         }
     }
 
@@ -41,11 +37,8 @@ class AuthRepositoryImpl @Inject constructor(
             val response = userApiService.loginUser(userCredentials)
             savedUser = response.data.user
             UiState.Success(response.data)
-        } catch (e: HttpException) {
-            val error = e.response()?.errorBody()?.string()
-            UiState.Error(getMessageFromHttpException(error))
-        } catch (e: Exception) {
-            UiState.Error(e.message ?: UNKNOWN_ERROR)
+        } catch (e: Throwable) {
+            handleApiError(e)
         }
     }
 
@@ -63,11 +56,8 @@ class AuthRepositoryImpl @Inject constructor(
             } else {
                 UiState.Success(savedUser)
             }
-        } catch (e: HttpException) {
-            val error = e.response()?.errorBody()?.string()
-            UiState.Error(getMessageFromHttpException(error))
-        } catch (e: Exception) {
-            UiState.Error(e.message ?: UNKNOWN_ERROR)
+        } catch (e: Throwable) {
+            handleApiError(e)
         }
     }
 
@@ -81,13 +71,20 @@ class AuthRepositoryImpl @Inject constructor(
             )
             savedUser = response.data.user
             UiState.Success(savedUser)
-        } catch (e: HttpException) {
-            val error = e.response()?.errorBody()?.string()
-            UiState.Error(getMessageFromHttpException(error))
-        } catch (e: Exception) {
-            UiState.Error(e.message ?: UNKNOWN_ERROR)
+        } catch (e: Throwable) {
+            handleApiError(e)
         }
     }
 
     override fun getSavedUser() = savedUser
+
+    private fun handleApiError(e: Throwable): UiState<Nothing> {
+        return when (e) {
+            is HttpException -> {
+                val errorBody = e.response()?.errorBody()?.string()
+                UiState.Error(getMessageFromHttpException(errorBody))
+            }
+            else -> UiState.Error(e.message ?: UNKNOWN_ERROR)
+        }
+    }
 }
