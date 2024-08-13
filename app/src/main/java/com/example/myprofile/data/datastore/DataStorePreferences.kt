@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.myprofile.data.network.INVALID_ID
 import com.example.myprofile.data.network.model.UserIdTokens
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -29,7 +30,7 @@ class DataStorePreferences @Inject constructor(private val dataStore: DataStore<
             val preferences = this.dataStore.data.first()
             val accessToken = preferences[ACCESS_TOKEN] ?: ""
             val refreshToken = preferences[REFRESH_TOKEN] ?: ""
-            val userId = preferences[USER_ID] ?: -1
+            val userId = preferences[USER_ID] ?: INVALID_ID
             UserIdTokens(userId = userId, accessToken = accessToken, refreshToken = refreshToken)
         } catch (e: NoSuchElementException) {
             UserIdTokens()

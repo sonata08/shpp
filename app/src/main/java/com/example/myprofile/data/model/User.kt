@@ -1,7 +1,9 @@
 package com.example.myprofile.data.model
 
+import com.example.myprofile.data.network.INVALID_ID
+
 data class User(
-    val id: Long = -1,
+    val id: Long = INVALID_ID,
     val email: String? = null,
     val name: String? = null,
     val phone: String? = null,

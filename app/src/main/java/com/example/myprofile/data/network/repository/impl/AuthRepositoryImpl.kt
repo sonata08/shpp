@@ -8,6 +8,7 @@ import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.response_dto.LoginResponse
 import com.example.myprofile.data.network.repository.AuthRepository
 import com.example.myprofile.data.repository.DataStoreRepository
+import com.example.myprofile.utils.extentions.isInvalidId
 import com.example.myprofile.utils.getMessageFromHttpException
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -52,7 +53,7 @@ class AuthRepositoryImpl @Inject constructor(
         val userIdTokens = dataStoreRepository.getUserIdTokens()
         return try {
             // if user is not saved -> get user from server
-            if (savedUser.id == -1L) {
+            if (savedUser.id.isInvalidId()) {
                 val response = userApiService.getUser(
                     userId = userIdTokens.userId,
                     token = userIdTokens.accessToken
