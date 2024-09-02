@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/contactsFragment"
-        android:name="com.example.myprofile.ui.fragments.contacts.ContactsFragment"
+        android:name="com.example.myprofile.ui.main.contacts.ContactsFragment"
         android:label="@string/contacts"
         tools:layout="@layout/fragment_contacts"/>
     <fragment
         android:id="@+id/detailViewFragment"
-        android:name="com.example.myprofile.ui.fragments.detail_view.DetailViewFragment"
+        android:name="com.example.myprofile.ui.main.detail_view.DetailViewFragment"
         android:label="DetailViewFragment"
         tools:layout="@layout/fragment_detail_view">
         <argument
@@ -21,18 +21,18 @@
     </fragment>
     <dialog
         android:id="@+id/addContactDialogFragment"
-        android:name="com.example.myprofile.ui.fragments.contacts.dialog.AddContactDialogFragment"
+        android:name="com.example.myprofile.ui.main.contacts.dialog.AddContactDialogFragment"
         android:label="AddContactDialogFragment"
         tools:layout="@layout/dialog_add_contact">
     </dialog>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.myprofile.ui.fragments.settings.SettingsFragment"
+        android:name="com.example.myprofile.ui.main.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/viewPagerFragment"
-        android:name="com.example.myprofile.ui.fragments.viewpager.ViewPagerFragment"
+        android:name="com.example.myprofile.ui.main.viewpager.ViewPagerFragment"
         android:label="ViewPagerFragment" >
         <action
             android:id="@+id/action_viewPagerFragment_to_detailViewFragment"
@@ -45,5 +45,37 @@
             app:destination="@id/contactsFragment"
             app:popUpTo="@id/viewPagerFragment"
             app:popUpToInclusive="true"/>
+        <argument
+            android:name="userId"
+            app:argType="long"
+            android:defaultValue="-1L" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_authActivity"
+            app:destination="@id/authActivity" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_addContactsFragment"
+            app:destination="@id/addContactsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.myprofile.ui.main.edit_profile.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
+    <activity
+        android:id="@+id/authActivity"
+        android:name="com.example.myprofile.ui.auth.AuthActivity"
+        android:label="activity_auth"
+        tools:layout="@layout/activity_auth" />
+    <fragment
+        android:id="@+id/addContactsFragment"
+        android:name="com.example.myprofile.ui.main.add_contacts.AddContactsFragment"
+        android:label="@string/users"
+        tools:layout="@layout/fragment_add_contacts" >
+        <action
+            android:id="@+id/action_addContactsFragment_to_detailViewFragment"
+            app:destination="@id/detailViewFragment" />
     </fragment>
 </navigation>
