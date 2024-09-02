@@ -39,6 +39,9 @@
     <string name="add_contacts">Додати контакти</string>
     <string name="search">Пошук</string>
     <string name="fab_delete">Видалити контакти</string>
+    <string name="contact_added">Контакт доданий</string>
+
+    <string name="users">Користувачі</string>
 
     <!--    Add contact-->
     <string name="add_contact">Додати контакт</string>
@@ -53,5 +56,25 @@
     <!--    Detail view-->
     <string name="message">Повідомлення</string>
     <string name="profile">Профайл</string>
+
+    <!--    Login view-->
+    <string name="hello">Привіт!</string>
+    <string name="enter_email_and_password">Вкажіть свій імейл та пароль</string>
+    <string name="forgot_password">Забули пароль?</string>
+    <string name="don_t_have_account">Немаєте аккаунту?</string>
+    <string name="sign_up">Зареєструватися</string>
+    <string name="login">Увійти</string>
+    <string name="cancel">Відмінити</string>
+    <string name="forward">Далі</string>
+    <string name="mobile_phone">Мобільний телефон</string>
+    <string name="your_profile_data">Дані вашого профілю</string>
+
+    <!-- SignUp Fragment   -->
+    <string name="user_exists">Такий користувач вже зареєстрований</string>
+    <string name="unauthorized">Не має доступу</string>
+    <string name="access_denied">Доступ заборонено</string>
+    <string name="invalid_request">Invalid request</string>
+    <string name="no_user">Такого користувача не існує</string>
+    <string name="unknown_error">Сталася помилка</string>
 
 </resources>
