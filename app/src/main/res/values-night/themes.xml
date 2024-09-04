@@ -22,4 +22,18 @@
         <item name="strokeWidth">@dimen/stroke_width</item>
     </style>
 
+    <!-- Apply the custom button style to the AlertDialog -->
+    <style name="CustomAlertDialogStyle" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButton</item>
+    </style>
+
+    <style name="PositiveButton" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textColor">?attr/colorSecondary</item>
+    </style>
+
+    <style name="NegativeButton" parent="@style/Widget.AppCompat.Button.Borderless.Colored">
+        <item name="android:textColor">?attr/colorPrimaryVariant</item>
+    </style>
+
 </resources>

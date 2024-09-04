@@ -1,8 +1,14 @@
 package com.example.myprofile.ui.main.contacts
 
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
@@ -17,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
 import com.example.myprofile.data.model.UserMultiselect
 import com.example.myprofile.data.network.model.UiState
+import com.example.myprofile.data.notifications.NotificationBuilder
+import com.example.myprofile.data.notifications.PermissionUtils
 import com.example.myprofile.databinding.FragmentContactsBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.contacts.adapter.ContactsAdapter
@@ -26,17 +34,25 @@ import com.example.myprofile.ui.main.contacts.adapter.SwipeToDeleteCallback
 import com.example.myprofile.ui.main.viewpager.TabFragments
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragment
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragmentDirections
+import com.example.myprofile.ui.permissions.NotificationRationale
+import com.example.myprofile.ui.utils.NOTIFICATION_RATIONALE_TAG
 import com.example.myprofile.ui.utils.extentions.hide
 import com.example.myprofile.ui.utils.extentions.show
+import com.example.myprofile.utils.extentions.openAppSettings
 import com.example.myprofile.utils.showError
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate) {
 
+    @Inject
+    lateinit var permissionUtils: PermissionUtils
+    @Inject
+    lateinit var notificationBuilder: NotificationBuilder
     private val viewModel: ContactsViewModel by viewModels()
 
     private val adapter: ContactsAdapter by lazy {
@@ -129,9 +145,57 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
                 viewPagerFragment.goToFragment(TabFragments.SETTINGS_FRAGMENT.ordinal)
             }
             inflateMenu(R.menu.contacts_menu)
-            setupSearchListener()
+//            setupSearchListener()
+            menu.findItem(R.id.search).setOnMenuItemClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    checkPermissionAndShowNotification()
+                } else {
+                    notificationBuilder.sendNotification()
+                }
+                true
+            }
+        }
+
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                notificationBuilder.sendNotification()
+            } else {
+                showRationale()
+            }
+        }
+
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun checkPermissionAndShowNotification() {
+        val permission = Manifest.permission.POST_NOTIFICATIONS
+        when {
+            permissionUtils.isNotificationPermissionGranted() -> {
+                notificationBuilder.sendNotification()
+            }
+            shouldShowRequestPermissionRationale(permission) -> {
+                showRationale()
+            }
+            else -> {
+                requestPermissionLauncher.launch(permission)
+            }
         }
     }
+
+
+    private fun showRationale() {
+        val rationale = NotificationRationale()
+        rationale.show(parentFragmentManager, NOTIFICATION_RATIONALE_TAG)
+    }
+
+
+
+
+
 
     private fun setupSearchListener() {
         val searchView =
