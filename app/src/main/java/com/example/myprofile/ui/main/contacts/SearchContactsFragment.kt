@@ -49,7 +49,7 @@ class SearchContactsFragment : BaseFragment<FragmentSearchContactsBinding>(Fragm
                 extras: FragmentNavigator.Extras
             ) {
                 val action =
-                    ViewPagerFragmentDirections.actionViewPagerFragmentToDetailViewFragment(contact.contact.id)
+                    SearchContactsFragmentDirections.actionSearchContactsFragmentToDetailViewFragment(contact.contact.id)
                 findNavController().navigate(action, extras)
             }
 

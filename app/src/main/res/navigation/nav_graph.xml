@@ -74,5 +74,9 @@
         android:id="@+id/searchContactsFragment"
         android:name="com.example.myprofile.ui.main.contacts.SearchContactsFragment"
         android:label="fragment_search_contacts"
-        tools:layout="@layout/fragment_search_contacts" />
+        tools:layout="@layout/fragment_search_contacts" >
+        <action
+            android:id="@+id/action_searchContactsFragment_to_detailViewFragment"
+            app:destination="@id/detailViewFragment" />
+    </fragment>
 </navigation>
