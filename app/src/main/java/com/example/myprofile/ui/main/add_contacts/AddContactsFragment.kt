@@ -97,7 +97,7 @@ class AddContactsFragment :
             setNavigationOnClickListener {
                 findNavController().navigateUp()
             }
-            inflateMenu(R.menu.contacts_menu)
+            inflateMenu(R.menu.add_contacts_menu)
             setupSearchListener()
         }
     }

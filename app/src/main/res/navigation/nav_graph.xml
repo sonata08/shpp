@@ -9,7 +9,8 @@
         android:id="@+id/contactsFragment"
         android:name="com.example.myprofile.ui.main.contacts.ContactsFragment"
         android:label="@string/contacts"
-        tools:layout="@layout/fragment_contacts"/>
+        tools:layout="@layout/fragment_contacts">
+    </fragment>
     <fragment
         android:id="@+id/detailViewFragment"
         android:name="com.example.myprofile.ui.main.detail_view.DetailViewFragment"
@@ -19,12 +20,6 @@
             android:name="contact_id"
             app:argType="long" />
     </fragment>
-    <dialog
-        android:id="@+id/addContactDialogFragment"
-        android:name="com.example.myprofile.ui.main.contacts.dialog.AddContactDialogFragment"
-        android:label="AddContactDialogFragment"
-        tools:layout="@layout/dialog_add_contact">
-    </dialog>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.myprofile.ui.main.settings.SettingsFragment"
@@ -37,9 +32,6 @@
         <action
             android:id="@+id/action_viewPagerFragment_to_detailViewFragment"
             app:destination="@id/detailViewFragment" />
-        <action
-            android:id="@+id/action_viewPagerFragment_to_addContactDialogFragment"
-            app:destination="@id/addContactDialogFragment" />
         <action
             android:id="@+id/action_viewPagerFragment_to_contactsFragment"
             app:destination="@id/contactsFragment"
@@ -78,4 +70,9 @@
             android:id="@+id/action_addContactsFragment_to_detailViewFragment"
             app:destination="@id/detailViewFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/searchContactsFragment"
+        android:name="com.example.myprofile.ui.main.contacts.SearchContactsFragment"
+        android:label="fragment_search_contacts"
+        tools:layout="@layout/fragment_search_contacts" />
 </navigation>

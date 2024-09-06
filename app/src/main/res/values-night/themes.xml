@@ -7,7 +7,7 @@
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/orange</item>
-        <item name="colorSecondaryVariant">@color/blue</item>
+        <item name="colorSecondaryVariant">@color/white</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
@@ -16,9 +16,9 @@
     </style>
 
     <style name="ButtonWhiteOutlined" >
-        <item name="android:backgroundTint">?attr/colorPrimaryVariant</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-        <item name="strokeColor">?attr/colorSecondary</item>
+        <item name="android:backgroundTint">?attr/colorOnPrimary</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="strokeColor">?attr/colorOnPrimary</item>
         <item name="strokeWidth">@dimen/stroke_width</item>
     </style>
 
