@@ -4,6 +4,7 @@ plugins {
     alias libs.plugins.safeargs
     alias libs.plugins.daggerHilt
     alias libs.plugins.kotlinKapt
+    alias libs.plugins.kotlinKsp
 }
 
 android {
@@ -70,12 +71,17 @@ dependencies {
 
     // Hilt
     implementation libs.dagger.hilt
-    kapt libs.hilt.android.compiler
     implementation libs.androidx.hilt.navigation
     implementation libs.androidx.annotation
+    kapt libs.hilt.android.compiler
 
     // Retrofit
     implementation libs.retrofit2
     implementation libs.retrofit.converter.gson
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
 }
