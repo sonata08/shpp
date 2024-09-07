@@ -77,4 +77,12 @@
     <string name="no_user">Такого користувача не існує</string>
     <string name="unknown_error">Сталася помилка</string>
 
+    <!--    Notifications-->
+    <string name="search_channel_name">Пошук</string>
+    <string name="search_title">Пошук</string>
+    <string name="go_to_search">Перейти до сторінки пошуку</string>
+    <string name="go_button">Перейти</string>
+    <string name="dismiss">Пізніше</string>
+    <string name="rational_dialog_text">Будь ласка, перейдіть до налаштувань додатку та ввімкніть сповіщення.</string>
+
 </resources>

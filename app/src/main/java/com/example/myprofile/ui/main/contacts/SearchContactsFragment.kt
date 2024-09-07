@@ -1,12 +1,8 @@
 package com.example.myprofile.ui.main.contacts
 
-
-import android.Manifest
-import android.os.Build
+import android.app.NotificationManager
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
@@ -21,19 +17,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
 import com.example.myprofile.data.model.UserMultiselect
 import com.example.myprofile.data.network.model.UiState
-import com.example.myprofile.data.notifications.NotificationBuilder
-import com.example.myprofile.data.notifications.PermissionUtils
-import com.example.myprofile.databinding.FragmentContactsBinding
+import com.example.myprofile.databinding.FragmentSearchContactsBinding
 import com.example.myprofile.ui.base.BaseFragment
 import com.example.myprofile.ui.main.contacts.adapter.ContactsAdapter
 import com.example.myprofile.ui.main.contacts.adapter.ContactsItemDecoration
 import com.example.myprofile.ui.main.contacts.adapter.OnContactClickListener
 import com.example.myprofile.ui.main.contacts.adapter.SwipeToDeleteCallback
-import com.example.myprofile.ui.main.viewpager.TabFragments
-import com.example.myprofile.ui.main.viewpager.ViewPagerFragment
 import com.example.myprofile.ui.main.viewpager.ViewPagerFragmentDirections
-import com.example.myprofile.ui.permissions.NotificationRationale
-import com.example.myprofile.ui.utils.NOTIFICATION_RATIONALE_TAG
 import com.example.myprofile.ui.utils.extentions.hide
 import com.example.myprofile.ui.utils.extentions.show
 import com.example.myprofile.utils.showError
@@ -42,14 +32,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
-class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsBinding::inflate) {
+class SearchContactsFragment : BaseFragment<FragmentSearchContactsBinding>(FragmentSearchContactsBinding::inflate) {
 
-    @Inject
-    lateinit var permissionUtils: PermissionUtils
-    @Inject
-    lateinit var notificationBuilder: NotificationBuilder
+    @Inject lateinit var notificationManager: NotificationManager
     private val viewModel: ContactsViewModel by activityViewModels()
 
     private val adapter: ContactsAdapter by lazy {
@@ -63,7 +49,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
                 extras: FragmentNavigator.Extras
             ) {
                 val action =
-                    ViewPagerFragmentDirections.actionViewPagerFragmentToDetailViewFragment(contact.contact.id)
+                    SearchContactsFragmentDirections.actionSearchContactsFragmentToDetailViewFragment(contact.contact.id)
                 findNavController().navigate(action, extras)
             }
 
@@ -85,9 +71,10 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar()
+        // close notification
+        notificationManager.cancelAll()
+        setupSearchListener()
         setupRecyclerView()
-        setupAddContactListener()
         observeUiState()
         observeSearchState()
         deactivateMultiselectMode()
@@ -134,64 +121,23 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         }
     }
 
-    private fun setupToolbar() {
-        with(binding.toolbar) {
-            // when back button is pressed
-            setNavigationOnClickListener {
-                val viewPagerFragment = requireParentFragment() as ViewPagerFragment
-                viewPagerFragment.goToFragment(TabFragments.SETTINGS_FRAGMENT.ordinal)
-            }
-            inflateMenu(R.menu.contacts_menu)
-            menu.findItem(R.id.search).setOnMenuItemClickListener {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    checkPermissionAndShowNotification()
-                } else {
-                    notificationBuilder.sendNotification()
-                }
-                true
-            }
+    private fun setupSearchListener() {
+        with(binding.searchView) {
+            isIconified = false
+            requestFocus()
         }
-    }
-
-    private val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                notificationBuilder.sendNotification()
-            } else {
-                showRationale()
+        binding.searchView.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                viewModel.filterUsers(query)
+                return false
             }
-        }
 
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun checkPermissionAndShowNotification() {
-        val permission = Manifest.permission.POST_NOTIFICATIONS
-        when {
-            permissionUtils.isNotificationPermissionGranted() -> {
-                notificationBuilder.sendNotification()
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.filterUsers(newText)
+                return true
             }
-            shouldShowRequestPermissionRationale(permission) -> {
-                showRationale()
-            }
-            else -> {
-                requestPermissionLauncher.launch(permission)
-            }
-        }
-    }
-
-    private fun showRationale() {
-        val rationale = NotificationRationale()
-        rationale.show(parentFragmentManager, NOTIFICATION_RATIONALE_TAG)
-    }
-
-    private fun setupAddContactListener() {
-        binding.tvAddContact.setOnClickListener {
-            val action =
-                ViewPagerFragmentDirections.actionViewPagerFragmentToAddContactsFragment()
-            findNavController().navigate(action)
-        }
+        })
     }
 
     private fun setFabOnclickListener() {
@@ -244,4 +190,5 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
             }
         })
     }
+
 }

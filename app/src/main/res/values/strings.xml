@@ -93,6 +93,12 @@
     <string name="no_user">There is no such user</string>
     <string name="unknown_error">Error</string>
 
-
+    <!--    Notifications-->
+    <string name="search_channel_name">Search</string>
+    <string name="search_title">Search</string>
+    <string name="go_to_search">Go to Search page</string>
+    <string name="go_button">Go</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="rational_dialog_text">Please go to the app settings and enable notifications.</string>
 
 </resources>
