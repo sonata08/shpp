@@ -4,6 +4,7 @@ plugins {
     alias libs.plugins.safeargs
     alias libs.plugins.daggerHilt
     alias libs.plugins.kotlinKapt
+    alias libs.plugins.kotlinSerialization
 }
 
 android {
@@ -25,8 +26,9 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -78,4 +80,5 @@ dependencies {
     implementation libs.retrofit2
     implementation libs.retrofit.converter.gson
 
+    implementation libs.kotlinx.serialization.json
 }

@@ -1,5 +1,7 @@
 package com.example.myprofile.data.model
 
+import androidx.annotation.Keep
+
 /**
  * Represents a user with additional properties for multiselect mode.
  *
@@ -9,6 +11,7 @@ package com.example.myprofile.data.model
  *
  * @constructor Creates a UserMultiselect with the given user information.
  */
+@Keep
 data class UserMultiselect(
     val contact: User,
     val isSelected: Boolean = false,

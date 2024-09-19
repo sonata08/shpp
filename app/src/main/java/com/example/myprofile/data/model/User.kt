@@ -1,7 +1,9 @@
 package com.example.myprofile.data.model
 
+import androidx.annotation.Keep
 import com.example.myprofile.data.network.INVALID_ID
 
+@Keep
 data class User(
     val id: Long = INVALID_ID,
     val email: String? = null,
