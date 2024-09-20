@@ -1,4 +1,4 @@
-package com.example.myprofile.data.repository
+package com.example.myprofile.data.datastore.repository
 
 import com.example.myprofile.data.network.model.UserIdTokens
 

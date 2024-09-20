@@ -1,7 +1,9 @@
 package com.example.myprofile.data.network.repository.impl
 
+import android.util.Log
 import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserMultiselect
+import com.example.myprofile.data.model.toContact
 import com.example.myprofile.data.network.NO_USER_ERROR
 import com.example.myprofile.data.network.UNKNOWN_ERROR
 import com.example.myprofile.data.network.api.ContactsApiService
@@ -11,17 +13,21 @@ import com.example.myprofile.data.network.model.UserIdTokens
 import com.example.myprofile.data.network.model.response_dto.AddContactRequest
 import com.example.myprofile.data.network.model.response_dto.Contacts
 import com.example.myprofile.data.network.repository.ContactsRepository
-import com.example.myprofile.data.repository.DataStoreRepository
+import com.example.myprofile.data.datastore.repository.DataStoreRepository
+import com.example.myprofile.data.room.entity.toUser
+import com.example.myprofile.data.room.repository.DatabaseRepository
 import com.example.myprofile.utils.getMessageFromHttpException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import retrofit2.HttpException
+import java.net.ConnectException
 import javax.inject.Inject
 
 
 class ContactsRepositoryImpl @Inject constructor(
     private val contactsApiService: ContactsApiService,
-    private val dataStoreRepository: DataStoreRepository,
+    private val dataStore: DataStoreRepository,
+    private val database: DatabaseRepository,
 ) : ContactsRepository {
 
     // list of user's contacts
@@ -53,11 +59,18 @@ class ContactsRepositoryImpl @Inject constructor(
                         userId = userIdTokens.userId,
                     )
                 _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
+
+                // save user contacts to database
+                val contactsForDb = response.data.contacts.map {it.toContact()}
+                database.addUserContacts(userIdTokens.userId, contactsForDb)
                 UiState.Success(response.data.contacts)
-            }
-            else {
+            } else {
                 UiState.Success(_userContactsFlow.value.map { it.contact })
             }
+        } catch (e: ConnectException) {
+            val userContacts = database.getUserContacts(userIdTokens.userId)
+            _userContactsFlow.value = mapToUserMultiselect(userContacts)
+            UiState.Success(userContacts)
         } catch (e: HttpException) {
             val error = e.response()?.errorBody()?.string()
             UiState.Error(getMessageFromHttpException(error))
@@ -83,6 +96,9 @@ class ContactsRepositoryImpl @Inject constructor(
             } else {
                 UiState.Error(NO_USER_ERROR)
             }
+        } catch (e: ConnectException) {
+            val dbContact = database.findContactById(contactId)
+            UiState.Success(dbContact.toUser())
         } catch (e: HttpException) {
             val error = e.response()?.errorBody()?.string()
             UiState.Error(getMessageFromHttpException(error))
@@ -94,7 +110,7 @@ class ContactsRepositoryImpl @Inject constructor(
     override suspend fun addContact(
         contactId: Long
     ): UiState<List<User>> {
-        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        val userIdTokens = dataStore.getUserIdTokens()
         return try {
             val response = contactsApiService.addContact(
                 token = userIdTokens.accessToken,
@@ -113,7 +129,7 @@ class ContactsRepositoryImpl @Inject constructor(
 
     override suspend fun deleteContact(contactId: Long): UiState<List<User>> {
         lastDeletedContact = contactId
-        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        val userIdTokens = dataStore.getUserIdTokens()
         return try {
             val response =
                 contactsApiService.deleteContact(
@@ -133,7 +149,7 @@ class ContactsRepositoryImpl @Inject constructor(
 
     // delete multiple contacts when multiselect mode
     override suspend fun deleteContacts(): UiState<List<User>> {
-        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        val userIdTokens = dataStore.getUserIdTokens()
         val list = _userContactsFlow.value
         return try {
             var response = BaseResponse(data = Contacts(emptyList()))
@@ -164,7 +180,7 @@ class ContactsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun logOut() {
-        dataStoreRepository.logOut()
+        dataStore.logOut()
         _userContactsFlow.value = emptyList()
     }
 
@@ -174,7 +190,7 @@ class ContactsRepositoryImpl @Inject constructor(
 
 
     private suspend fun getUserIdTokens(): UserIdTokens {
-        return dataStoreRepository.getUserIdTokens()
+        return dataStore.getUserIdTokens()
     }
 
     /**

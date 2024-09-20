@@ -6,7 +6,7 @@ import com.example.myprofile.data.model.UserCredentials
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.response_dto.LoginResponse
 import com.example.myprofile.data.network.repository.AuthRepository
-import com.example.myprofile.data.repository.DataStoreRepository
+import com.example.myprofile.data.datastore.repository.DataStoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

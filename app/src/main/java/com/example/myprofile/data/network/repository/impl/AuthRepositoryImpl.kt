@@ -7,16 +7,19 @@ import com.example.myprofile.data.network.api.UserApiService
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.response_dto.LoginResponse
 import com.example.myprofile.data.network.repository.AuthRepository
-import com.example.myprofile.data.repository.DataStoreRepository
+import com.example.myprofile.data.datastore.repository.DataStoreRepository
+import com.example.myprofile.data.room.repository.DatabaseRepository
 import com.example.myprofile.utils.extentions.isInvalidId
 import com.example.myprofile.utils.getMessageFromHttpException
 import retrofit2.HttpException
+import java.net.ConnectException
 import javax.inject.Inject
 
 
 class AuthRepositoryImpl @Inject constructor(
     private val userApiService: UserApiService,
     private val dataStoreRepository: DataStoreRepository,
+    private val database: DatabaseRepository,
 ) : AuthRepository {
 
     // current user logged in
@@ -36,6 +39,7 @@ class AuthRepositoryImpl @Inject constructor(
         return try {
             val response = userApiService.loginUser(userCredentials)
             savedUser = response.data.user
+
             UiState.Success(response.data)
         } catch (e: Throwable) {
             handleApiError(e)
@@ -52,6 +56,9 @@ class AuthRepositoryImpl @Inject constructor(
                     token = userIdTokens.accessToken
                 )
                 savedUser = response.data.user
+
+                database.insertUser(response.data.user)
+
                 UiState.Success(savedUser)
             } else {
                 UiState.Success(savedUser)
@@ -84,6 +91,7 @@ class AuthRepositoryImpl @Inject constructor(
                 val errorBody = e.response()?.errorBody()?.string()
                 UiState.Error(getMessageFromHttpException(errorBody))
             }
+            is ConnectException -> { UiState.Error("Internet Connection failed") }
             else -> UiState.Error(e.message ?: UNKNOWN_ERROR)
         }
     }

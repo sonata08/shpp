@@ -1,7 +1,7 @@
-package com.example.myprofile.data.repository.impl
+package com.example.myprofile.data.datastore.repository.impl
 
 import com.example.myprofile.data.datastore.DataStorePreferences
-import com.example.myprofile.data.repository.DataStoreRepository
+import com.example.myprofile.data.datastore.repository.DataStoreRepository
 import javax.inject.Inject
 
 

@@ -3,11 +3,11 @@ package com.example.myprofile.di
 import com.example.myprofile.data.network.repository.AuthRepository
 import com.example.myprofile.data.network.repository.ContactsRepository
 import com.example.myprofile.data.network.repository.TokenManager
-import com.example.myprofile.data.repository.DataStoreRepository
+import com.example.myprofile.data.datastore.repository.DataStoreRepository
 import com.example.myprofile.data.network.repository.impl.AuthRepositoryImpl
 import com.example.myprofile.data.network.repository.impl.ContactsRepositoryImpl
 import com.example.myprofile.data.network.repository.impl.TokenManagerImpl
-import com.example.myprofile.data.repository.impl.DataStoreRepositoryImpl
+import com.example.myprofile.data.datastore.repository.impl.DataStoreRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

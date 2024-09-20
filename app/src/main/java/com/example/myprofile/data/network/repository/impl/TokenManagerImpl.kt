@@ -2,7 +2,7 @@ package com.example.myprofile.data.network.repository.impl
 
 import com.example.myprofile.data.network.api.UserApiService
 import com.example.myprofile.data.network.repository.TokenManager
-import com.example.myprofile.data.repository.DataStoreRepository
+import com.example.myprofile.data.datastore.repository.DataStoreRepository
 import javax.inject.Inject
 import javax.inject.Provider
 
