@@ -31,7 +31,7 @@ fun User.toUserEntity(): UserEntity {
     )
 }
 
-fun User.toContact(): ContactEntity {
+fun User.toContactEntity(): ContactEntity {
     return ContactEntity (
         id = this.id,
         name = this.name,

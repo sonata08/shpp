@@ -14,11 +14,6 @@ data class UserEntity(
     @ColumnInfo(name = "address") val address: String?,
     @ColumnInfo(name = "career") val career: String?,
     @ColumnInfo(name = "birthday") val birthday: String?,
-//    @ColumnInfo(name = "facebook") val facebook: String? = null,
-//    @ColumnInfo(name = "instagram") val instagram: String? = null,
-//    @ColumnInfo(name = "twitter") val twitter: String? = null,
-//    @ColumnInfo(name = "linkedin") val linkedin: String? = null,
-//    @ColumnInfo(name = "image") val image: String? = null,
 )
 
 fun UserEntity.toUser(): User {

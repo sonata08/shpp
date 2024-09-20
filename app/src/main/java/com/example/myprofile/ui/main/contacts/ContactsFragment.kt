@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myprofile.R
 import com.example.myprofile.data.model.UserMultiselect
+import com.example.myprofile.data.network.executeIfOnline
+import com.example.myprofile.data.network.isOnline
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.notifications.NotificationBuilder
 import com.example.myprofile.data.notifications.PermissionUtils
@@ -56,7 +58,9 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
     private val adapter: ContactsAdapter by lazy {
         ContactsAdapter(object : OnContactClickListener {
             override fun onContactDelete(contactId: Long) {
-                deleteContactWithSnackbar(contactId)
+                executeIfOnline(requireContext(), binding.root) {
+                    deleteContactWithSnackbar(contactId)
+                }
             }
 
             override fun onContactClick(
@@ -87,6 +91,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
+        showWarning()
         setupRecyclerView()
         setupAddContactListener()
         observeUiState()
@@ -95,6 +100,15 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
         viewModel.getUserContacts()
     }
 
+    private fun showWarning() {
+        with(binding.noInternetWarning) {
+            if (isOnline(requireContext())) {
+                hide()
+            } else {
+                show()
+            }
+        }
+    }
     private fun observeUiState() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -205,7 +219,9 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
 
     private fun setFabOnclickListener() {
         binding.fabDeleteContacts.setOnClickListener { _ ->
-            viewModel.deleteContacts()
+            executeIfOnline(requireContext(), binding.root) {
+                viewModel.deleteContacts()
+            }
             viewModel.deactivateMultiselectMode()
             binding.fabDeleteContacts.hide()
         }
@@ -227,8 +243,10 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
     }
 
     private fun deleteContactWithSnackbar(contactId: Long) {
-        viewModel.deleteContactFromUser(contactId)
-        showUndoSnackbar()
+        executeIfOnline(requireContext(), binding.root) {
+            viewModel.deleteContactFromUser(contactId)
+            showUndoSnackbar()
+        }
     }
 
     private fun showUndoSnackbar() {

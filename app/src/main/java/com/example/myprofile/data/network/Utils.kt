@@ -1,8 +1,15 @@
 package com.example.myprofile.data.network
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
+import android.view.View
+import com.example.myprofile.R
 import com.example.myprofile.data.network.model.UiState
+import com.example.myprofile.utils.extentions.showShortToast
 import com.example.myprofile.utils.getMessageFromHttpException
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.HttpException
 import java.net.ConnectException
 
@@ -33,5 +40,27 @@ suspend fun <T> handleApiCall(
         UiState.Error(getMessageFromHttpException(error))
     } catch (e: Exception) {
         UiState.Error(e.message ?: UNKNOWN_ERROR)
+    }
+}
+
+fun isOnline(context: Context) =
+    (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).run {
+        getNetworkCapabilities(activeNetwork)?.run {
+            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                    || hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                    || hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+        } ?: false
+    }
+
+fun executeIfOnline(
+    context: Context,
+    view: View,
+    action: () -> Unit,
+) {
+    if(isOnline(context)) {
+        action()
+    } else {
+//        context.showShortToast(context.getString(R.string.internet_connection_failed))
+        Snackbar.make(view, R.string.internet_connection_failed, Snackbar.LENGTH_LONG).show()
     }
 }

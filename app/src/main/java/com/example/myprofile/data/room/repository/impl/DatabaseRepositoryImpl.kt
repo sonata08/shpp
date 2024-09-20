@@ -1,6 +1,5 @@
 package com.example.myprofile.data.room.repository.impl
 
-import android.util.Log
 import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.toUserEntity
 import com.example.myprofile.data.room.dao.ContactDao
@@ -14,6 +13,10 @@ class DatabaseRepositoryImpl(
     private val userDao: UserDao,
     private val contactDao: ContactDao,
 ): DatabaseRepository {
+    override suspend fun getAllContacts(): List<ContactEntity> {
+        return contactDao.getAllContacts()
+    }
+
     override suspend fun findContactById(contactId: Long): ContactEntity {
         return contactDao.findContactById(contactId)
     }
@@ -22,14 +25,29 @@ class DatabaseRepositoryImpl(
         return contactDao.getUserContacts(userId).contacts.map { it.toUser() }  // .contacts.map { it.toUser() }
     }
 
-    override suspend fun addUserContacts(userId: Long, contacts: List<ContactEntity>) {
+    override suspend fun insertUser(user: User) {
+        userDao.insertUser(user.toUserEntity())
+    }
+
+    override suspend fun insertAll(contacts: List<ContactEntity>) {
+        contactDao.insertContacts(contacts)
+    }
+
+    override suspend fun addContactToUser(userId: Long, contactId: Long) {
+       val userContacts = listOf(UserContactJoin(userId, contactId))
+        contactDao.insertUserContactsJoin(userContacts)
+    }
+
+    override suspend fun addAllUserContacts(userId: Long, contacts: List<ContactEntity>) {
         contactDao.insertContacts(contacts)
         val userContacts = contacts.map { UserContactJoin(userId, it.id) }
         contactDao.insertUserContactsJoin(userContacts)
     }
 
-    override suspend fun insertUser(user: User) {
-        userDao.insertUser(user.toUserEntity())
+    override suspend fun deleteContact(userId: Long, contactId: Long) {
+        val userContact = UserContactJoin(userId, contactId)
+        contactDao.deleteContact(userContact)
     }
+
 
 }

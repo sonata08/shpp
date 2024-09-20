@@ -40,8 +40,8 @@
     <string name="search">Пошук</string>
     <string name="fab_delete">Видалити контакти</string>
     <string name="contact_added">Контакт доданий</string>
-
     <string name="users">Користувачі</string>
+    <string name="no_internet_warning">Відсутній інтернет. Ви не можете додавати або видаляти контакти</string>
 
     <!--    Add contact-->
     <string name="add_contact">Додати контакт</string>

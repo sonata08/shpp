@@ -1,9 +1,10 @@
 package com.example.myprofile.data.network.repository.impl
 
+import android.util.Log
 import com.example.myprofile.data.datastore.repository.DataStoreRepository
 import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserMultiselect
-import com.example.myprofile.data.model.toContact
+import com.example.myprofile.data.model.toContactEntity
 import com.example.myprofile.data.network.NO_USER_ERROR
 import com.example.myprofile.data.network.api.ContactsApiService
 import com.example.myprofile.data.network.handleApiCall
@@ -37,7 +38,13 @@ class ContactsRepositoryImpl @Inject constructor(
         return handleApiCall(
             onApiCall = {
                 val response = contactsApiService.getAllUsers(userIdTokens.accessToken)
-                UiState.Success(removeExistingContacts(response.data.users))
+                val users = response.data.users
+                database.insertAll(users.map { it.toContactEntity() })
+                UiState.Success(removeExistingContacts(users))
+            },
+            onConnectException = {
+                val users = database.getAllContacts().map { it.toUser() }
+                UiState.Success(removeExistingContacts(users))
             }
         )
     }
@@ -46,21 +53,18 @@ class ContactsRepositoryImpl @Inject constructor(
         val userIdTokens = getUserIdTokens()
         return handleApiCall(
             onApiCall = {
-                if (_userContactsFlow.value.isEmpty()) {
-                    val response =
-                        contactsApiService.getAllUserContacts(
-                            token = userIdTokens.accessToken,
-                            userId = userIdTokens.userId,
-                        )
-                    _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
+                val response =
+                    contactsApiService.getAllUserContacts(
+                        token = userIdTokens.accessToken,
+                        userId = userIdTokens.userId,
+                    )
+                _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
 
-                    // save user contacts to database
-                    val contactsForDb = response.data.contacts.map {it.toContact()}
-                    database.addUserContacts(userIdTokens.userId, contactsForDb)
-                    UiState.Success(response.data.contacts)
-                } else {
-                    UiState.Success(_userContactsFlow.value.map { it.contact })
-                }
+                // save user contacts to database
+                val contactsForDb = response.data.contacts.map { it.toContactEntity() }
+                database.addAllUserContacts(userIdTokens.userId, contactsForDb)
+                UiState.Success(response.data.contacts)
+
             },
             onConnectException = {
                 val userContacts = database.getUserContacts(userIdTokens.userId)
@@ -105,6 +109,7 @@ class ContactsRepositoryImpl @Inject constructor(
                     AddContactRequest(contactId.toInt())
                 )
                 _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
+                database.addContactToUser(userIdTokens.userId, contactId)
                 UiState.Initial
             },
         )
@@ -122,6 +127,7 @@ class ContactsRepositoryImpl @Inject constructor(
                         contactId = contactId.toInt()
                     )
                 _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
+                database.deleteContact(userIdTokens.userId, contactId)
                 UiState.Success(response.data.contacts)
             }
         )
@@ -134,14 +140,16 @@ class ContactsRepositoryImpl @Inject constructor(
         return handleApiCall(
             onApiCall = {
                 var response = BaseResponse(data = Contacts(emptyList()))
+
                 for (user in list) {
-                    if(user.isSelected) {
+                    if (user.isSelected) {
                         response = contactsApiService.deleteContact(
                             token = userIdTokens.accessToken,
                             userId = userIdTokens.userId,
                             contactId = user.contact.id.toInt()
                         )
                         _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
+                        database.deleteContact(userIdTokens.userId,  user.contact.id)
                     }
                 }
                 UiState.Success(response.data.contacts)
@@ -166,7 +174,6 @@ class ContactsRepositoryImpl @Inject constructor(
     }
 
 
-
     private suspend fun getUserIdTokens(): UserIdTokens {
         return dataStore.getUserIdTokens()
     }
@@ -175,14 +182,14 @@ class ContactsRepositoryImpl @Inject constructor(
      * Filter the list of users to remove existing user's contacts from it
      *
      * @param serverList list of users received from server
-     * @return new users list or [serverList] if there is no user's contacts
+     * @return new users list or [serverList] if there are no user's contacts
      */
     private fun removeExistingContacts(serverList: List<User>): List<User> {
-        val users = _userContactsFlow.value.map {it.contact}
+        val users = _userContactsFlow.value.map { it.contact }
         return serverList.subtract(users).toList()
     }
 
     private fun mapToUserMultiselect(users: List<User>): List<UserMultiselect> {
-        return users.map {UserMultiselect(it)}
+        return users.map { UserMultiselect(it) }
     }
 }
