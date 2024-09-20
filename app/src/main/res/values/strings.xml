@@ -92,6 +92,7 @@
     <string name="invalid_request">Invalid request</string>
     <string name="no_user">There is no such user</string>
     <string name="unknown_error">Error</string>
+    <string name="internet_connection_failed">Internet Connection failed</string>
 
     <!--    Notifications-->
     <string name="search_channel_name">Search</string>

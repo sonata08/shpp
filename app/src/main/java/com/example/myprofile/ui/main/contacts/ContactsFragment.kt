@@ -48,6 +48,7 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
 
     @Inject
     lateinit var permissionUtils: PermissionUtils
+
     @Inject
     lateinit var notificationBuilder: NotificationBuilder
     private val viewModel: ContactsViewModel by activityViewModels()
@@ -102,7 +103,13 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
                         is UiState.Initial -> {}
                         is UiState.Success -> showContacts()
                         is UiState.Loading -> showProgressBar()
-                        is UiState.Error -> showError(binding.root, binding.progressBar, it.message)
+                        is UiState.Error -> activity?.let { activity ->
+                            showError(
+                                activity.findViewById(android.R.id.content),
+                                binding.progressBar,
+                                it.message
+                            )
+                        }
                     }
                 }
             }
@@ -172,9 +179,11 @@ class ContactsFragment : BaseFragment<FragmentContactsBinding>(FragmentContactsB
             permissionUtils.isNotificationPermissionGranted() -> {
                 notificationBuilder.sendNotification()
             }
+
             shouldShowRequestPermissionRationale(permission) -> {
                 showRationale()
             }
+
             else -> {
                 requestPermissionLauncher.launch(permission)
             }

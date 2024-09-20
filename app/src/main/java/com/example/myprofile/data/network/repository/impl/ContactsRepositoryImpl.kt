@@ -1,26 +1,22 @@
 package com.example.myprofile.data.network.repository.impl
 
-import android.util.Log
+import com.example.myprofile.data.datastore.repository.DataStoreRepository
 import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserMultiselect
 import com.example.myprofile.data.model.toContact
 import com.example.myprofile.data.network.NO_USER_ERROR
-import com.example.myprofile.data.network.UNKNOWN_ERROR
 import com.example.myprofile.data.network.api.ContactsApiService
+import com.example.myprofile.data.network.handleApiCall
 import com.example.myprofile.data.network.model.BaseResponse
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.UserIdTokens
 import com.example.myprofile.data.network.model.response_dto.AddContactRequest
 import com.example.myprofile.data.network.model.response_dto.Contacts
 import com.example.myprofile.data.network.repository.ContactsRepository
-import com.example.myprofile.data.datastore.repository.DataStoreRepository
 import com.example.myprofile.data.room.entity.toUser
 import com.example.myprofile.data.room.repository.DatabaseRepository
-import com.example.myprofile.utils.getMessageFromHttpException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import retrofit2.HttpException
-import java.net.ConnectException
 import javax.inject.Inject
 
 
@@ -38,45 +34,40 @@ class ContactsRepositoryImpl @Inject constructor(
 
     override suspend fun getUsers(): UiState<List<User>> {
         val userIdTokens = getUserIdTokens()
-        return try {
-            val response = contactsApiService.getAllUsers(userIdTokens.accessToken)
-            UiState.Success(removeExistingContacts(response.data.users))
-        } catch (e: HttpException) {
-            val error = e.response()?.errorBody()?.string()
-            UiState.Error(getMessageFromHttpException(error))
-        } catch (e: Exception) {
-            UiState.Error(e.message ?: UNKNOWN_ERROR)
-        }
+        return handleApiCall(
+            onApiCall = {
+                val response = contactsApiService.getAllUsers(userIdTokens.accessToken)
+                UiState.Success(removeExistingContacts(response.data.users))
+            }
+        )
     }
 
     override suspend fun getUserContacts(): UiState<List<User>> {
         val userIdTokens = getUserIdTokens()
-        return try {
-            if (_userContactsFlow.value.isEmpty()) {
-                val response =
-                    contactsApiService.getAllUserContacts(
-                        token = userIdTokens.accessToken,
-                        userId = userIdTokens.userId,
-                    )
-                _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
+        return handleApiCall(
+            onApiCall = {
+                if (_userContactsFlow.value.isEmpty()) {
+                    val response =
+                        contactsApiService.getAllUserContacts(
+                            token = userIdTokens.accessToken,
+                            userId = userIdTokens.userId,
+                        )
+                    _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
 
-                // save user contacts to database
-                val contactsForDb = response.data.contacts.map {it.toContact()}
-                database.addUserContacts(userIdTokens.userId, contactsForDb)
-                UiState.Success(response.data.contacts)
-            } else {
-                UiState.Success(_userContactsFlow.value.map { it.contact })
+                    // save user contacts to database
+                    val contactsForDb = response.data.contacts.map {it.toContact()}
+                    database.addUserContacts(userIdTokens.userId, contactsForDb)
+                    UiState.Success(response.data.contacts)
+                } else {
+                    UiState.Success(_userContactsFlow.value.map { it.contact })
+                }
+            },
+            onConnectException = {
+                val userContacts = database.getUserContacts(userIdTokens.userId)
+                _userContactsFlow.value = mapToUserMultiselect(userContacts)
+                UiState.Success(userContacts)
             }
-        } catch (e: ConnectException) {
-            val userContacts = database.getUserContacts(userIdTokens.userId)
-            _userContactsFlow.value = mapToUserMultiselect(userContacts)
-            UiState.Success(userContacts)
-        } catch (e: HttpException) {
-            val error = e.response()?.errorBody()?.string()
-            UiState.Error(getMessageFromHttpException(error))
-        } catch (e: Exception) {
-            UiState.Error(e.message ?: UNKNOWN_ERROR)
-        }
+        )
     }
 
     // contact info for DetailViewFragment
@@ -87,89 +78,75 @@ class ContactsRepositoryImpl @Inject constructor(
 
         // if contact is clicked from general user's list
         val userIdTokens = getUserIdTokens()
-        return try {
-            val response = contactsApiService.getAllUsers(userIdTokens.accessToken)
 
-            val contactFromServer = response.data.users.find { it.id == contactId }
-            if (contactFromServer != null) {
+        return handleApiCall(
+            onApiCall = {
+                val response = contactsApiService.getAllUsers(userIdTokens.accessToken)
+                val contactFromServer = response.data.users.find { it.id == contactId }
+                    ?: return@handleApiCall UiState.Error(NO_USER_ERROR)
                 UiState.Success(contactFromServer)
-            } else {
-                UiState.Error(NO_USER_ERROR)
+            },
+            onConnectException = {
+                val dbContact = database.findContactById(contactId).toUser()
+                UiState.Success(dbContact)
             }
-        } catch (e: ConnectException) {
-            val dbContact = database.findContactById(contactId)
-            UiState.Success(dbContact.toUser())
-        } catch (e: HttpException) {
-            val error = e.response()?.errorBody()?.string()
-            UiState.Error(getMessageFromHttpException(error))
-        } catch (e: Exception) {
-            UiState.Error(e.message ?: UNKNOWN_ERROR)
-        }
+        )
     }
 
     override suspend fun addContact(
         contactId: Long
     ): UiState<List<User>> {
         val userIdTokens = dataStore.getUserIdTokens()
-        return try {
-            val response = contactsApiService.addContact(
-                token = userIdTokens.accessToken,
-                userId = userIdTokens.userId,
-                AddContactRequest(contactId.toInt())
-            )
-            _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
-            UiState.Initial
-        } catch (e: HttpException) {
-            val error = e.response()?.errorBody()?.string()
-            UiState.Error(getMessageFromHttpException(error))
-        } catch (e: Exception) {
-            UiState.Error(e.message ?: UNKNOWN_ERROR)
-        }
+        return handleApiCall(
+            onApiCall = {
+                val response = contactsApiService.addContact(
+                    token = userIdTokens.accessToken,
+                    userId = userIdTokens.userId,
+                    AddContactRequest(contactId.toInt())
+                )
+                _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
+                UiState.Initial
+            },
+        )
     }
 
     override suspend fun deleteContact(contactId: Long): UiState<List<User>> {
         lastDeletedContact = contactId
         val userIdTokens = dataStore.getUserIdTokens()
-        return try {
-            val response =
-                contactsApiService.deleteContact(
-                    token = userIdTokens.accessToken,
-                    userId = userIdTokens.userId,
-                    contactId = contactId.toInt()
-                )
-            _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
-            UiState.Success(response.data.contacts)
-        } catch (e: HttpException) {
-            val error = e.response()?.errorBody()?.string()
-            UiState.Error(getMessageFromHttpException(error))
-        } catch (e: Exception) {
-            UiState.Error(e.message ?: UNKNOWN_ERROR)
-        }
+        return handleApiCall(
+            onApiCall = {
+                val response =
+                    contactsApiService.deleteContact(
+                        token = userIdTokens.accessToken,
+                        userId = userIdTokens.userId,
+                        contactId = contactId.toInt()
+                    )
+                _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
+                UiState.Success(response.data.contacts)
+            }
+        )
     }
 
     // delete multiple contacts when multiselect mode
     override suspend fun deleteContacts(): UiState<List<User>> {
         val userIdTokens = dataStore.getUserIdTokens()
         val list = _userContactsFlow.value
-        return try {
-            var response = BaseResponse(data = Contacts(emptyList()))
-            for (user in list) {
-                if(user.isSelected) {
-                    response = contactsApiService.deleteContact(
-                        token = userIdTokens.accessToken,
-                        userId = userIdTokens.userId,
-                        contactId = user.contact.id.toInt()
-                    )
-                    _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
+        return handleApiCall(
+            onApiCall = {
+                var response = BaseResponse(data = Contacts(emptyList()))
+                for (user in list) {
+                    if(user.isSelected) {
+                        response = contactsApiService.deleteContact(
+                            token = userIdTokens.accessToken,
+                            userId = userIdTokens.userId,
+                            contactId = user.contact.id.toInt()
+                        )
+                        _userContactsFlow.value = mapToUserMultiselect(response.data.contacts)
+                    }
                 }
+                UiState.Success(response.data.contacts)
             }
-            UiState.Success(response.data.contacts)
-        } catch (e: HttpException) {
-            val error = e.response()?.errorBody()?.string()
-            UiState.Error(getMessageFromHttpException(error))
-        } catch (e: Exception) {
-            UiState.Error(e.message ?: UNKNOWN_ERROR)
-        }
+        )
     }
 
     override suspend fun restoreLastDeletedContact() {
@@ -187,6 +164,7 @@ class ContactsRepositoryImpl @Inject constructor(
     override fun updateContactsFlow(users: List<UserMultiselect>) {
         _userContactsFlow.value = users
     }
+
 
 
     private suspend fun getUserIdTokens(): UserIdTokens {

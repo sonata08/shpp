@@ -76,6 +76,7 @@
     <string name="invalid_request">Invalid request</string>
     <string name="no_user">Такого користувача не існує</string>
     <string name="unknown_error">Сталася помилка</string>
+    <string name="internet_connection_failed">Відсутній інтернет</string>
 
     <!--    Notifications-->
     <string name="search_channel_name">Пошук</string>
