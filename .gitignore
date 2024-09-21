@@ -16,3 +16,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/.idea/appInsightsSettings.xml
+/.idea/deploymentTargetSelector.xml
