@@ -27,6 +27,7 @@ class AuthRepositoryImpl @Inject constructor(
             onApiCall = {
                 val response = userApiService.createUser(userCredentials)
                 savedUser = response.data.user
+                database.insertUser(response.data.user)
                 UiState.Success(response.data)
             }
         )
@@ -37,6 +38,7 @@ class AuthRepositoryImpl @Inject constructor(
             onApiCall = {
                 val response = userApiService.loginUser(userCredentials)
                 savedUser = response.data.user
+                database.insertUser(response.data.user)
                 UiState.Success(response.data)
             }
         )
@@ -53,11 +55,14 @@ class AuthRepositoryImpl @Inject constructor(
                         token = userIdTokens.accessToken
                     )
                     savedUser = response.data.user
-                    database.insertUser(response.data.user)
                     UiState.Success(savedUser)
                 } else {
                     UiState.Success(savedUser)
                 }
+            },
+            onConnectException = {
+                val user = database.findUserById(userIdTokens.userId)
+                UiState.Success(user)
             }
         )
     }

@@ -22,7 +22,11 @@ class DatabaseRepositoryImpl(
     }
 
     override suspend fun getUserContacts(userId: Long): List<User> {
-        return contactDao.getUserContacts(userId).contacts.map { it.toUser() }  // .contacts.map { it.toUser() }
+        return contactDao.getUserContacts(userId).contacts.map { it.toUser() }
+    }
+
+    override suspend fun findUserById(userId: Long): User {
+        return userDao.findUserById(userId).toUser()
     }
 
     override suspend fun insertUser(user: User) {
@@ -48,6 +52,4 @@ class DatabaseRepositoryImpl(
         val userContact = UserContactJoin(userId, contactId)
         contactDao.deleteContact(userContact)
     }
-
-
 }

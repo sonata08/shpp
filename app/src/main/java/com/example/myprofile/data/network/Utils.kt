@@ -33,7 +33,6 @@ suspend fun <T> handleApiCall(
     return try {
         onApiCall()
     } catch (e: ConnectException) {
-        Log.e("FAT_handleApi", "ConnectException: ${e.message}")
         onConnectException()
     } catch (e: HttpException) {
         val error = e.response()?.errorBody()?.string()
@@ -43,6 +42,12 @@ suspend fun <T> handleApiCall(
     }
 }
 
+/**
+ * Checks if the device has an active internet connection.
+ *
+ * @param context The context used to check the network connectivity.
+ * @return `true` if the device is connected to the internet, `false` otherwise.
+ */
 fun isOnline(context: Context) =
     (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).run {
         getNetworkCapabilities(activeNetwork)?.run {
@@ -52,6 +57,13 @@ fun isOnline(context: Context) =
         } ?: false
     }
 
+/**
+ * Executes the given action only if the device has an active internet connection.
+ *
+ * @param context The context used to check the network connectivity.
+ * @param view The view used to display a Snackbar if there's no internet connection.
+ * @param action The action to be executed if the device is online.
+ */
 fun executeIfOnline(
     context: Context,
     view: View,
@@ -60,7 +72,6 @@ fun executeIfOnline(
     if(isOnline(context)) {
         action()
     } else {
-//        context.showShortToast(context.getString(R.string.internet_connection_failed))
         Snackbar.make(view, R.string.internet_connection_failed, Snackbar.LENGTH_LONG).show()
     }
 }

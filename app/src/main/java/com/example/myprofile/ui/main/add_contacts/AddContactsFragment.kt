@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myprofile.R
 import com.example.myprofile.data.model.User
-import com.example.myprofile.data.network.INTERNET_CONNECTION_FAILED
 import com.example.myprofile.data.network.executeIfOnline
 import com.example.myprofile.data.network.isOnline
 import com.example.myprofile.data.network.model.UiState
@@ -22,7 +21,6 @@ import com.example.myprofile.ui.main.add_contacts.adapter.OnAddContactClickListe
 import com.example.myprofile.ui.main.contacts.adapter.ContactsItemDecoration
 import com.example.myprofile.ui.utils.extentions.hide
 import com.example.myprofile.ui.utils.extentions.show
-import com.example.myprofile.utils.extentions.showShortToast
 import com.example.myprofile.utils.showError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -134,7 +132,6 @@ class AddContactsFragment :
                 return true
             }
         })
-
     }
 
     private fun setupRecyclerView() {

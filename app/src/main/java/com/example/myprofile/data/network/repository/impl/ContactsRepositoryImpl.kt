@@ -1,6 +1,5 @@
 package com.example.myprofile.data.network.repository.impl
 
-import android.util.Log
 import com.example.myprofile.data.datastore.repository.DataStoreRepository
 import com.example.myprofile.data.model.User
 import com.example.myprofile.data.model.UserMultiselect
@@ -135,7 +134,7 @@ class ContactsRepositoryImpl @Inject constructor(
 
     // delete multiple contacts when multiselect mode
     override suspend fun deleteContacts(): UiState<List<User>> {
-        val userIdTokens = dataStore.getUserIdTokens()
+        val userIdTokens =  dataStore.getUserIdTokens()
         val list = _userContactsFlow.value
         return handleApiCall(
             onApiCall = {
