@@ -45,14 +45,13 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUser(): UiState<User> {
-        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        val userId = dataStoreRepository.getUserId()
         return handleApiCall(
             onApiCall = {
                 // if user is not saved -> get user from server
                 if (savedUser.id.isInvalidId()) {
                     val response = userApiService.getUser(
-                        userId = userIdTokens.userId,
-                        token = userIdTokens.accessToken
+                        userId = userId,
                     )
                     savedUser = response.data.user
                     UiState.Success(savedUser)
@@ -61,19 +60,18 @@ class AuthRepositoryImpl @Inject constructor(
                 }
             },
             onConnectException = {
-                val user = database.findUserById(userIdTokens.userId)
+                val user = database.findUserById(userId)
                 UiState.Success(user)
             }
         )
     }
 
     override suspend fun editUser(user: User): UiState<User> {
-        val userIdTokens = dataStoreRepository.getUserIdTokens()
+        val userId = dataStoreRepository.getUserId()
         return handleApiCall(
             onApiCall = {
                 val response = userApiService.editUser(
-                    token = userIdTokens.accessToken,
-                    userId = userIdTokens.userId,
+                    userId = userId,
                     user = user
                 )
                 savedUser = response.data.user

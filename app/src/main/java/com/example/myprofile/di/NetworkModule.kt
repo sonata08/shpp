@@ -2,15 +2,18 @@ package com.example.myprofile.di
 
 
 import com.example.myprofile.BuildConfig
+import com.example.myprofile.data.datastore.repository.DataStoreRepository
 import com.example.myprofile.data.network.api.ContactsApiService
 import com.example.myprofile.data.network.api.UserApiService
 import com.example.myprofile.data.network.interceptor.TokenAuthenticator
+import com.example.myprofile.data.network.interceptor.TokenInterceptor
 import com.example.myprofile.data.network.repository.TokenManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Authenticator
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,8 +31,15 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(tokenAuthenticator: TokenAuthenticator): OkHttpClient {
+    fun provideTokenAInterceptor(dataStoreRepository: DataStoreRepository): Interceptor {
+        return TokenInterceptor(dataStoreRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(tokenAuthenticator: TokenAuthenticator, tokenInterceptor: TokenInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(tokenInterceptor)
             .authenticator(tokenAuthenticator)
             .build()
     }

@@ -36,8 +36,8 @@ class LoginViewModel @Inject constructor(
 
     fun saveUserIdTokens(data: LoginResponse) {
         viewModelScope.launch {
-            dataStoreRepository.saveUserIdTokens(data.user.id, data.accessToken, data.refreshToken)
-        }
+            dataStoreRepository.saveUserId(data.user.id)
+            dataStoreRepository.saveTokens(data.accessToken, data.refreshToken)        }
     }
 
     fun rememberUser(data: Boolean) {

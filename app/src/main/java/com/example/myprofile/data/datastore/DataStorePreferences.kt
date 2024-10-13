@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.myprofile.data.network.INVALID_ID
-import com.example.myprofile.data.network.model.UserIdTokens
+import com.example.myprofile.data.network.model.response_dto.Tokens
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
@@ -15,33 +15,30 @@ import javax.inject.Inject
 The class is responsible for storing user's data
  */
 class DataStorePreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
-
-
-    suspend fun saveUserIdTokens(userId: Long, accessToken: String, refreshToken: String) {
+    
+    suspend fun saveUserId(userId: Long) {
         dataStore.edit { preferences ->
-            preferences[ACCESS_TOKEN] = "Bearer $accessToken"
-            preferences[REFRESH_TOKEN] = refreshToken
             preferences[USER_ID] = userId
         }
     }
 
-    suspend fun getUserIdTokens(): UserIdTokens {
-        return try {
-            val preferences = this.dataStore.data.first()
-            val accessToken = preferences[ACCESS_TOKEN] ?: ""
-            val refreshToken = preferences[REFRESH_TOKEN] ?: ""
-            val userId = preferences[USER_ID] ?: INVALID_ID
-            UserIdTokens(userId = userId, accessToken = accessToken, refreshToken = refreshToken)
-        } catch (e: NoSuchElementException) {
-            UserIdTokens()
-        }
+    suspend fun getUserId(): Long {
+        val preferences = this.dataStore.data.first()
+        return preferences[USER_ID] ?: INVALID_ID
     }
 
     suspend fun saveTokens(accessToken: String, refreshToken: String) {
         dataStore.edit { preferences ->
-            preferences[ACCESS_TOKEN] = "Bearer $accessToken"
+            preferences[ACCESS_TOKEN] = accessToken
             preferences[REFRESH_TOKEN] = refreshToken
         }
+    }
+
+    suspend fun getTokens(): Tokens {
+        val preferences = this.dataStore.data.first()
+        val accessToken = preferences[ACCESS_TOKEN] ?: ""
+        val refreshToken = preferences[REFRESH_TOKEN] ?: ""
+        return Tokens(accessToken, refreshToken)
     }
 
     suspend fun rememberUser(data: Boolean) {
