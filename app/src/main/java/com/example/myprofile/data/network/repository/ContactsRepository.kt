@@ -16,9 +16,4 @@ interface ContactsRepository {
     suspend fun restoreLastDeletedContact()
     suspend fun logOut()
     fun updateContactsFlow(users: List<UserMultiselect>)
-
-//    fun makeSelected(contactPosition: Int, isChecked: Boolean)
-//    fun countSelectedItems(): Int
-//    fun deactivateMultiselectMode()
-//    fun activateMultiselectMode()
 }

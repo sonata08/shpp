@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import com.example.myprofile.R
 import com.example.myprofile.data.network.ACCESS_DENIED
+import com.example.myprofile.data.network.INTERNET_CONNECTION_FAILED
 import com.example.myprofile.data.network.INVALID_REQUEST
 import com.example.myprofile.data.network.NO_USER_ERROR
 import com.example.myprofile.data.network.UNAUTHORIZED
@@ -47,6 +48,7 @@ fun localizeError(error: String, context: Context): String {
         ACCESS_DENIED -> R.string.access_denied
         INVALID_REQUEST -> R.string.access_denied
         NO_USER_ERROR -> R.string.no_user
+        INTERNET_CONNECTION_FAILED -> R.string.internet_connection_failed
         UNKNOWN_ERROR -> R.string.unknown_error
         else-> return error
     }

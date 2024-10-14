@@ -6,7 +6,7 @@ import com.example.myprofile.data.model.UserCredentials
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.data.network.model.response_dto.LoginResponse
 import com.example.myprofile.data.network.repository.AuthRepository
-import com.example.myprofile.data.repository.DataStoreRepository
+import com.example.myprofile.data.datastore.repository.DataStoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,7 +32,8 @@ class SignUpViewModel @Inject constructor(
 
     fun saveUserIdTokens(data: LoginResponse) {
         viewModelScope.launch {
-            dataStoreRepository.saveUserIdTokens(data.user.id, data.accessToken, data.refreshToken)
+            dataStoreRepository.saveUserId(data.user.id)
+            dataStoreRepository.saveTokens(data.accessToken, data.refreshToken)
         }
     }
 

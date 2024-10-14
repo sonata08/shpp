@@ -2,7 +2,7 @@ package com.example.myprofile.data.network.repository.impl
 
 import com.example.myprofile.data.network.api.UserApiService
 import com.example.myprofile.data.network.repository.TokenManager
-import com.example.myprofile.data.repository.DataStoreRepository
+import com.example.myprofile.data.datastore.repository.DataStoreRepository
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -20,11 +20,11 @@ class TokenManagerImpl @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
 ): TokenManager {
     override suspend fun refreshTokens(): String? {
-        val userIdTokens = dataStoreRepository.getUserIdTokens()
-        if (userIdTokens.refreshToken.isEmpty()) return null
+        val userTokens = dataStoreRepository.getTokens()
+        if (userTokens.refreshToken.isEmpty()) return null
         return try {
             val response = userApiService.get().refreshToken(
-                userIdTokens.refreshToken
+                userTokens.refreshToken
             )
             dataStoreRepository.saveTokens(response.data.accessToken, response.data.refreshToken)
             response.data.accessToken

@@ -11,6 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myprofile.R
 import com.example.myprofile.data.model.User
+import com.example.myprofile.data.network.executeIfOnline
+import com.example.myprofile.data.network.isOnline
 import com.example.myprofile.data.network.model.UiState
 import com.example.myprofile.databinding.FragmentAddContactsBinding
 import com.example.myprofile.ui.base.BaseFragment
@@ -43,7 +45,9 @@ class AddContactsFragment :
             }
 
             override fun onAddContact(contactId: Long) {
-                viewModel.addContactToUser(contactId)
+                executeIfOnline(requireContext(), binding.root) {
+                    viewModel.addContactToUser(contactId)
+                }
             }
         })
     }
@@ -51,10 +55,21 @@ class AddContactsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
+        showWarning()
         setupRecyclerView()
         observeUiState()
         observeSearchState()
         viewModel.getContacts()
+    }
+
+    private fun showWarning() {
+        with(binding.noInternetWarning) {
+            if (isOnline(requireContext())) {
+                hide()
+            } else {
+                show()
+            }
+        }
     }
 
     private fun observeUiState() {
@@ -65,7 +80,7 @@ class AddContactsFragment :
                         is UiState.Initial -> {}
                         is UiState.Success -> showContactList(it.data)
                         is UiState.Loading -> showProgressBar()
-                        is UiState.Error -> showError(binding.root, binding.progressBar, it.message)
+                        is UiState.Error -> { showError(binding.root, binding.progressBar, it.message) }
                     }
                 }
             }
@@ -117,7 +132,6 @@ class AddContactsFragment :
                 return true
             }
         })
-
     }
 
     private fun setupRecyclerView() {

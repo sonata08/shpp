@@ -41,8 +41,9 @@
     <string name="fab_delete">Delete contacts</string>
     <string name="add" translatable="false">Add</string>
     <string name="contact_added">Contact added</string>
-
     <string name="users">Users</string>
+    <string name="no_internet_warning">Internet Connection failed. You can\'t add and delete contacts</string>
+
 
     <!--    Add contact-->
     <string name="add_contact">Add contact</string>
@@ -92,6 +93,7 @@
     <string name="invalid_request">Invalid request</string>
     <string name="no_user">There is no such user</string>
     <string name="unknown_error">Error</string>
+    <string name="internet_connection_failed">Internet Connection failed</string>
 
     <!--    Notifications-->
     <string name="search_channel_name">Search</string>

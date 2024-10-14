@@ -28,10 +28,8 @@ interface UserApiService {
         @Body userCredentials: UserCredentials,
     ): BaseResponse<LoginResponse>
 
-
     @PUT("users/{userId}")
     suspend fun editUser(
-        @Header("Authorization") token: String,
         @Path("userId") userId: Long,
         @Body user: User
     ): BaseResponse<UserGet>
@@ -39,7 +37,6 @@ interface UserApiService {
     @GET("users/{userId}")
     suspend fun getUser(
         @Path("userId") userId: Long,
-        @Header("Authorization") token: String,
     ): BaseResponse<UserGet>
 
     @POST("refresh")

@@ -11,6 +11,7 @@ const val USER_EXISTS = "User already exists"
 const val UNAUTHORIZED = "Unauthorized"
 const val ACCESS_DENIED = "Access denied"
 const val INVALID_REQUEST = "Invalid request"
+const val INTERNET_CONNECTION_FAILED = "Internet Connection failed"
 const val INVALID_ID = -1L
 
 
